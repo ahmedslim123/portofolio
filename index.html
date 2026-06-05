@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chamber of Curiosities · Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+/* ============================================================
+   CHAMBER OF CURIOSITIES — Design Tokens
+   ============================================================ */
+:root{
+  --void:#0B0F2B;          /* deep indigo background */
+  --void-2:#070A1E;        /* deeper void */
+  --charcoal:#121212;
+  --obsidian:#0E0E0E;
+  --blue:#1E9FFF;          /* knowledge energy */
+  --gold:#E5C16F;          /* wisdom highlight */
+  --cyan:#00F7FF;          /* vein glow */
+  --rose:#E8B4A0;          /* luxury rose gold */
+  --titanium:#C5C9C6;      /* neutral text */
+  --purple:#9A6BFF;
+  --ink:#EDE9DF;
+  --muted:#8A8FB0;
+  --glass:rgba(18,22,48,.42);
+  --glass-line:rgba(229,193,111,.22);
+  --display:"Cinzel",serif;
+  --body:"Cormorant Garamond",Georgia,serif;
+  --mono:"Space Mono","Courier New",monospace;
+  --ease-out-quart:cubic-bezier(.165,.84,.44,1);
+  --ease-out-back:cubic-bezier(.34,1.56,.64,1);
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:auto}
+body{
+  font-family:var(--body);
+  background:var(--void-2);
+  color:var(--ink);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  cursor:none;
+}
+@media (pointer:coarse){ body{cursor:auto} }
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+::selection{background:var(--gold);color:var(--void-2)}
+
+/* ---- Atmospheric layered background ---- */
+.atmosphere{
+  position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background:
+    radial-gradient(1200px 800px at 78% -10%, rgba(30,159,255,.12), transparent 60%),
+    radial-gradient(900px 700px at 12% 8%, rgba(229,193,111,.10), transparent 55%),
+    radial-gradient(1000px 900px at 50% 120%, rgba(154,107,255,.10), transparent 60%),
+    linear-gradient(180deg, var(--void) 0%, var(--void-2) 45%, #04050f 100%);
+}
+.grain{
+  position:fixed;inset:0;z-index:120;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.vignette{position:fixed;inset:0;z-index:118;pointer-events:none;
+  box-shadow:inset 0 0 320px 60px rgba(0,0,0,.75);}
+
+/* ---- Three.js canvas ---- */
+#bg-canvas{position:fixed;inset:0;z-index:-2;display:block}
+
+/* ============================================================
+   CUSTOM CURSOR
+   ============================================================ */
+.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;z-index:9999;pointer-events:none;
+  border-radius:50%;transform:translate(-50%,-50%);mix-blend-mode:screen}
+.cursor-dot{width:6px;height:6px;background:var(--cyan);box-shadow:0 0 12px var(--cyan)}
+.cursor-ring{width:34px;height:34px;border:1px solid rgba(229,193,111,.6);
+  transition:width .25s var(--ease-out-back),height .25s var(--ease-out-back),border-color .25s,background .25s}
+.cursor-ring.hot{width:54px;height:54px;border-color:var(--cyan);background:rgba(0,247,255,.06)}
+
+/* ============================================================
+   INTRO — THE GRAND DOOR OVERLAY
+   ============================================================ */
+#intro{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
+  background:transparent}
+.intro-hint{position:absolute;bottom:8%;left:50%;transform:translateX(-50%);
+  font-family:var(--mono);font-size:11px;letter-spacing:.45em;text-transform:uppercase;
+  color:var(--gold);opacity:.0;text-align:center}
+.intro-hint .pulse{display:inline-block;margin-top:10px;color:var(--cyan);font-size:10px;letter-spacing:.3em}
+.intro-title{position:absolute;top:14%;left:50%;transform:translateX(-50%);text-align:center;opacity:0}
+.intro-title h1{font-family:var(--display);font-weight:600;font-size:clamp(20px,3.4vw,40px);
+  letter-spacing:.34em;color:var(--gold);text-shadow:0 0 28px rgba(229,193,111,.5)}
+.intro-title p{font-family:var(--mono);font-size:10px;letter-spacing:.5em;color:var(--titanium);
+  opacity:.7;margin-top:14px;text-transform:uppercase}
+#flash{position:fixed;inset:0;z-index:101;background:#fff;opacity:0;pointer-events:none}
+
+/* enter button (for reduced motion / manual) */
+.enter-btn{position:absolute;bottom:16%;left:50%;transform:translateX(-50%);
+  font-family:var(--mono);font-size:12px;letter-spacing:.35em;text-transform:uppercase;
+  color:var(--ink);padding:14px 34px;border:1px solid var(--glass-line);border-radius:40px;
+  background:rgba(11,15,43,.5);backdrop-filter:blur(8px);cursor:pointer;opacity:0;
+  transition:.3s;display:none}
+.enter-btn:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 30px rgba(0,247,255,.25)}
+
+/* ============================================================
+   SHARED LAYOUT
+   ============================================================ */
+#scene{opacity:0;visibility:hidden}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+.section{position:relative;padding:140px 0;z-index:1}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.45em;text-transform:uppercase;
+  color:var(--cyan);display:flex;align-items:center;gap:14px;margin-bottom:26px}
+.eyebrow::before{content:"";width:42px;height:1px;background:linear-gradient(90deg,var(--cyan),transparent)}
+.h-title{font-family:var(--display);font-weight:700;line-height:1.04;
+  font-size:clamp(34px,5.6vw,72px);
+  background:linear-gradient(180deg,#fff 0%,var(--gold) 70%,#9c7d3a 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 60px rgba(229,193,111,.18)}
+.lead{font-size:clamp(18px,2vw,23px);color:var(--titanium);max-width:62ch;line-height:1.55;margin-top:22px}
+
+/* ============================================================
+   NAVBAR — holographic ribbon
+   ============================================================ */
+#nav{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;
+  justify-content:space-between;padding:22px 34px;transition:.4s;opacity:0;transform:translateY(-20px)}
+#nav.scrolled{background:rgba(7,10,30,.55);backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(229,193,111,.14);padding:14px 34px}
+.logo{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:700;
+  letter-spacing:.22em;font-size:15px;color:var(--gold)}
+.logo .rune{width:30px;height:30px;border:1px solid var(--gold);border-radius:50%;
+  display:grid;place-items:center;position:relative;animation:spin 14s linear infinite}
+.logo .rune::before{content:"";position:absolute;inset:7px;border:1px solid var(--cyan);
+  transform:rotate(45deg);opacity:.8}
+@keyframes spin{to{transform:rotate(360deg)}}
+.nav-links{display:flex;gap:30px;align-items:center}
+.nav-links a{font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--titanium);position:relative;padding:6px 0;transition:.3s}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;
+  background:var(--cyan);box-shadow:0 0 8px var(--cyan);transition:width .35s var(--ease-out-quart)}
+.nav-links a:hover{color:var(--cyan)}
+.nav-links a:hover::after{width:100%}
+@media(max-width:760px){.nav-links{display:none}}
+
+/* dot navigation */
+#dots{position:fixed;right:24px;top:50%;transform:translateY(-50%);z-index:70;
+  display:flex;flex-direction:column;gap:16px;opacity:0}
+#dots button{width:9px;height:9px;border-radius:50%;border:1px solid rgba(197,201,198,.5);
+  background:transparent;cursor:none;transition:.3s;position:relative}
+#dots button.active{background:var(--cyan);border-color:var(--cyan);box-shadow:0 0 12px var(--cyan)}
+#dots button span{position:absolute;right:18px;top:50%;transform:translateY(-50%);
+  font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--titanium);
+  white-space:nowrap;opacity:0;transition:.3s}
+#dots button:hover span{opacity:1}
+@media(max-width:760px){#dots{display:none}}
+
+/* ============================================================
+   HERO / ABOUT ME
+   ============================================================ */
+#hero{min-height:100vh;display:flex;align-items:center;padding-top:90px}
+.hero-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:60px;align-items:center;width:100%}
+@media(max-width:860px){.hero-grid{grid-template-columns:1fr;gap:48px}}
+.hero-name{font-family:var(--display);font-weight:800;line-height:.98;
+  font-size:clamp(48px,9vw,118px);
+  background:linear-gradient(170deg,#fff 0%,var(--gold) 55%,#a07f3c 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-name .ln{display:block;overflow:hidden}
+.hero-name .ln span{display:inline-block;transform:translateY(110%)}
+.hero-role{font-family:var(--mono);font-size:13px;letter-spacing:.4em;text-transform:uppercase;
+  color:var(--cyan);margin:26px 0 22px}
+.hero-bio{font-size:20px;color:var(--titanium);line-height:1.6;max-width:50ch}
+.hero-cta{display:flex;gap:16px;margin-top:38px;flex-wrap:wrap}
+.btn{font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;
+  padding:15px 30px;border-radius:40px;cursor:none;transition:.35s;border:1px solid var(--glass-line)}
+.btn.primary{background:linear-gradient(120deg,var(--gold),var(--rose));color:#1a1405;border:none;
+  box-shadow:0 8px 40px rgba(229,193,111,.25)}
+.btn.primary:hover{box-shadow:0 8px 50px rgba(229,193,111,.5);transform:translateY(-2px)}
+.btn.ghost{color:var(--ink);background:rgba(11,15,43,.4)}
+.btn.ghost:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 30px rgba(0,247,255,.2)}
+
+/* portal frame photo */
+.portal{position:relative;width:min(360px,80vw);aspect-ratio:1;margin:0 auto}
+.portal .ring{position:absolute;inset:0;border-radius:50%;
+  border:2px solid transparent;
+  background:conic-gradient(from 0deg,var(--blue),var(--cyan),var(--gold),var(--rose),var(--blue)) border-box;
+  -webkit-mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;animation:spin 9s linear infinite}
+.portal .ring.r2{inset:-16px;opacity:.4;animation-direction:reverse;animation-duration:16s}
+.portal .photo{position:absolute;inset:18px;border-radius:50%;overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(30,159,255,.35), transparent 60%),
+    radial-gradient(circle at 60% 80%, rgba(229,193,111,.3), transparent 55%),
+    linear-gradient(145deg,#13183a,#0a0d24);
+  display:grid;place-items:center;box-shadow:inset 0 0 60px rgba(0,247,255,.18),0 0 60px rgba(30,159,255,.25)}
+.portal .photo span{font-family:var(--mono);font-size:10px;letter-spacing:.25em;color:var(--muted);
+  text-transform:uppercase;text-align:center;padding:0 30px;line-height:2}
+.portal .photo .initials{font-family:var(--display);font-size:64px;font-weight:700;color:var(--gold);
+  text-shadow:0 0 30px rgba(229,193,111,.6)}
+.scroll-cue{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);
+  font-family:var(--mono);font-size:10px;letter-spacing:.35em;text-transform:uppercase;color:var(--muted);
+  display:flex;flex-direction:column;align-items:center;gap:10px}
+.scroll-cue .bar{width:1px;height:46px;background:linear-gradient(var(--cyan),transparent);
+  animation:cue 2s ease-in-out infinite}
+@keyframes cue{0%,100%{opacity:.3;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
+
+/* ============================================================
+   ABOUT (À PROPOS)
+   ============================================================ */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center;margin-top:50px}
+@media(max-width:860px){.about-grid{grid-template-columns:1fr;gap:40px}}
+.about-text p{font-size:19px;line-height:1.7;color:var(--titanium);margin-bottom:22px}
+.about-text p .hl{color:var(--gold)}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.stat{padding:26px;border:1px solid var(--glass-line);border-radius:16px;background:var(--glass);
+  backdrop-filter:blur(8px);position:relative;overflow:hidden}
+.stat::before{content:"";position:absolute;top:0;left:0;width:100%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.5}
+.stat .num{font-family:var(--display);font-size:44px;font-weight:700;color:var(--gold)}
+.stat .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--titanium);margin-top:8px}
+
+/* ============================================================
+   SKILLS — constellation of orbs
+   ============================================================ */
+.galaxy{position:relative;height:520px;margin-top:50px}
+@media(max-width:860px){.galaxy{height:auto;display:flex;flex-wrap:wrap;gap:18px;justify-content:center}}
+.orb{position:absolute;border-radius:50%;display:grid;place-items:center;cursor:none;
+  background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.5),rgba(30,159,255,.12) 45%,transparent 70%);
+  border:1px solid rgba(229,193,111,.3);transition:transform .4s var(--ease-out-back),box-shadow .4s;
+  box-shadow:0 0 28px rgba(30,159,255,.2),inset 0 0 24px rgba(0,247,255,.12);
+  animation:drift 8s ease-in-out infinite}
+@media(max-width:860px){.orb{position:static!important;animation:none}}
+.orb .nm{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--ink);text-align:center;
+  text-transform:uppercase;pointer-events:none}
+.orb .pct{font-family:var(--display);font-weight:700;font-size:22px;color:var(--gold);
+  opacity:0;height:0;transition:.3s;pointer-events:none}
+.orb:hover{transform:scale(1.18);box-shadow:0 0 45px rgba(0,247,255,.5),inset 0 0 30px rgba(0,247,255,.25);z-index:5}
+.orb:hover .pct{opacity:1;height:auto}
+.orb:hover .nm{color:var(--cyan)}
+@keyframes drift{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+
+/* ============================================================
+   PROJECTS — HALL OF CREATIONS (DOORS)
+   ============================================================ */
+.hall{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:26px;margin-top:56px;
+  perspective:1600px}
+.door{position:relative;aspect-ratio:3/4.4;border-radius:14px 14px 6px 6px;cursor:none;
+  transform-style:preserve-3d;transition:transform .5s var(--ease-out-quart);
+  background:linear-gradient(160deg,#14182f,#0a0d22);
+  border:1px solid rgba(229,193,111,.2);overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.door:hover{transform:translateY(-10px) rotateX(3deg)}
+.door .leaf{position:absolute;inset:0;border-radius:inherit;transform-origin:left center;
+  transition:transform .9s var(--ease-out-quart);backface-visibility:hidden;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:flex-end;padding:24px}
+.door.open .leaf{transform:rotateY(-118deg)}
+.door .leaf::before{content:"";position:absolute;inset:0;opacity:.9;
+  background:var(--door-bg,linear-gradient(160deg,#1a1f3d,#0c1026))}
+.door .leaf::after{content:"";position:absolute;inset:0;
+  background:var(--door-tex,none);opacity:.5;mix-blend-mode:screen}
+.door .seam{position:absolute;top:0;right:0;width:2px;height:100%;
+  background:linear-gradient(var(--gold),var(--cyan),var(--gold));box-shadow:0 0 16px var(--cyan);opacity:.7}
+.door .handle{position:absolute;top:50%;right:14px;width:6px;height:34px;border-radius:4px;
+  background:var(--gold);box-shadow:0 0 14px var(--gold);transform:translateY(-50%)}
+.door .meta{position:relative;z-index:2}
+.door .tag{font-family:var(--mono);font-size:9px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--cyan);margin-bottom:8px}
+.door .nm{font-family:var(--display);font-weight:600;font-size:20px;color:var(--ink);line-height:1.1}
+.door .glow{position:absolute;inset:0;z-index:1;opacity:0;transition:.4s;
+  background:radial-gradient(circle at 50% 60%,var(--door-glow,rgba(0,247,255,.25)),transparent 70%)}
+.door:hover .glow{opacity:1}
+.door .interior{position:absolute;inset:0;border-radius:inherit;z-index:0;padding:24px;
+  display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+  background:radial-gradient(circle at 50% 40%,rgba(30,159,255,.18),#06081a 70%)}
+.door .interior .enter{font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);opacity:.85}
+.door .interior .arrow{font-size:30px;color:var(--cyan);margin-top:10px;animation:cue 1.6s ease-in-out infinite}
+
+/* ============================================================
+   PROJECT MODAL — CASE STUDY ROOM
+   ============================================================ */
+#modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:30px}
+#modal.show{display:flex}
+#modal .scrim{position:absolute;inset:0;background:rgba(3,4,12,.8);backdrop-filter:blur(8px);opacity:0}
+#modal .room{position:relative;width:min(920px,100%);max-height:88vh;overflow-y:auto;border-radius:20px;
+  background:linear-gradient(165deg,rgba(20,24,52,.96),rgba(8,11,30,.98));
+  border:1px solid var(--glass-line);box-shadow:0 40px 120px rgba(0,0,0,.7);
+  opacity:0;transform:translateY(40px) scale(.96)}
+#modal .room::-webkit-scrollbar{width:8px}
+#modal .room::-webkit-scrollbar-thumb{background:rgba(229,193,111,.3);border-radius:8px}
+.room-hero{padding:44px 44px 28px;position:relative;
+  background:radial-gradient(circle at 80% 0%,rgba(30,159,255,.2),transparent 60%)}
+.room-close{position:absolute;top:22px;right:22px;width:42px;height:42px;border-radius:50%;
+  border:1px solid var(--glass-line);background:rgba(11,15,43,.6);color:var(--ink);cursor:none;
+  font-size:20px;display:grid;place-items:center;transition:.3s}
+.room-close:hover{border-color:var(--cyan);color:var(--cyan);transform:rotate(90deg)}
+.room-hero .tag{font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--cyan)}
+.room-hero h2{font-family:var(--display);font-weight:700;font-size:clamp(30px,5vw,52px);
+  color:var(--gold);margin:14px 0 8px;text-shadow:0 0 40px rgba(229,193,111,.25)}
+.room-hero .sub{font-size:19px;color:var(--titanium)}
+.room-media{margin:0 44px;border-radius:14px;overflow:hidden;border:1px solid var(--glass-line);
+  aspect-ratio:16/9;background:#000;position:relative}
+.room-media iframe{width:100%;height:100%;border:0}
+.room-media .placeholder{position:absolute;inset:0;display:grid;place-items:center;
+  background:radial-gradient(circle at 50% 40%,rgba(30,159,255,.18),#06081a 70%);
+  font-family:var(--mono);font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);
+  flex-direction:column;gap:14px;text-align:center;padding:20px}
+.room-media .placeholder .play{width:64px;height:64px;border-radius:50%;border:1px solid var(--cyan);
+  display:grid;place-items:center;color:var(--cyan);font-size:22px;box-shadow:0 0 30px rgba(0,247,255,.25)}
+.room-body{padding:34px 44px 44px}
+.monoliths{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:34px}
+@media(max-width:680px){.monoliths{grid-template-columns:1fr}}
+.monolith{padding:24px;border-radius:12px;background:rgba(11,15,43,.5);border:1px solid var(--glass-line);
+  position:relative;overflow:hidden}
+.monolith::before{content:"";position:absolute;top:0;left:0;width:100%;height:2px;background:var(--accent,var(--cyan))}
+.monolith h4{font-family:var(--mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--accent,var(--cyan));margin-bottom:12px}
+.monolith p{font-size:16px;line-height:1.55;color:var(--titanium)}
+.pills{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:30px}
+.pill{font-family:var(--mono);font-size:11px;letter-spacing:.1em;padding:8px 16px;border-radius:30px;
+  border:1px solid var(--glass-line);background:rgba(0,247,255,.05);color:var(--ink)}
+.room-links{display:flex;gap:14px;flex-wrap:wrap}
+
+/* ============================================================
+   TIMELINE — PATH OF LIGHT
+   ============================================================ */
+.timeline{position:relative;margin-top:60px;padding-left:40px}
+.timeline::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;
+  background:linear-gradient(var(--cyan),var(--gold),transparent);box-shadow:0 0 14px var(--cyan)}
+.tnode{position:relative;padding:0 0 50px 32px}
+.tnode::before{content:"";position:absolute;left:-39px;top:4px;width:16px;height:16px;border-radius:50%;
+  background:var(--void);border:2px solid var(--cyan);box-shadow:0 0 16px var(--cyan)}
+.tnode .yr{font-family:var(--mono);font-size:11px;letter-spacing:.25em;color:var(--gold)}
+.tnode h4{font-family:var(--display);font-weight:600;font-size:23px;color:var(--ink);margin:8px 0 6px}
+.tnode .org{font-family:var(--mono);font-size:12px;color:var(--cyan);letter-spacing:.12em;margin-bottom:10px}
+.tnode p{font-size:17px;color:var(--titanium);line-height:1.55;max-width:60ch}
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+.contact-card{max-width:680px;margin:56px auto 0;padding:48px;border-radius:22px;
+  background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--glass-line);
+  position:relative;overflow:hidden;text-align:center}
+.contact-card .ringfx{position:absolute;inset:-40%;border-radius:50%;
+  background:radial-gradient(circle,transparent 58%,rgba(0,247,255,.06) 60%,transparent 64%);
+  animation:spin 30s linear infinite;pointer-events:none}
+.field{text-align:left;margin-bottom:20px;position:relative}
+.field label{font-family:var(--mono);font-size:10px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--cyan);display:block;margin-bottom:8px}
+.field input,.field textarea{width:100%;background:rgba(7,10,30,.6);border:1px solid var(--glass-line);
+  border-radius:10px;padding:14px 16px;color:var(--ink);font-family:var(--body);font-size:18px;
+  transition:.3s;outline:none;resize:vertical}
+.field input:focus,.field textarea:focus{border-color:var(--cyan);box-shadow:0 0 22px rgba(0,247,255,.18)}
+#sendBtn{width:100%;justify-content:center;margin-top:8px}
+.burst{position:fixed;width:6px;height:6px;border-radius:50%;background:var(--cyan);pointer-events:none;z-index:300;
+  box-shadow:0 0 10px var(--cyan)}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer{position:relative;z-index:1;padding:70px 0 50px;border-top:1px solid rgba(229,193,111,.12);
+  text-align:center}
+footer .sig{font-family:var(--display);font-size:26px;letter-spacing:.2em;color:var(--gold)}
+footer .links{display:flex;gap:26px;justify-content:center;margin:24px 0}
+footer .links a{font-family:var(--mono);font-size:11px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--titanium);transition:.3s}
+footer .links a:hover{color:var(--cyan)}
+footer .fine{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--muted);margin-top:14px}
+
+/* reveal util */
+.reveal{opacity:0;transform:translateY(40px)}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001s!important;transition-duration:.15s!important}
+}
+</style>
+</head>
+<body>
+
+<div class="atmosphere"></div>
+<canvas id="bg-canvas"></canvas>
+<div class="vignette"></div>
+<div class="grain"></div>
+
+<!-- custom cursor -->
+<div class="cursor-ring"></div>
+<div class="cursor-dot"></div>
+
+<!-- ===================== INTRO / GRAND DOOR ===================== -->
+<div id="intro">
+  <div class="intro-title">
+    <h1>CHAMBER OF CURIOSITIES</h1>
+    <p>The Door as a Gateway to Knowledge</p>
+  </div>
+  <div class="intro-hint">
+    Move your cursor to awaken the door
+    <span class="pulse">◈ &nbsp; OPENING &nbsp; ◈</span>
+  </div>
+  <button class="enter-btn" id="enterBtn">Enter the Chamber</button>
+</div>
+<div id="flash"></div>
+
+<!-- ===================== PORTFOLIO ===================== -->
+<div id="scene">
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#hero" class="logo"><span class="rune"></span> AETHER<span style="color:var(--cyan)">·</span>FOLIO</a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#timeline">Journey</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- DOT NAV -->
+  <div id="dots"></div>
+
+  <!-- HERO -->
+  <section id="hero" class="section" data-name="Home">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">Creative Developer &amp; Designer</div>
+          <h1 class="hero-name">
+            <span class="ln"><span>YOUR</span></span>
+            <span class="ln"><span>NAME</span></span>
+          </h1>
+          <div class="hero-role reveal">Frontend · WebGL · Interaction Design</div>
+          <p class="hero-bio reveal">I craft immersive digital experiences at the intersection of art and engineering — where every interaction feels like opening a door to something new.</p>
+          <div class="hero-cta reveal">
+            <a href="#projects" class="btn primary" data-scroll>View Projects</a>
+            <a href="#contact" class="btn ghost" data-scroll>Get in Touch</a>
+          </div>
+        </div>
+        <div class="reveal">
+          <div class="portal">
+            <div class="ring r2"></div>
+            <div class="ring"></div>
+            <div class="photo">
+              <div class="initials">YN</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-cue"><span>Scroll</span><span class="bar"></span></div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section" data-name="About">
+    <div class="wrap">
+      <div class="eyebrow reveal">À Propos · The Maker</div>
+      <h2 class="h-title reveal">Behind the Door</h2>
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <p>I'm a <span class="hl">creative developer</span> obsessed with motion, light, and the small details that make an interface feel alive. My work blends <span class="hl">3D graphics</span>, thoughtful UX, and performant code.</p>
+          <p>From real-time WebGL scenes to clean production React apps, I treat every project as a space to be explored — not just a page to be scrolled. I believe great software should feel like a <span class="hl">rite of passage</span>.</p>
+          <p>When I'm not building, I'm studying cinematography, generative art, and the architecture of beautiful tools.</p>
+        </div>
+        <div class="stat-grid reveal">
+          <div class="stat"><div class="num" data-count="5">0</div><div class="lbl">Years Crafting</div></div>
+          <div class="stat"><div class="num" data-count="40">0</div><div class="lbl">Projects Shipped</div></div>
+          <div class="stat"><div class="num" data-count="18">0</div><div class="lbl">Technologies</div></div>
+          <div class="stat"><div class="num" data-count="99">0</div><div class="lbl">% Caffeine</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="section" data-name="Skills">
+    <div class="wrap">
+      <div class="eyebrow reveal">Arsenal · Languages &amp; Tools</div>
+      <h2 class="h-title reveal">Constellation of Skills</h2>
+      <p class="lead reveal">Hover each orb to reveal proficiency. Size reflects mastery.</p>
+      <div class="galaxy" id="galaxy"></div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="section" data-name="Projects">
+    <div class="wrap">
+      <div class="eyebrow reveal">Hall of Creations</div>
+      <h2 class="h-title reveal">Open a Door</h2>
+      <p class="lead reveal">Each project is a door. Click to step inside the case study.</p>
+      <div class="hall" id="hall"></div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section id="timeline" class="section" data-name="Journey">
+    <div class="wrap">
+      <div class="eyebrow reveal">The Path of Light</div>
+      <h2 class="h-title reveal">My Journey</h2>
+      <div class="timeline" id="timeline"></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section" data-name="Contact">
+    <div class="wrap">
+      <div class="eyebrow reveal" style="justify-content:center">Open Channel</div>
+      <h2 class="h-title reveal" style="text-align:center">Let's Build Something</h2>
+      <div class="contact-card reveal">
+        <div class="ringfx"></div>
+        <div class="field"><label>Your Name</label><input type="text" id="cName" placeholder="Traveler's name" /></div>
+        <div class="field"><label>Email</label><input type="email" id="cEmail" placeholder="you@realm.com" /></div>
+        <div class="field"><label>Message</label><textarea id="cMsg" rows="4" placeholder="Speak, and the door shall open…"></textarea></div>
+        <button class="btn primary" id="sendBtn">Send Message ◈</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="sig">YOUR NAME</div>
+      <div class="links">
+        <a href="#" data-edit>GitHub</a>
+        <a href="#" data-edit>LinkedIn</a>
+        <a href="#" data-edit>Twitter / X</a>
+        <a href="#" data-edit>Dribbble</a>
+      </div>
+      <div class="fine">© 2026 · Crafted with light, sound &amp; mechanism · Chamber of Curiosities</div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ===================== PROJECT MODAL ===================== -->
+<div id="modal">
+  <div class="scrim"></div>
+  <div class="room" id="room"></div>
+</div>
+
+<!-- ===================== LIBRARIES ===================== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lenis/1.1.13/lenis.min.js"></script>
+
+<!-- ===================== APP SCRIPT (injected below) ===================== -->
+<script id="app">
+/* =====================================================================
+   CHAMBER OF CURIOSITIES — Application
+   ---------------------------------------------------------------------
+   ⮞ EDIT YOUR CONTENT IN THE `DATA` OBJECT BELOW. Everything else is engine.
+   ===================================================================== */
+
+const DATA = {
+  name: "YOUR NAME",
+  skills: [
+    { name:"JavaScript", pct:95, size:120 },
+    { name:"React",      pct:92, size:112 },
+    { name:"Three.js",   pct:85, size:104 },
+    { name:"GSAP",       pct:88, size:100 },
+    { name:"TypeScript", pct:84, size:96  },
+    { name:"Next.js",    pct:86, size:98  },
+    { name:"Node.js",    pct:80, size:90  },
+    { name:"GLSL",       pct:70, size:82  },
+    { name:"Python",     pct:75, size:86  },
+    { name:"Figma",      pct:82, size:88  },
+  ],
+  projects: [
+    { tag:"Web App", name:"Velocity", accent:"#FFD166",
+      bg:"linear-gradient(160deg,#2a2410,#0c0d04)",
+      glow:"rgba(255,209,102,.3)",
+      sub:"A lightning-fast SaaS dashboard",
+      problem:"Users abandoned a slow, cluttered analytics tool.",
+      solution:"Rebuilt the frontend with React + virtualized lists and optimistic UI.",
+      result:"Load time cut 70%; daily active users up 2.4×.",
+      stack:["React","TypeScript","Vite","Tailwind"],
+      github:"https://github.com/yourname/velocity",
+      live:"https://velocity.demo",
+      video:"" /* paste a YouTube/Vimeo EMBED url to show a player */ },
+    { tag:"Brand / Luxury", name:"Aurelia", accent:"#E8B4A0",
+      bg:"linear-gradient(160deg,#2c1d22,#0d0709)",
+      glow:"rgba(232,180,160,.3)",
+      sub:"A high-end fashion house landing experience",
+      problem:"The brand needed a digital flagship matching its prestige.",
+      solution:"Cinematic scroll storytelling with WebGL fabric simulations.",
+      result:"Featured on Awwwards; +35% time-on-site.",
+      stack:["Three.js","GSAP","Lenis","Webflow"],
+      github:"https://github.com/yourname/aurelia", live:"https://aurelia.demo", video:"" },
+    { tag:"Data / Analytics", name:"Pulse", accent:"#1E9FFF",
+      bg:"linear-gradient(160deg,#0e2236,#05070f)",
+      glow:"rgba(30,159,255,.3)",
+      sub:"Real-time data visualization platform",
+      problem:"Teams couldn't read 1000s of live data points at a glance.",
+      solution:"Built a streaming dashboard with animated D3 + canvas charts.",
+      result:"Decision speed improved; adopted across 12 teams.",
+      stack:["D3.js","React","WebSockets","Node"],
+      github:"https://github.com/yourname/pulse", live:"https://pulse.demo", video:"" },
+    { tag:"Creative / Design", name:"Verdant", accent:"#5FE39B",
+      bg:"linear-gradient(160deg,#0f2a1d,#050d08)",
+      glow:"rgba(95,227,155,.3)",
+      sub:"Generative art garden in the browser",
+      problem:"Wanted to make generative botany feel organic & alive.",
+      solution:"Procedural plant growth with shaders + particle blooms.",
+      result:"50k+ unique gardens generated by visitors.",
+      stack:["Three.js","GLSL","p5.js"],
+      github:"https://github.com/yourname/verdant", live:"https://verdant.demo", video:"" },
+    { tag:"AI / Tech", name:"Synapse", accent:"#9A6BFF",
+      bg:"linear-gradient(160deg,#1e1538,#08060f)",
+      glow:"rgba(154,107,255,.32)",
+      sub:"An AI-assisted knowledge graph",
+      problem:"Research notes were siloed and impossible to connect.",
+      solution:"LLM-powered linking with an interactive 3D neural graph.",
+      result:"Surfaced hidden connections; 3× faster research.",
+      stack:["Next.js","OpenAI","react-force-graph","Postgres"],
+      github:"https://github.com/yourname/synapse", live:"https://synapse.demo", video:"" },
+  ],
+  timeline: [
+    { yr:"2024 — Present", role:"Senior Creative Developer", org:"Studio Nova",
+      desc:"Leading immersive web experiences and WebGL product work for global brands." },
+    { yr:"2022 — 2024", role:"Frontend Engineer", org:"Lumen Labs",
+      desc:"Built design systems and high-performance React applications at scale." },
+    { yr:"2020 — 2022", role:"Web Developer", org:"Freelance",
+      desc:"Shipped 30+ sites for startups, blending motion design with clean code." },
+    { yr:"2020", role:"B.Sc. Computer Science", org:"University",
+      desc:"Graduated with a focus on graphics, HCI, and interactive media." },
+  ]
+};
+
+/* ---------------------------------------------------------------- */
+const $  = (s,c=document)=>c.querySelector(s);
+const $$ = (s,c=document)=>[...c.querySelectorAll(s)];
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isTouch = matchMedia('(pointer:coarse)').matches;
+
+/* ================= CUSTOM CURSOR ================= */
+(function(){
+  if(isTouch) return;
+  const dot=$('.cursor-dot'), ring=$('.cursor-ring');
+  let rx=0,ry=0,mx=0,my=0;
+  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;
+    dot.style.left=mx+'px';dot.style.top=my+'px';});
+  (function loop(){rx+=(mx-rx)*.18;ry+=(my-ry)*.18;
+    ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+  addEventListener('mouseover',e=>{
+    if(e.target.closest('a,button,.door,.orb,input,textarea')) ring.classList.add('hot');
+    else ring.classList.remove('hot');
+  });
+})();
+
+/* ================= THREE.JS — GRAND DOOR SCENE ================= */
+let three = { ok:false, mode:'door', warp:0, glow:0, targetGlow:0 };
+
+function initThree(){
+  if(typeof THREE==='undefined') return false;
+  const canvas=$('#bg-canvas');
+  let renderer;
+  try{
+    renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
+  }catch(e){ return false; }
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.setSize(innerWidth,innerHeight);
+  renderer.setClearColor(0x000000,0);
+
+  const scene=new THREE.Scene();
+  scene.fog=new THREE.FogExp2(0x070A1E,0.045);
+  const camera=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,0.1,200);
+  camera.position.set(0,0,8);
+
+  /* ---- lights ---- */
+  scene.add(new THREE.AmbientLight(0x223055,0.6));
+  const key=new THREE.SpotLight(0xbfe6ff,3.2,60,Math.PI/5,0.4,1.2);
+  key.position.set(-6,8,6); scene.add(key);
+  const rim=new THREE.PointLight(0xE5C16F,1.4,40); rim.position.set(6,-2,4); scene.add(rim);
+  const core=new THREE.PointLight(0x1E9FFF,2.2,30); core.position.set(0,0,1.2); scene.add(core);
+
+  /* ---- floor (subtle reflective gradient plane) ---- */
+  const floorMat=new THREE.MeshStandardMaterial({color:0x05060f,metalness:.9,roughness:.35});
+  const floor=new THREE.Mesh(new THREE.PlaneGeometry(60,60),floorMat);
+  floor.rotation.x=-Math.PI/2; floor.position.y=-2.2; scene.add(floor);
+
+  /* ---- particles (the void dust) ---- */
+  const N=reduced?1500:5200;
+  const pg=new THREE.BufferGeometry();
+  const pos=new Float32Array(N*3), col=new Float32Array(N*3);
+  const palette=[[0.12,0.62,1],[0.9,0.76,0.43],[0,0.97,1]];
+  for(let i=0;i<N;i++){
+    pos[i*3]=(Math.random()-.5)*40;
+    pos[i*3+1]=(Math.random()-.5)*24;
+    pos[i*3+2]=(Math.random()-.5)*34 - 4;
+    const c=palette[(Math.random()*palette.length)|0];
+    col[i*3]=c[0];col[i*3+1]=c[1];col[i*3+2]=c[2];
+  }
+  pg.setAttribute('position',new THREE.BufferAttribute(pos,3));
+  pg.setAttribute('color',new THREE.BufferAttribute(col,3));
+  const pm=new THREE.PointsMaterial({size:.05,vertexColors:true,transparent:true,
+    opacity:.9,blending:THREE.AdditiveBlending,depthWrite:false});
+  const points=new THREE.Points(pg,pm); scene.add(points);
+
+  /* ---- THE DOOR ---- */
+  const doorGroup=new THREE.Group(); scene.add(doorGroup);
+  const W=2.6,H=4.2,D=0.22;
+  const metal=()=>new THREE.MeshStandardMaterial({color:0x0E0E12,metalness:.92,roughness:.22});
+
+  // arch frame
+  const frameMat=new THREE.MeshStandardMaterial({color:0x16182c,metalness:.8,roughness:.4});
+  const fL=new THREE.Mesh(new THREE.BoxGeometry(.28,H+.5,.5),frameMat); fL.position.set(-(W/2+.18),0,-.1);
+  const fR=fL.clone(); fR.position.x=(W/2+.18);
+  const fT=new THREE.Mesh(new THREE.BoxGeometry(W+.9,.32,.5),frameMat); fT.position.set(0,H/2+.3,-.1);
+  doorGroup.add(fL,fR,fT);
+
+  const veinMats=[];
+  function addVeins(parent,x0){
+    // central spine + branches as glowing thin boxes
+    const mk=(w,h,x,y,colr)=>{
+      const m=new THREE.MeshStandardMaterial({color:0x000000,emissive:new THREE.Color(colr),
+        emissiveIntensity:1.4,metalness:0,roughness:1});
+      veinMats.push(m);
+      const b=new THREE.Mesh(new THREE.BoxGeometry(w,h,.04),m);
+      b.position.set(x,y,D/2+.01); parent.add(b);
+    };
+    mk(.04,H*.86,x0,0,0x1E9FFF);
+    mk(.03,H*.34, x0-.34,.7,0x00F7FF);
+    mk(.03,H*.30, x0+.34,-.6,0xE5C16F);
+    mk(.5,.03, x0-.18,.7,0x00F7FF);
+    mk(.42,.03, x0+.2,-.6,0xE5C16F);
+    mk(.03,H*.2, x0-.18,1.4,0x1E9FFF);
+  }
+
+  function makeLeaf(side){ // -1 left, +1 right
+    const pivot=new THREE.Group();
+    pivot.position.x=side*(W/2);
+    const leaf=new THREE.Mesh(new THREE.BoxGeometry(W/2,H,D),metal());
+    leaf.position.x=-side*(W/4); // span toward center
+    pivot.add(leaf);
+    addVeins(leaf, side<0? -W/8 : W/8);
+    doorGroup.add(pivot);
+    return pivot;
+  }
+  const leftLeaf=makeLeaf(-1), rightLeaf=makeLeaf(1);
+
+  // halo glow behind door
+  const haloMat=new THREE.MeshBasicMaterial({color:0x1E9FFF,transparent:true,opacity:0,
+    blending:THREE.AdditiveBlending,depthWrite:false});
+  const halo=new THREE.Mesh(new THREE.PlaneGeometry(W*2.4,H*1.6),haloMat);
+  halo.position.z=-.6; doorGroup.add(halo);
+
+  /* ---- pointer parallax ---- */
+  let px=0,py=0,tpx=0,tpy=0;
+  addEventListener('mousemove',e=>{tpx=(e.clientX/innerWidth-.5);tpy=(e.clientY/innerHeight-.5);});
+
+  /* ---- render loop ---- */
+  const clock=new THREE.Clock();
+  function animate(){
+    requestAnimationFrame(animate);
+    const t=clock.getElapsedTime(), dt=clock.getDelta?0:0;
+    // vein pulse
+    three.glow += (three.targetGlow-three.glow)*0.06;
+    const pulse=(Math.sin(t* (2+three.glow*4))*0.5+0.5);
+    veinMats.forEach((m,i)=>{ m.emissiveIntensity=(1.0+pulse*1.6)*(1+three.glow*2.2); });
+    halo.material.opacity=0.05+pulse*0.08+three.glow*0.35;
+    core.intensity=2.0+pulse*1.2+three.glow*4;
+
+    // particle drift + warp
+    points.rotation.y += 0.0006 + three.warp*0.01;
+    if(three.warp>0){
+      const arr=pg.attributes.position.array;
+      const speed=three.warp*1.4;
+      for(let i=0;i<N;i++){
+        arr[i*3+2]+=speed;
+        if(arr[i*3+2]>camera.position.z){ arr[i*3+2]-=70; }
+      }
+      pg.attributes.position.needsUpdate=true;
+      pm.size=0.05+three.warp*0.5;
+      pm.opacity=0.9;
+    }
+
+    // parallax
+    px+=(tpx-px)*.05; py+=(tpy-py)*.05;
+    if(three.mode==='door'){
+      doorGroup.rotation.y = px*0.25;
+      doorGroup.rotation.x = py*0.12;
+      camera.position.x = px*0.6;
+      camera.position.y = -py*0.4;
+      camera.lookAt(0,0,0);
+    } else {
+      // ambient background mode
+      points.rotation.x += 0.0002;
+      camera.position.x += (px*1.2-camera.position.x)*.04;
+      camera.position.y += (-py*0.8-camera.position.y)*.04;
+      camera.lookAt(0,0,0);
+    }
+    renderer.render(scene,camera);
+  }
+  animate();
+
+  addEventListener('resize',()=>{
+    camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth,innerHeight);
+  });
+
+  three = Object.assign(three,{ok:true,scene,camera,renderer,doorGroup,leftLeaf,rightLeaf,points,halo});
+  return true;
+}
+
+/* ================= INTRO SEQUENCE ================= */
+function revealScene(){
+  const scene=$('#scene');
+  gsap.set(scene,{visibility:'visible'});
+  gsap.to(scene,{opacity:1,duration:1.2,ease:'power2.out'});
+  gsap.to('#nav',{opacity:1,y:0,duration:1,delay:.2,ease:'power3.out'});
+  gsap.to('#dots',{opacity:1,duration:1,delay:.4});
+  // hero name reveal
+  gsap.to('.hero-name .ln span',{y:'0%',duration:1.1,stagger:.12,delay:.3,ease:'power4.out'});
+  gsap.fromTo('#hero .reveal',{opacity:0,y:30},
+    {opacity:1,y:0,duration:1,stagger:.12,delay:.7,ease:'power3.out'});
+  // switch three to ambient
+  if(three.ok){
+    three.mode='ambient';
+    gsap.to(three.doorGroup.scale,{x:.01,y:.01,z:.01,duration:1,ease:'power2.in',
+      onComplete:()=>{three.doorGroup.visible=false;}});
+    gsap.to(three,{warp:0,duration:1.5});
+  }
+  document.body.style.overflow='';
+  setupAfterReveal();
+}
+
+function playIntro(){
+  const intro=$('#intro');
+  document.body.style.overflow='hidden';
+  if(reduced || !three.ok){
+    // show static title + enter button
+    gsap.to('.intro-title',{opacity:1,duration:1});
+    const btn=$('#enterBtn'); btn.style.display='block';
+    gsap.to(btn,{opacity:1,duration:1,delay:.5});
+    btn.onclick=()=>{ gsap.to(intro,{opacity:0,duration:.6,onComplete:()=>intro.style.display='none'});
+      revealScene(); };
+    return;
+  }
+  gsap.to('.intro-title',{opacity:1,duration:1.2,ease:'power2.out'});
+  gsap.to('.intro-hint',{opacity:.85,duration:1,delay:.6});
+
+  const tl=gsap.timeline({delay:.7});
+  // SENSING: veins wake up
+  tl.call(()=>{three.targetGlow=1;})
+    .to({},{duration:.9})
+    // OPENING: leaves swing, camera pushes through
+    .call(()=>{three.targetGlow=1.6;})
+    .to(three.leftLeaf.rotation,{y:2.0,duration:1.5,ease:'power3.inOut'},'open')
+    .to(three.rightLeaf.rotation,{y:-2.0,duration:1.5,ease:'power3.inOut'},'open')
+    .to(three.camera.position,{z:-1.5,duration:1.6,ease:'power2.in'},'open')
+    .to(three.camera,{fov:95,duration:1.6,ease:'power2.in',
+        onUpdate:()=>three.camera.updateProjectionMatrix()},'open')
+    // WARP
+    .to(three,{warp:1,duration:.8,ease:'power2.in'},'open+=0.7')
+    .to('.intro-hint',{opacity:0,duration:.4},'open+=0.6')
+    .to('.intro-title',{opacity:0,duration:.4},'open+=0.6')
+    // FLASH + reveal
+    .to('#flash',{opacity:1,duration:.35,ease:'power2.in'},'-=0.15')
+    .call(()=>{ $('#intro').style.display='none'; revealScene(); })
+    .to('#flash',{opacity:0,duration:.9,ease:'power2.out'});
+}
+
+/* ================= BUILD DYNAMIC CONTENT ================= */
+function buildContent(){
+  // name everywhere
+  $$('[data-name-fill]').forEach(el=>el.textContent=DATA.name);
+
+  // skills constellation
+  const galaxy=$('#galaxy');
+  const spots=[[12,20],[34,8],[58,16],[80,26],[20,55],[46,42],[68,52],[88,60],[30,80],[62,78]];
+  DATA.skills.forEach((s,i)=>{
+    const o=document.createElement('div'); o.className='orb';
+    const sp=spots[i%spots.length];
+    o.style.width=o.style.height=s.size+'px';
+    o.style.left=sp[0]+'%'; o.style.top=sp[1]+'%';
+    o.style.animationDelay=(i*0.4)+'s';
+    o.innerHTML=`<div class="nm">${s.name}</div><div class="pct">${s.pct}%</div>`;
+    galaxy.appendChild(o);
+  });
+
+  // project doors
+  const hall=$('#hall');
+  DATA.projects.forEach((p,i)=>{
+    const d=document.createElement('div'); d.className='door'; d.dataset.idx=i;
+    d.style.setProperty('--door-bg',p.bg);
+    d.style.setProperty('--door-glow',p.glow);
+    d.innerHTML=`
+      <div class="interior"><div class="enter">Step Inside</div><div class="arrow">→</div></div>
+      <div class="leaf">
+        <div class="seam"></div><div class="handle"></div><div class="glow"></div>
+        <div class="meta"><div class="tag">${p.tag}</div><div class="nm">${p.name}</div></div>
+      </div>`;
+    hall.appendChild(d);
+    d.addEventListener('click',()=>openProject(i,d));
+  });
+
+  // timeline
+  const tl=$('#timeline');
+  DATA.timeline.forEach(n=>{
+    const el=document.createElement('div'); el.className='tnode reveal';
+    el.innerHTML=`<div class="yr">${n.yr}</div><h4>${n.role}</h4>
+      <div class="org">${n.org}</div><p>${n.desc}</p>`;
+    tl.appendChild(el);
+  });
+
+  // names
+  $('.hero-name').innerHTML = DATA.name.split(' ').map(w=>`<span class="ln"><span>${w}</span></span>`).join('');
+  $('footer .sig').textContent=DATA.name;
+}
+
+/* ================= PROJECT MODAL ================= */
+function openProject(i,doorEl){
+  const p=DATA.projects[i];
+  doorEl.classList.add('open');
+  const modal=$('#modal'), room=$('#room');
+  const media = p.video
+    ? `<div class="room-media"><iframe src="${p.video}" allowfullscreen loading="lazy"></iframe></div>`
+    : `<div class="room-media"><div class="placeholder"><div class="play">▶</div>
+         Paste a video embed URL in DATA.projects[${i}].video</div></div>`;
+  room.innerHTML=`
+    <div class="room-hero" style="--accent:${p.accent}">
+      <button class="room-close" id="closeRoom">✕</button>
+      <div class="tag" style="color:${p.accent}">${p.tag}</div>
+      <h2>${p.name}</h2>
+      <div class="sub">${p.sub}</div>
+    </div>
+    ${media}
+    <div class="room-body">
+      <div class="monoliths">
+        <div class="monolith" style="--accent:${p.accent}"><h4>Problem</h4><p>${p.problem}</p></div>
+        <div class="monolith" style="--accent:${p.accent}"><h4>Solution</h4><p>${p.solution}</p></div>
+        <div class="monolith" style="--accent:${p.accent}"><h4>Result</h4><p>${p.result}</p></div>
+      </div>
+      <div class="pills">${p.stack.map(s=>`<span class="pill">${s}</span>`).join('')}</div>
+      <div class="room-links">
+        <a class="btn primary" href="${p.github}" target="_blank" rel="noopener">◈ GitHub</a>
+        <a class="btn ghost" href="${p.live}" target="_blank" rel="noopener">Live Site →</a>
+      </div>
+    </div>`;
+  modal.classList.add('show');
+  gsap.fromTo('#modal .scrim',{opacity:0},{opacity:1,duration:.4});
+  gsap.fromTo('#room',{opacity:0,y:40,scale:.96},{opacity:1,y:0,scale:1,duration:.6,ease:'power3.out',delay:.15});
+  const close=()=>{
+    gsap.to('#room',{opacity:0,y:30,scale:.97,duration:.35});
+    gsap.to('#modal .scrim',{opacity:0,duration:.4,delay:.05,onComplete:()=>{
+      modal.classList.remove('show'); doorEl.classList.remove('open');
+    }});
+  };
+  $('#closeRoom').onclick=close;
+  $('#modal .scrim').onclick=close;
+  document.addEventListener('keydown',function esc(e){ if(e.key==='Escape'){close();document.removeEventListener('keydown',esc);} });
+}
+
+/* ================= SCROLL / REVEALS / NAV ================= */
+function setupAfterReveal(){
+  let lenis=null;
+  if(typeof Lenis!=='undefined' && !reduced){
+    lenis=new Lenis({lerp:.09,wheelMultiplier:1});
+    lenis.on('scroll',()=>{ if(window.ScrollTrigger) ScrollTrigger.update(); });
+    gsap.ticker.add(t=>lenis.raf(t*1000));
+    gsap.ticker.lagSmoothing(0);
+  }
+  const scrollTo=(target)=>{
+    const el=$(target); if(!el) return;
+    if(lenis) lenis.scrollTo(el,{offset:0}); else el.scrollIntoView({behavior:'smooth'});
+  };
+  $$('[data-scroll], .nav-links a').forEach(a=>{
+    a.addEventListener('click',e=>{ const h=a.getAttribute('href');
+      if(h&&h.startsWith('#')){e.preventDefault();scrollTo(h);} });
+  });
+
+  // nav scrolled bg
+  const nav=$('#nav');
+  const onScroll=()=>{ nav.classList.toggle('scrolled', window.scrollY>60); };
+  (lenis? lenis.on('scroll',onScroll) : addEventListener('scroll',onScroll)); onScroll();
+
+  // reveals
+  if(window.ScrollTrigger){
+    gsap.registerPlugin(ScrollTrigger);
+    $$('.reveal').forEach(el=>{
+      if(el.closest('#hero')) return; // hero handled by intro reveal
+      gsap.fromTo(el,{opacity:0,y:42},{opacity:1,y:0,duration:1,ease:'power3.out',
+        scrollTrigger:{trigger:el,start:'top 88%'}});
+    });
+    // count up
+    ScrollTrigger.create({trigger:'#about',start:'top 70%',once:true,onEnter:countUp});
+    // dot nav highlight
+    const sections=$$('.section');
+    sections.forEach(sec=>{
+      ScrollTrigger.create({trigger:sec,start:'top 55%',end:'bottom 55%',
+        onToggle:self=>{ if(self.isActive) setActiveDot(sec.id); }});
+    });
+  } else {
+    $$('.reveal').forEach(el=>{el.style.opacity=1;el.style.transform='none';});
+    countUp();
+  }
+  buildDots(scrollTo);
+}
+
+function countUp(){
+  $$('[data-count]').forEach(el=>{
+    const end=+el.dataset.count; const obj={v:0};
+    gsap.to(obj,{v:end,duration:1.6,ease:'power2.out',
+      onUpdate:()=>el.textContent=Math.round(obj.v)});
+  });
+}
+
+function buildDots(scrollTo){
+  const dots=$('#dots'); const secs=$$('.section');
+  secs.forEach(s=>{
+    const b=document.createElement('button'); b.dataset.id=s.id;
+    b.innerHTML=`<span>${s.dataset.name||s.id}</span>`;
+    b.onclick=()=>scrollTo('#'+s.id);
+    dots.appendChild(b);
+  });
+}
+function setActiveDot(id){
+  $$('#dots button').forEach(b=>b.classList.toggle('active',b.dataset.id===id));
+}
+
+/* ================= CONTACT — particle burst ================= */
+function setupContact(){
+  $('#sendBtn').addEventListener('click',e=>{
+    const r=e.target.getBoundingClientRect();
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    for(let i=0;i<28;i++){
+      const p=document.createElement('div'); p.className='burst'; document.body.appendChild(p);
+      const ang=Math.random()*Math.PI*2, dist=60+Math.random()*120;
+      gsap.set(p,{left:cx,top:cy,background:['#00F7FF','#E5C16F','#1E9FFF'][i%3]});
+      gsap.to(p,{left:cx+Math.cos(ang)*dist,top:cy+Math.sin(ang)*dist,opacity:0,scale:0,
+        duration:.9+Math.random()*.5,ease:'power2.out',onComplete:()=>p.remove()});
+    }
+    const btn=e.target; const old=btn.textContent;
+    btn.textContent='Message Sent ◈'; btn.style.pointerEvents='none';
+    setTimeout(()=>{btn.textContent=old;btn.style.pointerEvents='';
+      $('#cName').value=$('#cEmail').value=$('#cMsg').value='';},2200);
+  });
+}
+
+/* ================= BOOT ================= */
+window.addEventListener('load',()=>{
+  buildContent();
+  three.ok = initThree();
+  setupContact();
+  playIntro();
+  // safety: if intro stalls, force reveal after 8s
+  setTimeout(()=>{ if($('#scene').style.opacity!=='1' && getComputedStyle($('#scene')).visibility==='hidden'){
+    const intro=$('#intro'); if(intro) intro.style.display='none'; revealScene(); } },8000);
+});
+</script>
+</body>
+</html>

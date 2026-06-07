@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { sections } from "@/content/site";
+import { useI18n } from "@/components/LanguageProvider";
 
 export default function DotNav({ scrollTo, revealed }) {
+  const { sections } = useI18n();
   const [active, setActive] = useState("hero");
 
   useEffect(() => {

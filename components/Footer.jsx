@@ -1,8 +1,9 @@
 "use client";
 
-import { site } from "@/content/site";
+import { useI18n } from "@/components/LanguageProvider";
 
 export default function Footer() {
+  const { site } = useI18n();
   const year = new Date().getFullYear();
   return (
     <footer className="footer">
@@ -15,10 +16,7 @@ export default function Footer() {
             </a>
           ))}
         </div>
-        <div className="fine">
-          © {year} {site.name} · All rights reserved. Crafted with light, sound
-          &amp; mechanism — the Chamber of Curiosities.
-        </div>
+        <div className="fine">© {year} {site.name}</div>
       </div>
     </footer>
   );

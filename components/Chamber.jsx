@@ -17,6 +17,7 @@ import Projects from "@/components/Projects";
 import Timeline from "@/components/Timeline";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import { LanguageProvider } from "@/components/LanguageProvider";
 import { useReducedMotion, useIsTouch } from "@/hooks/useReducedMotion";
 
 /**
@@ -63,9 +64,12 @@ export default function Chamber() {
     if (enteredRef.current) return;
     enteredRef.current = true;
     fx.current.mode = "ambient";
+    // Retire the door instantly — it happens under the full whiteout, so the
+    // 3D door can never bleed through behind the portfolio as it paints in.
+    fx.current.doorVisible = false;
     setEntered(true);
     document.body.style.overflow = "";
-    // ease the warp back down and retire the door
+    // ease the warp back down
     gsap.to(fx.current, {
       warp: 0,
       glow: 0.5,
@@ -74,11 +78,6 @@ export default function Chamber() {
       duration: 1.5,
       ease: "power2.out",
     });
-    // Retire the door with a plain timer (NOT gsap.delayedCall) so it survives a
-    // gsap.context revert if the intro effect re-runs (e.g. a late WebGL flag).
-    setTimeout(() => {
-      fx.current.doorVisible = false;
-    }, 600);
   };
 
   /* ----------------------------- Intro sequence ----------------------------- */
@@ -146,10 +145,13 @@ export default function Chamber() {
         // so there's never a blank white gap.
         .to(flashRef.current, { opacity: 1, duration: 0.3, ease: "power2.in" }, "open+=1.45")
         .add(enter)
+        // hold the whiteout fully opaque a beat so the portfolio is completely
+        // painted (and the door fully gone) before the light dissolves — a clean
+        // cut to the finished scene, never a muddy overlap.
         .to(
           flashRef.current,
-          { opacity: 0, duration: 0.9, ease: "power2.out" },
-          ">0.12"
+          { opacity: 0, duration: 1.0, ease: "power2.out" },
+          ">0.4"
         );
     });
 
@@ -190,10 +192,77 @@ export default function Chamber() {
     };
   }, [entered, reduced]);
 
+  /* ------------------- Click-and-drag scrolling (grab to scroll) ------------ */
+  // Grab anywhere on the page (except real interactive elements) and move up or
+  // down to scroll — makes navigating and lining up hovers effortless on
+  // desktop. Routed through Lenis so it stays buttery-smooth.
+  useEffect(() => {
+    if (!entered || isTouch) return;
+    const SKIP =
+      "a, button, input, textarea, select, label, video, iframe, canvas, [role='button'], .modal";
+    let downEl = null;
+    let down = false;
+    let dragging = false;
+    let startY = 0;
+    let startScroll = 0;
+    let pid = null;
+
+    const curScroll = () => (lenisRef.current ? lenisRef.current.scroll : window.scrollY);
+    const scrollToY = (y) => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const clamped = Math.max(0, Math.min(y, max));
+      if (lenisRef.current) lenisRef.current.scrollTo(clamped, { immediate: true, force: true });
+      else window.scrollTo(0, clamped);
+    };
+
+    const onDown = (e) => {
+      if (e.button !== 0 || (e.target.closest && e.target.closest(SKIP))) return;
+      downEl = e.target;
+      down = true;
+      dragging = false;
+      startY = e.clientY;
+      startScroll = curScroll();
+      pid = e.pointerId;
+    };
+    const onMove = (e) => {
+      if (!down) return;
+      const dy = e.clientY - startY;
+      if (!dragging) {
+        if (Math.abs(dy) < 6) return;
+        dragging = true;
+        document.body.classList.add("dragging");
+        try {
+          downEl.setPointerCapture?.(pid);
+        } catch {}
+      }
+      scrollToY(startScroll - dy);
+      e.preventDefault();
+    };
+    const onUp = () => {
+      down = false;
+      if (dragging) {
+        dragging = false;
+        document.body.classList.remove("dragging");
+      }
+    };
+
+    window.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointermove", onMove, { passive: false });
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+    return () => {
+      window.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+      document.body.classList.remove("dragging");
+    };
+  }, [entered, isTouch]);
+
   const showEnterBtn = (reduced || isTouch || webglFailed) && !entered;
 
   return (
-    <>
+    <LanguageProvider>
       <Atmosphere />
       <Background fx={fx} onError={() => setWebglFailed(true)} />
       <Cursor />
@@ -212,12 +281,10 @@ export default function Chamber() {
         style={{
           opacity: entered ? 1 : 0,
           visibility: entered ? "visible" : "hidden",
-          transform: entered ? "scale(1)" : "scale(1.045)",
-          transformOrigin: "center 38%",
-          // opacity snaps in quickly beneath the whiteout; the scale gives a
-          // gentle cinematic settle as the white dissolves to reveal it.
-          transition:
-            "opacity 0.5s ease, transform 1.2s cubic-bezier(0.165,0.84,0.44,1)",
+          // Pure opacity — no scale settle. The scene is fully in place beneath
+          // the whiteout, so when the white lifts it reveals a finished, static
+          // portfolio (the hero's own entrance animations do the elegant part).
+          transition: "opacity 0.5s ease",
         }}
         aria-hidden={!entered}
       >
@@ -231,6 +298,6 @@ export default function Chamber() {
         <Contact />
         <Footer />
       </main>
-    </>
+    </LanguageProvider>
   );
 }

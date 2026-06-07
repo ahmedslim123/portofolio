@@ -33,9 +33,7 @@ const projects = [
   { slug: "video-montage", dir: "Montage Video ( IA , capcut , premiere pro )",
     images: [], videos: [{ src: "MONTAGEE.mp4", out: "reel" }, { src: "MOKITOIA.mp4", out: "mojito" }, { src: "sou9 mirta7.mp4", out: "sou9" }],
     cover: { poster: "reel" } },
-  { slug: "social-media-design", dir: "Social Media Graphic Design",
-    images: ["WhatsApp Image 2026-05-10 at 6.49.41 PM (1).jpeg", "WhatsApp Image 2026-05-10 at 6.49.42 PM (1).jpeg", "WhatsApp Image 2026-05-10 at 6.49.41 PM (2).jpeg", "WhatsApp Image 2026-05-10 at 6.49.42 PM.jpeg"],
-    videos: [], cover: { image: "WhatsApp Image 2026-05-10 at 6.49.41 PM (1).jpeg" } },
+  // social-media-design door was removed from the portfolio (2026-06).
 ];
 
 const VF = "scale=w=min(1280\\,iw):h=min(720\\,ih):force_original_aspect_ratio=decrease:force_divisible_by=2";
@@ -96,8 +94,12 @@ async function optimizeImage(input, out, width = 1600, q = 82) {
       manifest.videos.push({ mp4, poster });
     }
 
-    // cover for the door
-    if (p.cover.image) {
+    // cover for the door — prefer an explicit cover.png dropped into the raw folder
+    // (door is object-fit:cover / 3:4.4, so we keep aspect ratio and just compress).
+    const explicitCover = path.join(srcDir, "cover.png");
+    if (fs.existsSync(explicitCover)) {
+      await sharp(explicitCover).rotate().resize({ width: 1080, withoutEnlargement: true }).jpeg({ quality: 84, mozjpeg: true }).toFile(path.join(outDir, "cover.jpg"));
+    } else if (p.cover.image) {
       await optimizeImage(path.join(srcDir, p.cover.image), path.join(outDir, "cover.jpg"), 820, 80);
     } else if (p.cover.poster) {
       const posterPath = path.join(outDir, `${p.cover.poster}.jpg`);

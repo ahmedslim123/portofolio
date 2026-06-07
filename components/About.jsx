@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Reveal from "@/components/Reveal";
-import { site } from "@/content/site";
+import { useI18n } from "@/components/LanguageProvider";
 
 /** Animated count-up that fires once when scrolled into view. */
 function CountUp({ to }) {
@@ -40,12 +40,13 @@ function CountUp({ to }) {
 }
 
 export default function About() {
+  const { site, ui } = useI18n();
   return (
     <section id="about" className="section" data-name="About">
       <div className="wrap">
-        <Reveal className="eyebrow">À Propos · The Maker</Reveal>
+        <Reveal className="eyebrow">{ui.about.eyebrow}</Reveal>
         <Reveal className="h-title" as="h2">
-          Behind the Door
+          {ui.about.title}
         </Reveal>
         <div className="about-grid">
           <Reveal className="about-text">

@@ -1,7 +1,7 @@
 "use client";
 
 import Reveal from "@/components/Reveal";
-import { site } from "@/content/site";
+import { useI18n } from "@/components/LanguageProvider";
 
 // Scattered centre points (left%, top%) for the galaxy layout on desktop.
 const SPOTS = [
@@ -18,17 +18,15 @@ const SPOTS = [
 ];
 
 export default function Skills() {
+  const { site, ui } = useI18n();
   return (
     <section id="skills" className="section" data-name="Skills">
       <div className="wrap">
-        <Reveal className="eyebrow">Arsenal · Languages &amp; Tools</Reveal>
+        <Reveal className="eyebrow">{ui.skills.eyebrow}</Reveal>
         <Reveal className="h-title" as="h2">
-          Constellation of Skills
+          {ui.skills.title}
         </Reveal>
-        <Reveal className="lead">
-          Each orb is a craft I work in — the ring shows proficiency, the size
-          reflects mastery. Hover to read the numbers.
-        </Reveal>
+        <Reveal className="lead">{ui.skills.lead}</Reveal>
         <div className="galaxy">
           {site.skills.map((s, i) => {
             const sp = SPOTS[i % SPOTS.length];

@@ -1,11 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { site } from "@/content/site";
+import { useI18n } from "@/components/LanguageProvider";
+import { asset } from "@/lib/asset";
 
 const EASE = [0.165, 0.84, 0.44, 1];
 
 export default function Hero({ revealed, scrollTo }) {
+  const { site, ui } = useI18n();
   const words = site.name.split(" ");
 
   const go = (e, id) => {
@@ -45,6 +47,17 @@ export default function Hero({ revealed, scrollTo }) {
             <motion.div className="hero-role" {...fade(0.7)}>
               {site.tagline}
             </motion.div>
+            {site.phone && (
+              <motion.a className="hero-phone" href={`tel:${site.phone}`} {...fade(0.78)}>
+                <svg viewBox="0 0 24 24" aria-hidden focusable="false">
+                  <path
+                    fill="currentColor"
+                    d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.58 3.6a1 1 0 0 1-.25 1l-2.23 2.2Z"
+                  />
+                </svg>
+                <span>{site.phoneDisplay || site.phone}</span>
+              </motion.a>
+            )}
             <motion.p className="hero-bio" {...fade(0.8)}>
               {site.heroBio}
             </motion.p>
@@ -54,14 +67,14 @@ export default function Hero({ revealed, scrollTo }) {
                 className="btn primary"
                 onClick={(e) => go(e, "projects")}
               >
-                View Projects
+                {ui.hero.viewProjects}
               </a>
               <a
                 href="#contact"
                 className="btn ghost"
                 onClick={(e) => go(e, "contact")}
               >
-                Get in Touch
+                {ui.hero.getInTouch}
               </a>
             </motion.div>
           </div>
@@ -73,7 +86,7 @@ export default function Hero({ revealed, scrollTo }) {
               <div className="photo">
                 {site.photo ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={site.photo} alt={site.name} />
+                  <img src={asset(site.photo)} alt={site.name} />
                 ) : (
                   <div className="initials">{site.initials}</div>
                 )}
@@ -83,7 +96,7 @@ export default function Hero({ revealed, scrollTo }) {
         </div>
       </div>
       <div className="scroll-cue">
-        <span>Scroll</span>
+        <span>{ui.hero.scroll}</span>
         <span className="bar" />
       </div>
     </section>

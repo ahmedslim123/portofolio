@@ -58,6 +58,7 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       className={`${cinzel.variable} ${cormorant.variable} ${spaceMono.variable}`}
+      suppressHydrationWarning
     >
       <body suppressHydrationWarning>{children}</body>
     </html>

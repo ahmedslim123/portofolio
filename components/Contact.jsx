@@ -3,9 +3,10 @@
 import { useRef, useState } from "react";
 import gsap from "gsap";
 import Reveal from "@/components/Reveal";
-import { site } from "@/content/site";
+import { useI18n } from "@/components/LanguageProvider";
 
 export default function Contact() {
+  const { site, ui } = useI18n();
   const btnRef = useRef(null);
   // status: "idle" | "sending" | "sent" | "error"
   const [status, setStatus] = useState("idle");
@@ -33,24 +34,24 @@ export default function Contact() {
     }
   };
 
-  // Last-resort fallback: open the visitor's mail client pre-filled.
-  const mailtoFallback = () => {
-    const subject = encodeURIComponent(`Portfolio message from ${form.name || "a traveler"}`);
+  // The site is a fully static export (no server), so submitting opens the
+  // visitor's mail client pre-filled to me — works on any static host.
+  const openMail = () => {
+    const subject = encodeURIComponent(`Portfolio message from ${form.name || ui.contact.traveler}`);
     const body = encodeURIComponent(`${form.msg}\n\n— ${form.name}${form.email ? ` (${form.email})` : ""}`);
     window.location.href = `mailto:${site.email}?subject=${subject}&body=${body}`;
   };
 
   const validate = () => {
     if (!form.name.trim() || !form.email.trim() || !form.msg.trim())
-      return "Please fill in every field.";
+      return ui.contact.fillAll;
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim()))
-      return "That email address looks off.";
+      return ui.contact.badEmail;
     return "";
   };
 
-  const onSubmit = async (e) => {
+  const onSubmit = (e) => {
     e.preventDefault();
-    if (status === "sending") return;
 
     const v = validate();
     if (v) {
@@ -59,39 +60,17 @@ export default function Contact() {
       return;
     }
     setError("");
-    setStatus("sending");
 
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
+    openMail();
 
-      // Not configured yet (no API key) → fall back to the user's mail client.
-      if (res.status === 503) {
-        mailtoFallback();
-        setStatus("idle");
-        return;
-      }
-
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok || !data.ok) {
-        throw new Error(data.error || "Send failed");
-      }
-
-      // Success — celebrate.
-      const r = btnRef.current.getBoundingClientRect();
-      burst(r.left + r.width / 2, r.top + r.height / 2);
-      setStatus("sent");
-      setTimeout(() => {
-        setStatus("idle");
-        setForm({ name: "", email: "", msg: "", company: "" });
-      }, 3200);
-    } catch (err) {
-      setError(err.message || "Something went wrong. Try again, or email me directly.");
-      setStatus("error");
-    }
+    // Celebrate — the mail client opens with the message ready to send.
+    const r = btnRef.current.getBoundingClientRect();
+    burst(r.left + r.width / 2, r.top + r.height / 2);
+    setStatus("sent");
+    setTimeout(() => {
+      setStatus("idle");
+      setForm({ name: "", email: "", msg: "", company: "" });
+    }, 3200);
   };
 
   const set = (k) => (e) => {
@@ -104,51 +83,51 @@ export default function Contact() {
 
   const label =
     status === "sending"
-      ? "Sending…"
+      ? ui.contact.sending
       : status === "sent"
-      ? "Message Sent ◈"
-      : "Send Message ◈";
+      ? ui.contact.sent
+      : ui.contact.send;
 
   return (
     <section id="contact" className="section" data-name="Contact">
       <div className="wrap">
         <Reveal className="eyebrow" style={{ justifyContent: "center" }}>
-          Open Channel
+          {ui.contact.eyebrow}
         </Reveal>
         <Reveal className="h-title" as="h2" style={{ textAlign: "center" }}>
-          Let&apos;s Build Something
+          {ui.contact.title}
         </Reveal>
         <Reveal className="contact-card">
           <div className="ringfx" />
           <form onSubmit={onSubmit} noValidate>
             <div className="field">
-              <label htmlFor="cName">Your Name</label>
+              <label htmlFor="cName">{ui.contact.name}</label>
               <input
                 id="cName"
                 type="text"
-                placeholder="Traveler's name"
+                placeholder={ui.contact.namePh}
                 value={form.name}
                 onChange={set("name")}
                 disabled={status === "sending"}
               />
             </div>
             <div className="field">
-              <label htmlFor="cEmail">Email</label>
+              <label htmlFor="cEmail">{ui.contact.email}</label>
               <input
                 id="cEmail"
                 type="email"
-                placeholder="you@realm.com"
+                placeholder={ui.contact.emailPh}
                 value={form.email}
                 onChange={set("email")}
                 disabled={status === "sending"}
               />
             </div>
             <div className="field">
-              <label htmlFor="cMsg">Message</label>
+              <label htmlFor="cMsg">{ui.contact.message}</label>
               <textarea
                 id="cMsg"
                 rows={4}
-                placeholder="Speak, and the door shall open…"
+                placeholder={ui.contact.messagePh}
                 value={form.msg}
                 onChange={set("msg")}
                 disabled={status === "sending"}
@@ -179,7 +158,7 @@ export default function Contact() {
 
             <div className={`form-status${status === "error" ? " err" : status === "sent" ? " ok" : ""}`} role="status">
               {status === "error" && error}
-              {status === "sent" && "Thank you — your message is on its way. I'll reply soon."}
+              {status === "sent" && ui.contact.statusSent}
             </div>
           </form>
         </Reveal>

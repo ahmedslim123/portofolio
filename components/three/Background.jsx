@@ -2,14 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { AdaptiveDpr } from "@react-three/drei";
-import {
-  EffectComposer,
-  Bloom,
-  Vignette,
-  ChromaticAberration,
-} from "@react-three/postprocessing";
-import { BlendFunction } from "postprocessing";
+import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import * as THREE from "three";
 
 import GrandDoor from "@/components/three/GrandDoor";
@@ -91,35 +84,17 @@ function Rig({ fx }) {
   return null;
 }
 
-/** Drops render resolution briefly while the visitor scrolls, so the GPU can
- *  keep the smooth-scroll and blurred glass panels fluid, then restores full
- *  crispness once they stop. Pairs with <AdaptiveDpr/> + `performance.min`. */
-function ScrollPerfGuard() {
-  const regress = useThree((s) => s.performance.regress);
-  useEffect(() => {
-    const onActivity = () => regress();
-    const opts = { passive: true };
-    window.addEventListener("wheel", onActivity, opts);
-    window.addEventListener("touchmove", onActivity, opts);
-    window.addEventListener("scroll", onActivity, opts);
-    return () => {
-      window.removeEventListener("wheel", onActivity);
-      window.removeEventListener("touchmove", onActivity);
-      window.removeEventListener("scroll", onActivity);
-    };
-  }, [regress]);
-  return null;
-}
-
-/** Post stack — Bloom makes the emissive veins glow, a subtle chromatic
- *  aberration adds a filmic lens fringe, and a vignette frames the void.
+/** Post stack — Bloom makes the emissive veins glow and a vignette frames the
+ *  void. (We dropped the chromatic-aberration pass: it was a full-screen pass
+ *  every frame for a barely-visible fringe — removing it keeps the continuous
+ *  render cheap so the scene stays smooth without ever throttling resolution.)
  *  NOTE: we deliberately do NOT pass a `ref` to any effect — in React 19 `ref`
  *  is a regular prop and @react-three/postprocessing's wrapEffect does
  *  `JSON.stringify(restProps)`, which throws on the circular effect instance. */
 function Effects() {
   return (
-    // multisampling 0: Bloom + chromatic aberration already soften edges, so MSAA
-    // (which only AAs the base render target, not the post output) is wasted GPU.
+    // multisampling 0: Bloom already softens edges, so MSAA (which only AAs the
+    // base render target, not the post output) is wasted GPU.
     <EffectComposer multisampling={0}>
       <Bloom
         intensity={1.25}
@@ -127,12 +102,6 @@ function Effects() {
         luminanceSmoothing={0.9}
         mipmapBlur
         radius={0.7}
-      />
-      <ChromaticAberration
-        blendFunction={BlendFunction.NORMAL}
-        offset={[0.0006, 0.0006]}
-        radialModulation={false}
-        modulationOffset={0}
       />
       <Vignette eskil={false} offset={0.3} darkness={0.85} />
     </EffectComposer>
@@ -145,13 +114,12 @@ function Effects() {
  */
 export default function Background({ fx, onError }) {
   const [ok, setOk] = useState(true);
-  // Pause the whole render loop (incl. the expensive Bloom pass) when it can't
-  // help the visitor: the tab is hidden, a project room is open (the canvas is
-  // fully covered), or they're actively scrolling (the void is fixed, so a
-  // frozen frame is identical — and this hands the GPU entirely to the scroll).
-  // The framebuffer keeps showing the last frame, so pausing is invisible.
+  // The render loop runs continuously so the ambient void NEVER freezes, jumps
+  // or restarts on a click/scroll — the animation stays perfectly smooth while
+  // the visitor navigates. We only pause when the tab is hidden (invisible to
+  // the visitor, saves the GPU/battery), and the DPR is fixed (no runtime
+  // resolution switching), so nothing about the picture ever changes on input.
   const [visible, setVisible] = useState(true);
-  const [busy, setBusy] = useState(false); // room open OR mid-scroll
 
   useEffect(() => {
     try {
@@ -174,48 +142,12 @@ export default function Background({ fx, onError }) {
     return () => document.removeEventListener("visibilitychange", onVis);
   }, []);
 
-  useEffect(() => {
-    let overlay = false;
-    let scrolling = false;
-    let timer;
-    const sync = () => setBusy(overlay || scrolling);
-    const onScroll = () => {
-      // Never interfere with the door intro — only pause-on-scroll once the
-      // scene has settled into the ambient void.
-      if (fx.current.mode === "door") return;
-      scrolling = true;
-      sync();
-      clearTimeout(timer);
-      // resume a beat after motion settles (covers Lenis momentum)
-      timer = setTimeout(() => {
-        scrolling = false;
-        sync();
-      }, 180);
-    };
-    const onOverlay = (e) => {
-      overlay = !!e.detail?.open;
-      sync();
-    };
-    const opts = { passive: true };
-    window.addEventListener("scroll", onScroll, opts);
-    window.addEventListener("wheel", onScroll, opts);
-    window.addEventListener("touchmove", onScroll, opts);
-    window.addEventListener("chamber:overlay", onOverlay);
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("wheel", onScroll);
-      window.removeEventListener("touchmove", onScroll);
-      window.removeEventListener("chamber:overlay", onOverlay);
-    };
-  }, []);
-
   if (!ok) return null;
 
   return (
     <Canvas
       className="bg-canvas"
-      frameloop={visible && !busy ? "always" : "never"}
+      frameloop={visible ? "always" : "never"}
       style={{
         position: "fixed",
         inset: 0,
@@ -224,8 +156,9 @@ export default function Background({ fx, onError }) {
         zIndex: -2,
         display: "block",
       }}
-      dpr={[1, 1.75]}
-      performance={{ min: 0.5, max: 1, debounce: 200 }}
+      // Fixed DPR (capped at 1.5) — picked once per device, never changed at
+      // runtime, so the scene can't shimmer/sharpen as you scroll or click.
+      dpr={[1, 1.5]}
       gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
       camera={{ position: [0, 0, 8], fov: 60, near: 0.1, far: 200 }}
       onCreated={({ gl }) => {
@@ -246,8 +179,6 @@ export default function Background({ fx, onError }) {
       <GrandDoor fx={fx} />
       <Rig fx={fx} />
       <Effects />
-      <ScrollPerfGuard />
-      <AdaptiveDpr pixelated={false} />
     </Canvas>
   );
 }

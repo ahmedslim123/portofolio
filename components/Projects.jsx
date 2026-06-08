@@ -124,15 +124,6 @@ export default function Projects() {
   useEffect(() => () => clearTimeout(timer.current), []);
   useEffect(() => setActiveMedia(0), [modalIdx]);
 
-  // Tell the WebGL backdrop to pause its render loop while a door/room is open
-  // — the canvas is fully covered, so the GPU is free to drive the door + room
-  // animation smoothly. Resumes when everything is closed.
-  useEffect(() => {
-    window.dispatchEvent(
-      new CustomEvent("chamber:overlay", { detail: { open: openIdx != null } })
-    );
-  }, [openIdx]);
-
   useEffect(() => {
     if (modalIdx == null) return;
     const onKey = (e) => e.key === "Escape" && close();

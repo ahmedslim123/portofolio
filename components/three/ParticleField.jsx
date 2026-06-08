@@ -51,13 +51,14 @@ export default function ParticleField({ fx, count }) {
     const reduced =
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    // Touch devices (phones/tablets) have weaker GPUs and the extra additive
-    // points cost the most there — fewer keeps the void smooth at 60fps without
-    // any visible difference. Desktop density is unchanged.
+    // The void renders continuously at a fixed quality (no runtime throttling),
+    // so the point count is kept modest to hold a rock-steady frame rate on its
+    // own. Additive points are fill-rate heavy; these counts still read as a
+    // dense starfield. Touch devices get fewer (weaker GPUs).
     const coarse =
       typeof window !== "undefined" &&
       window.matchMedia("(pointer:coarse)").matches;
-    const N = count ?? (reduced ? 1600 : coarse ? 2800 : 5600);
+    const N = count ?? (reduced ? 1200 : coarse ? 1800 : 3200);
     const positions = new Float32Array(N * 3);
     const aColor = new Float32Array(N * 3);
     const aScale = new Float32Array(N);

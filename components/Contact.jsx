@@ -68,7 +68,9 @@ export default function Contact() {
     fd.append("from_name", "slimportofolio contact form");
     fd.append("replyto", form.email);
 
-    const res = await fetch("https://api.web3forms.com/post", {
+    // Endpoint MUST be /submit — /post returns API-Gateway "Missing
+    // Authentication Token" (403, route not found).
+    const res = await fetch("https://api.web3forms.com/submit", {
       method: "POST",
       body: fd,
     });

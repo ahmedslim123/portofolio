@@ -49,8 +49,8 @@ export default function Contact() {
   };
 
   // POST to Web3Forms — emails the submission straight to my inbox, no server
-  // needed. Returns true on success. Honeypot (`company`) is forwarded as
-  // `botcheck` so their spam filter can drop bots silently.
+  // needed. Returns true on success, else throws with the server's reason
+  // (bots never reach here — they're short-circuited in onSubmit).
   const sendViaWeb3Forms = async () => {
     const res = await fetch("https://api.web3forms.com/post", {
       method: "POST",
@@ -61,12 +61,13 @@ export default function Contact() {
         email: form.email,
         message: form.msg,
         subject: `Portfolio message from ${form.name}`,
-        from_name: "Portfolio Contact Form",
-        botcheck: form.company ? true : "",
+        from_name: "slimportofolio contact form",
+        replyto: form.email,
       }),
     });
     const data = await res.json().catch(() => ({}));
-    if (!res.ok || !data.success) throw new Error(data.message || "send failed");
+    if (!res.ok || !data.success)
+      throw new Error(data.message || `HTTP ${res.status}`);
     return true;
   };
 
@@ -116,9 +117,14 @@ export default function Contact() {
     try {
       await sendViaWeb3Forms();
       celebrate();
-    } catch {
-      setError(ui.contact.genericErr);
-      setStatus("error");
+    } catch (err) {
+      // The form service was unreachable — domain restriction on the Web3Forms
+      // key, an ad-/tracker-blocker, or the visitor being offline. Surface the
+      // real reason in the console for debugging, then never lose the message:
+      // fall back to the visitor's mail client and still celebrate.
+      console.error("Contact form (Web3Forms) failed:", err?.message || err);
+      openMail();
+      celebrate();
     }
   };
 

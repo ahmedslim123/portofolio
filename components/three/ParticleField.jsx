@@ -51,7 +51,13 @@ export default function ParticleField({ fx, count }) {
     const reduced =
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const N = count ?? (reduced ? 1600 : 5600);
+    // Touch devices (phones/tablets) have weaker GPUs and the extra additive
+    // points cost the most there — fewer keeps the void smooth at 60fps without
+    // any visible difference. Desktop density is unchanged.
+    const coarse =
+      typeof window !== "undefined" &&
+      window.matchMedia("(pointer:coarse)").matches;
+    const N = count ?? (reduced ? 1600 : coarse ? 2800 : 5600);
     const positions = new Float32Array(N * 3);
     const aColor = new Float32Array(N * 3);
     const aScale = new Float32Array(N);

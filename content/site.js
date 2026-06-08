@@ -27,8 +27,8 @@ export const site = {
 
   about: [
     "I'm a <hl>software engineer</hl> and <hl>graphic designer</hl> based in Sousse, Tunisia — a fresh ESPRIT graduate with a Master's in Computer Software Engineering. I live where logic meets aesthetics.",
-    "My work spans <hl>full-stack web &amp; mobile development</hl>, <hl>AI &amp; data science</hl>, and the brand design that makes products feel alive. From LLaMA-powered RAG systems to text-to-video pipelines and responsive showcase sites, I love building things end to end.",
-    "When I'm not shipping code, I lead <hl>marketing &amp; content</hl> for growing brands — designing posters, editing video, and growing communities from the ground up.",
+    "My work spans <hl>full-stack web & mobile development</hl>, <hl>AI & data science</hl>, and the brand design that makes products feel alive. From LLaMA-powered RAG systems to text-to-video pipelines and responsive showcase sites, I love building things end to end.",
+    "When I'm not shipping code, I lead <hl>marketing & content</hl> for growing brands — designing posters, editing video, and growing communities from the ground up.",
   ],
 
   stats: [
@@ -506,8 +506,8 @@ const siteFR = {
     "Je fais le lien entre l'ingénierie et le design créatif — je conçois des applications web et mobiles, j'entraîne des systèmes d'IA et je fais grandir des marques avec un code propre et des visuels percutants.",
   about: [
     "Je suis <hl>ingénieur logiciel</hl> et <hl>designer graphique</hl> basé à Sousse, en Tunisie — jeune diplômé d'ESPRIT avec un Mastère en Génie Logiciel. Je vis là où la logique rencontre l'esthétique.",
-    "Mon travail couvre le <hl>développement web &amp; mobile full-stack</hl>, l'<hl>IA &amp; la science des données</hl>, et le design de marque qui donne vie aux produits. Des systèmes RAG propulsés par LLaMA aux pipelines text-to-video et sites vitrines responsives, j'adore construire de bout en bout.",
-    "Quand je ne code pas, je dirige le <hl>marketing &amp; le contenu</hl> de marques en croissance — création d'affiches, montage vidéo et animation de communautés depuis zéro.",
+    "Mon travail couvre le <hl>développement web & mobile full-stack</hl>, l'<hl>IA & la science des données</hl>, et le design de marque qui donne vie aux produits. Des systèmes RAG propulsés par LLaMA aux pipelines text-to-video et sites vitrines responsives, j'adore construire de bout en bout.",
+    "Quand je ne code pas, je dirige le <hl>marketing & le contenu</hl> de marques en croissance — création d'affiches, montage vidéo et animation de communautés depuis zéro.",
   ],
   stats: site.stats.map((s, i) => ({ ...s, label: statsFR[i] })),
   projects: site.projects.map((p) => ({ ...p, ...(projectsFR[p.slug] || {}) })),

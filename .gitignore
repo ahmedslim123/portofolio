@@ -15,7 +15,8 @@
 
 # next.js
 /.next/
-/out/
+# /out/ is committed on request so the built, deploy-ready site lives in the
+# repo (FTP its contents to InfinityFree htdocs/). Regenerate with `npm run build`.
 
 # production
 /build

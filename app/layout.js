@@ -1,19 +1,22 @@
 import { Cinzel, Cormorant_Garamond, Space_Mono } from "next/font/google";
 import "./globals.css";
 
-/* Display — engraved, cathedral serif for headings & name */
+/* Display — engraved, cathedral serif for headings & name.
+   Only 600/700/800 are referenced in globals.css, so we load exactly those —
+   trimming three unused weight files from the critical first paint. */
 const cinzel = Cinzel({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: ["600", "700", "800"],
   variable: "--font-display",
   display: "swap",
 });
 
-/* Body — elegant high-contrast serif for prose */
+/* Body — elegant high-contrast serif for prose. No italic is used anywhere in
+   the styles, so we ship only the normal styles — dropping three font files. */
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
+  style: ["normal"],
   variable: "--font-body",
   display: "swap",
 });

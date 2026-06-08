@@ -145,6 +145,10 @@ function Effects() {
  */
 export default function Background({ fx, onError }) {
   const [ok, setOk] = useState(true);
+  // Pause the whole render loop (incl. the expensive Bloom pass) while the tab
+  // is hidden — saves GPU/battery and stops the fans spinning on a backgrounded
+  // tab. Resumes the instant the visitor returns.
+  const [visible, setVisible] = useState(true);
 
   useEffect(() => {
     try {
@@ -161,11 +165,18 @@ export default function Background({ fx, onError }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    const onVis = () => setVisible(!document.hidden);
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
+
   if (!ok) return null;
 
   return (
     <Canvas
       className="bg-canvas"
+      frameloop={visible ? "always" : "never"}
       style={{
         position: "fixed",
         inset: 0,

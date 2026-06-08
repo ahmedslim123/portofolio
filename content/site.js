@@ -300,11 +300,27 @@ export const site = {
   email: "slim.ahmed@esprit.tn",
   phone: "+21694687669",
   phoneDisplay: "+216 94 687 669",
+  // WhatsApp deep-link — wa.me wants the number in international form with NO
+  // "+", spaces or dashes (country code + number). +216 94 687 669 → 21694687669.
+  whatsapp: "https://wa.me/21694687669",
   socials: [
     { label: "LinkedIn", href: "https://www.linkedin.com/in/ahmed-s-307897226" },
     { label: "Upwork", href: "https://www.upwork.com/freelancers/~012340f5cbd8f352dc" },
-    { label: "Facebook", href: "https://www.facebook.com/ahmed.slim.135496/" },
+    { label: "WhatsApp", href: "https://wa.me/21694687669" },
   ],
+
+  /* ---- Contact form delivery (Web3Forms) --------------------------------
+     The site is a STATIC export (no server), so the contact form posts to
+     Web3Forms, which emails the submission straight to your inbox.
+
+     ⮞ SET THIS UP (takes 1 minute, free, no signup):
+       1. Go to https://web3forms.com
+       2. Type your email (ahmedslim007@gmail.com) — they instantly email you
+          an "Access Key" (a long uuid like 1a2b3c4d-...).
+       3. Paste that key between the quotes below, save, and rebuild.
+     Until a real key is pasted here, the form falls back to opening the
+     visitor's mail app (mailto) so it never silently fails.                  */
+  web3formsKey: "515c1f0a-462c-485b-aeef-13373644e3df",
 };
 
 /* ----------------------------------------------------------------------------

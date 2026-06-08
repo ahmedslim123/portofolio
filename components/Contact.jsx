@@ -34,12 +34,50 @@ export default function Contact() {
     }
   };
 
-  // The site is a fully static export (no server), so submitting opens the
-  // visitor's mail client pre-filled to me — works on any static host.
+  // Has a real Web3Forms key been configured (not the placeholder)? If so we
+  // POST the message straight to the inbox; otherwise we fall back to mailto so
+  // the form never silently fails on a fresh deploy.
+  const web3Key = site.web3formsKey;
+  const hasW3F = !!web3Key && !/^PASTE-/.test(web3Key);
+
+  // Static export (no server) — when no form service is configured we open the
+  // visitor's mail client pre-filled to me. Works on any static host.
   const openMail = () => {
     const subject = encodeURIComponent(`Portfolio message from ${form.name || ui.contact.traveler}`);
     const body = encodeURIComponent(`${form.msg}\n\n— ${form.name}${form.email ? ` (${form.email})` : ""}`);
     window.location.href = `mailto:${site.email}?subject=${subject}&body=${body}`;
+  };
+
+  // POST to Web3Forms — emails the submission straight to my inbox, no server
+  // needed. Returns true on success. Honeypot (`company`) is forwarded as
+  // `botcheck` so their spam filter can drop bots silently.
+  const sendViaWeb3Forms = async () => {
+    const res = await fetch("https://api.web3forms.com/post", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        access_key: web3Key,
+        name: form.name,
+        email: form.email,
+        message: form.msg,
+        subject: `Portfolio message from ${form.name}`,
+        from_name: "Portfolio Contact Form",
+        botcheck: form.company ? true : "",
+      }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.success) throw new Error(data.message || "send failed");
+    return true;
+  };
+
+  const celebrate = () => {
+    const r = btnRef.current.getBoundingClientRect();
+    burst(r.left + r.width / 2, r.top + r.height / 2);
+    setStatus("sent");
+    setTimeout(() => {
+      setStatus("idle");
+      setForm({ name: "", email: "", msg: "", company: "" });
+    }, 3200);
   };
 
   const validate = () => {
@@ -50,7 +88,7 @@ export default function Contact() {
     return "";
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     const v = validate();
@@ -61,16 +99,27 @@ export default function Contact() {
     }
     setError("");
 
-    openMail();
+    // Silently drop bots that filled the hidden honeypot — pretend success.
+    if (form.company) {
+      celebrate();
+      return;
+    }
 
-    // Celebrate — the mail client opens with the message ready to send.
-    const r = btnRef.current.getBoundingClientRect();
-    burst(r.left + r.width / 2, r.top + r.height / 2);
-    setStatus("sent");
-    setTimeout(() => {
-      setStatus("idle");
-      setForm({ name: "", email: "", msg: "", company: "" });
-    }, 3200);
+    // No form service configured → open the mail client and celebrate.
+    if (!hasW3F) {
+      openMail();
+      celebrate();
+      return;
+    }
+
+    setStatus("sending");
+    try {
+      await sendViaWeb3Forms();
+      celebrate();
+    } catch {
+      setError(ui.contact.genericErr);
+      setStatus("error");
+    }
   };
 
   const set = (k) => (e) => {

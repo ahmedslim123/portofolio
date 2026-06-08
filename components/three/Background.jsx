@@ -145,10 +145,13 @@ function Effects() {
  */
 export default function Background({ fx, onError }) {
   const [ok, setOk] = useState(true);
-  // Pause the whole render loop (incl. the expensive Bloom pass) while the tab
-  // is hidden — saves GPU/battery and stops the fans spinning on a backgrounded
-  // tab. Resumes the instant the visitor returns.
+  // Pause the whole render loop (incl. the expensive Bloom pass) when it can't
+  // help the visitor: the tab is hidden, a project room is open (the canvas is
+  // fully covered), or they're actively scrolling (the void is fixed, so a
+  // frozen frame is identical — and this hands the GPU entirely to the scroll).
+  // The framebuffer keeps showing the last frame, so pausing is invisible.
   const [visible, setVisible] = useState(true);
+  const [busy, setBusy] = useState(false); // room open OR mid-scroll
 
   useEffect(() => {
     try {
@@ -171,12 +174,48 @@ export default function Background({ fx, onError }) {
     return () => document.removeEventListener("visibilitychange", onVis);
   }, []);
 
+  useEffect(() => {
+    let overlay = false;
+    let scrolling = false;
+    let timer;
+    const sync = () => setBusy(overlay || scrolling);
+    const onScroll = () => {
+      // Never interfere with the door intro — only pause-on-scroll once the
+      // scene has settled into the ambient void.
+      if (fx.current.mode === "door") return;
+      scrolling = true;
+      sync();
+      clearTimeout(timer);
+      // resume a beat after motion settles (covers Lenis momentum)
+      timer = setTimeout(() => {
+        scrolling = false;
+        sync();
+      }, 180);
+    };
+    const onOverlay = (e) => {
+      overlay = !!e.detail?.open;
+      sync();
+    };
+    const opts = { passive: true };
+    window.addEventListener("scroll", onScroll, opts);
+    window.addEventListener("wheel", onScroll, opts);
+    window.addEventListener("touchmove", onScroll, opts);
+    window.addEventListener("chamber:overlay", onOverlay);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("wheel", onScroll);
+      window.removeEventListener("touchmove", onScroll);
+      window.removeEventListener("chamber:overlay", onOverlay);
+    };
+  }, []);
+
   if (!ok) return null;
 
   return (
     <Canvas
       className="bg-canvas"
-      frameloop={visible ? "always" : "never"}
+      frameloop={visible && !busy ? "always" : "never"}
       style={{
         position: "fixed",
         inset: 0,

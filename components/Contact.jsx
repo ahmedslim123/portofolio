@@ -34,11 +34,11 @@ export default function Contact() {
     }
   };
 
-  // Has a real Web3Forms key been configured (not the placeholder)? If so we
-  // POST the message straight to the inbox; otherwise we fall back to mailto so
-  // the form never silently fails on a fresh deploy.
-  const web3Key = site.web3formsKey;
-  const hasW3F = !!web3Key && !/^PASTE-/.test(web3Key);
+  // Has a Formspree endpoint been configured? If so we POST the message
+  // straight to the inbox; otherwise we fall back to mailto so the form never
+  // silently fails on a fresh deploy.
+  const formEndpoint = site.formspreeEndpoint;
+  const hasForm = !!formEndpoint && /^https?:\/\//.test(formEndpoint);
 
   // Static export (no server) — when no form service is configured we open the
   // visitor's mail client pre-filled to me. Works on any static host.
@@ -48,35 +48,30 @@ export default function Contact() {
     window.location.href = `mailto:${site.email}?subject=${subject}&body=${body}`;
   };
 
-  // POST to Web3Forms — emails the submission straight to my inbox, no server
+  // POST to Formspree — emails the submission straight to my inbox, no server
   // needed. Returns true on success, else throws with the server's reason
   // (bots never reach here — they're short-circuited in onSubmit).
   //
-  // We send FormData (NOT JSON) on purpose: a JSON body forces the browser to
-  // fire a CORS preflight (OPTIONS) that Web3Forms doesn't answer with a
-  // passing status, so the request fails with "blocked by CORS policy".
-  // FormData is a CORS "simple" request — no preflight — so it goes straight
-  // through. We also DON'T set Content-Type: the browser adds it (with the
-  // multipart boundary) and keeps the request preflight-free.
-  const sendViaWeb3Forms = async () => {
+  // We send FormData with only an `Accept: application/json` header (both are
+  // CORS-safelisted) so the request stays preflight-free and Formspree replies
+  // with JSON instead of redirecting. `email` becomes the reply-to address.
+  const sendViaFormspree = async () => {
     const fd = new FormData();
-    fd.append("access_key", web3Key);
     fd.append("name", form.name);
     fd.append("email", form.email);
     fd.append("message", form.msg);
-    fd.append("subject", `Portfolio message from ${form.name}`);
-    fd.append("from_name", "slimportofolio contact form");
-    fd.append("replyto", form.email);
+    fd.append("_subject", `Portfolio message from ${form.name}`);
 
-    // Endpoint MUST be /submit — /post returns API-Gateway "Missing
-    // Authentication Token" (403, route not found).
-    const res = await fetch("https://api.web3forms.com/submit", {
+    const res = await fetch(formEndpoint, {
       method: "POST",
+      headers: { Accept: "application/json" },
       body: fd,
     });
     const data = await res.json().catch(() => ({}));
-    if (!res.ok || !data.success)
-      throw new Error(data.message || `HTTP ${res.status}`);
+    if (!res.ok) {
+      const reason = data?.errors?.map((e) => e.message).join(", ");
+      throw new Error(reason || data?.error || `HTTP ${res.status}`);
+    }
     return true;
   };
 
@@ -116,7 +111,7 @@ export default function Contact() {
     }
 
     // No form service configured → open the mail client and celebrate.
-    if (!hasW3F) {
+    if (!hasForm) {
       openMail();
       celebrate();
       return;
@@ -124,14 +119,14 @@ export default function Contact() {
 
     setStatus("sending");
     try {
-      await sendViaWeb3Forms();
+      await sendViaFormspree();
       celebrate();
     } catch (err) {
-      // The form service was unreachable — domain restriction on the Web3Forms
-      // key, an ad-/tracker-blocker, or the visitor being offline. Surface the
-      // real reason in the console for debugging, then never lose the message:
-      // fall back to the visitor's mail client and still celebrate.
-      console.error("Contact form (Web3Forms) failed:", err?.message || err);
+      // The form service was unreachable — an ad-/tracker-blocker or the
+      // visitor being offline. Surface the real reason in the console for
+      // debugging, then never lose the message: fall back to the visitor's
+      // mail client and still celebrate.
+      console.error("Contact form (Formspree) failed:", err?.message || err);
       openMail();
       celebrate();
     }

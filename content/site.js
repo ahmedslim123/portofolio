@@ -309,18 +309,14 @@ export const site = {
     { label: "WhatsApp", href: "https://wa.me/21694687669" },
   ],
 
-  /* ---- Contact form delivery (Web3Forms) --------------------------------
+  /* ---- Contact form delivery (Formspree) --------------------------------
      The site is a STATIC export (no server), so the contact form posts to
-     Web3Forms, which emails the submission straight to your inbox.
+     Formspree, which emails the submission straight to your inbox.
+     (We left Web3Forms because it blocks free .great-site.net domains.)
 
-     ⮞ SET THIS UP (takes 1 minute, free, no signup):
-       1. Go to https://web3forms.com
-       2. Type your email (ahmedslim007@gmail.com) — they instantly email you
-          an "Access Key" (a long uuid like 1a2b3c4d-...).
-       3. Paste that key between the quotes below, save, and rebuild.
-     Until a real key is pasted here, the form falls back to opening the
-     visitor's mail app (mailto) so it never silently fails.                  */
-  web3formsKey: "515c1f0a-462c-485b-aeef-13373644e3df",
+     ⮞ Your form endpoint from formspree.io → just paste it below.
+     Leave it empty ("") to fall back to opening the visitor's mail app.       */
+  formspreeEndpoint: "https://formspree.io/f/mbdeoawa",
 };
 
 /* ----------------------------------------------------------------------------

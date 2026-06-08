@@ -1,0 +1,41 @@
+# ============================================================================
+#  slimportofolio — Apache tuning for InfinityFree (static export)
+#  Shipped via /public so it lands at the site root in /out → htdocs/.
+#  Every block is guarded by <IfModule> so a missing module never 500s.
+# ============================================================================
+
+# ---- 1) Gzip/DEFLATE compression — shrinks JS/CSS/HTML transfer ~70% --------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml \
+    application/javascript application/x-javascript application/json \
+    image/svg+xml application/xml font/ttf font/otf
+</IfModule>
+
+# ---- 2) Long-lived caching for immutable, content-hashed assets -------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType text/css               "access plus 1 year"
+  ExpiresByType font/woff2             "access plus 1 year"
+  ExpiresByType image/jpeg             "access plus 1 month"
+  ExpiresByType image/png              "access plus 1 month"
+  ExpiresByType image/webp             "access plus 1 month"
+  ExpiresByType image/x-icon           "access plus 1 month"
+  ExpiresByType text/html              "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Hashed build assets never change → cache hard, skip revalidation.
+  <FilesMatch "\.(js|css|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  # HTML must always be fresh so new deploys show up immediately.
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# ---- 3) Keep-alive helps batch the many small _next chunks ------------------
+<IfModule mod_headers.c>
+  Header set Connection keep-alive
+</IfModule>

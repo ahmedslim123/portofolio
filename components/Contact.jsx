@@ -51,19 +51,26 @@ export default function Contact() {
   // POST to Web3Forms — emails the submission straight to my inbox, no server
   // needed. Returns true on success, else throws with the server's reason
   // (bots never reach here — they're short-circuited in onSubmit).
+  //
+  // We send FormData (NOT JSON) on purpose: a JSON body forces the browser to
+  // fire a CORS preflight (OPTIONS) that Web3Forms doesn't answer with a
+  // passing status, so the request fails with "blocked by CORS policy".
+  // FormData is a CORS "simple" request — no preflight — so it goes straight
+  // through. We also DON'T set Content-Type: the browser adds it (with the
+  // multipart boundary) and keeps the request preflight-free.
   const sendViaWeb3Forms = async () => {
+    const fd = new FormData();
+    fd.append("access_key", web3Key);
+    fd.append("name", form.name);
+    fd.append("email", form.email);
+    fd.append("message", form.msg);
+    fd.append("subject", `Portfolio message from ${form.name}`);
+    fd.append("from_name", "slimportofolio contact form");
+    fd.append("replyto", form.email);
+
     const res = await fetch("https://api.web3forms.com/post", {
       method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({
-        access_key: web3Key,
-        name: form.name,
-        email: form.email,
-        message: form.msg,
-        subject: `Portfolio message from ${form.name}`,
-        from_name: "slimportofolio contact form",
-        replyto: form.email,
-      }),
+      body: fd,
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok || !data.success)

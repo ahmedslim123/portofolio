@@ -33,7 +33,7 @@ export const site = {
 
   stats: [
     { num: 5, label: "Years Building" },
-    { num: 9, label: "Projects Shipped" },
+    { num: 12, label: "Projects Shipped" },
     { num: 20, label: "Tools & Tech" },
     { num: 3, label: "Languages" },
   ],
@@ -87,6 +87,81 @@ export const site = {
         { type: "image", src: "/projects/tera-energy/img1.jpg" },
         { type: "image", src: "/projects/tera-energy/img3.jpg" },
         { type: "image", src: "/projects/tera-energy/img5.jpg" },
+      ],
+    },
+    {
+      slug: "koroko",
+      tag: "Web · Brand · Wellness",
+      name: "Korokoro & Fils",
+      accent: "#7FB84E",
+      bg: "linear-gradient(160deg,#12240c,#050a03)",
+      glow: "rgba(127,184,78,.30)",
+      sub: "A digital home for a family house of natural remedies",
+      cover: "/projects/koroko/cover.jpg",
+      overview:
+        "A warm, story-driven showcase site for Établissement Korokoro & Fils — a family house in Bénin that has crafted traditional plant-based remedies and natural wellness products across generations.",
+      problem:
+        "A respected family business with 43+ traditional remedies and a rich heritage had no digital presence to tell its story or reach national and export markets.",
+      solution:
+        "I designed and built an elegant, heritage-driven website that honors the family's pharmacopoeia roots — showcasing their flagship Savon & Pommade Korokoro, natural honey, red palm oil and NONI juice, with a warm botanical identity and direct call/WhatsApp paths.",
+      result:
+        "A trustworthy, premium online presence that turns generations of traditional know-how into a brand ready for national reach and export.",
+      stack: ["Next.js", "Web Design", "Brand Identity", "UI/UX"],
+      live: "https://korokobyahmedslim.vercel.app/",
+      media: [
+        { type: "image", src: "/projects/koroko/img1.jpg" },
+        { type: "image", src: "/projects/koroko/img2.jpg" },
+        { type: "image", src: "/projects/koroko/img3.jpg" },
+      ],
+    },
+    {
+      slug: "soafeno-vanilla",
+      tag: "Web · Export · B2B",
+      name: "Soafeno Trading",
+      accent: "#C7A24E",
+      bg: "linear-gradient(160deg,#20160d,#080503)",
+      glow: "rgba(199,162,78,.30)",
+      sub: "A bilingual B2B storefront for Bourbon vanilla from Madagascar",
+      cover: "/projects/soafeno-vanilla/cover.jpg",
+      overview:
+        "A refined, bilingual (FR/EN) showcase site for Soafeno Trading SARLU — a direct producer and exporter of premium Bourbon vanilla from the SAVA region of Madagascar — built to convert international B2B buyers.",
+      problem:
+        "A direct-from-origin vanilla exporter needed an international-grade digital presence to earn the trust of professional buyers and stand apart from commodity resellers.",
+      solution:
+        "I built an elegant, animated one-page site with a custom 3D hero (floating vanilla pods & golden dust), a full grade catalog, the field-to-export process and frictionless quote/WhatsApp CTAs — bilingual, fast and premium.",
+      result:
+        "A high-end, credible export brand experience that positions Soafeno as a direct-from-origin vanilla partner for buyers worldwide.",
+      stack: ["Next.js", "Three.js", "GSAP", "i18n FR/EN"],
+      live: "https://soafenotradingbyahmedslim.vercel.app/",
+      media: [
+        { type: "image", src: "/projects/soafeno-vanilla/img1.jpg" },
+        { type: "image", src: "/projects/soafeno-vanilla/img2.jpg" },
+        { type: "image", src: "/projects/soafeno-vanilla/img3.jpg" },
+      ],
+    },
+    {
+      slug: "palmiche",
+      tag: "Web · Restaurant · Brand",
+      name: "Palmiché",
+      accent: "#F2A81D",
+      bg: "linear-gradient(160deg,#0c3b39,#04100e)",
+      glow: "rgba(242,168,29,.32)",
+      sub: "A taste of Venezuela — a Caribbean restaurant lands in Dijon",
+      cover: "/projects/palmiche/cover.jpg",
+      overview:
+        "A warm, sun-soaked showcase site for Palmiché, a Venezuelan restaurant bringing the flavors of the Caribbean — arepas, empanadas and tequeños — to Dijon, France.",
+      problem:
+        "A new Venezuelan restaurant opening in Dijon needed a vibrant, appetizing digital identity to introduce a still little-known cuisine and drive orders.",
+      solution:
+        "I designed and built a lively, tropical website with a bold deep-teal & amber identity, an animated menu, the story of the arepa, a gallery and clear ordering paths — ready for its launch on Uber Eats & Deliveroo.",
+      result:
+        "A mouth-watering, welcoming online home that makes Venezuelan cuisine feel irresistible and ready to order.",
+      stack: ["Next.js", "Framer Motion", "Web Design", "Brand Identity"],
+      live: "https://palmichebyahmedslim.vercel.app/",
+      media: [
+        { type: "image", src: "/projects/palmiche/img1.jpg" },
+        { type: "image", src: "/projects/palmiche/img2.jpg" },
+        { type: "image", src: "/projects/palmiche/img3.jpg" },
       ],
     },
     {

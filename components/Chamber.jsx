@@ -46,11 +46,13 @@ export default function Chamber() {
     doorVisible: true,
   });
 
+  const [manualMode, setManualMode] = useState(false);
   const titleRef = useRef(null);
   const hintRef = useRef(null);
   const flashRef = useRef(null);
   const lenisRef = useRef(null);
   const enteredRef = useRef(false);
+  const introStartedRef = useRef(false);
 
   // Smooth-scroll helper handed to nav components.
   const scrollTo = (selector) => {
@@ -81,15 +83,38 @@ export default function Chamber() {
   };
 
   /* ----------------------------- Intro sequence ----------------------------- */
+  // Runs EXACTLY once on mount. It must never restart: the deciding inputs
+  // (reduced motion / touch / WebGL support) are read synchronously here instead
+  // of from async React state, so a late state flip can no longer revert and
+  // re-fire the in-flight GSAP door timeline (the old cause of the intro
+  // occasionally "going everywhere" — two timelines fighting over fx.current).
   useEffect(() => {
-    // Once we're through the door, never re-run the intro — a late dependency
-    // change (e.g. WebGL flag flipping) must not relock scroll or revive the door.
-    if (enteredRef.current) return;
+    if (introStartedRef.current || enteredRef.current) return;
+    introStartedRef.current = true;
+
+    // Always begin at the very top: a browser-restored scroll position from a
+    // previous visit made the reveal paint mid-page and look broken on reload.
+    if (typeof history !== "undefined" && "scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+    window.scrollTo(0, 0);
 
     document.body.style.overflow = "hidden";
 
     // Reduced motion / touch / no-WebGL → show a manual "Enter" affordance.
-    const manual = reduced || isTouch || webglFailed;
+    // Probed synchronously so the decision is correct on the very first run.
+    const manual = (() => {
+      try {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
+        if (window.matchMedia("(pointer:coarse)").matches) return true;
+        const c = document.createElement("canvas");
+        const gl = c.getContext("webgl2") || c.getContext("webgl");
+        return !gl;
+      } catch {
+        return true;
+      }
+    })();
+    setManualMode(manual);
 
     let tl;
     const ctx = gsap.context(() => {
@@ -163,7 +188,7 @@ export default function Chamber() {
       ctx.revert();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reduced, isTouch, webglFailed]);
+  }, []);
 
   // Manual enter (reduced motion / touch / fallback button).
   const manualEnter = () => {
@@ -191,6 +216,26 @@ export default function Chamber() {
       lenisRef.current = null;
     };
   }, [entered, reduced]);
+
+  /* ------------------- Lock the page while a project room is open ----------- */
+  // When a door opens, freeze the underlying page (Lenis + native scroll) so it
+  // can NEVER move or bleed behind the room. Projects fires these events.
+  useEffect(() => {
+    const lock = () => {
+      lenisRef.current?.stop();
+      document.body.style.overflow = "hidden";
+    };
+    const unlock = () => {
+      lenisRef.current?.start();
+      document.body.style.overflow = "";
+    };
+    window.addEventListener("chamber:modal-open", lock);
+    window.addEventListener("chamber:modal-close", unlock);
+    return () => {
+      window.removeEventListener("chamber:modal-open", lock);
+      window.removeEventListener("chamber:modal-close", unlock);
+    };
+  }, []);
 
   /* ------------------- Click-and-drag scrolling (grab to scroll) ------------ */
   // Grab anywhere on the page (except real interactive elements) and move up or
@@ -259,7 +304,7 @@ export default function Chamber() {
     };
   }, [entered, isTouch]);
 
-  const showEnterBtn = (reduced || isTouch || webglFailed) && !entered;
+  const showEnterBtn = (manualMode || webglFailed) && !entered;
 
   return (
     <LanguageProvider>

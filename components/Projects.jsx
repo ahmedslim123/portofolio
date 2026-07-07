@@ -131,6 +131,14 @@ export default function Projects() {
     return () => window.removeEventListener("keydown", onKey);
   }, [modalIdx]);
 
+  // Freeze the page behind the open room so the home content can never scroll
+  // or bleed through the door. Chamber listens and stops Lenis + native scroll.
+  useEffect(() => {
+    if (modalIdx == null) return;
+    window.dispatchEvent(new Event("chamber:modal-open"));
+    return () => window.dispatchEvent(new Event("chamber:modal-close"));
+  }, [modalIdx]);
+
   // Click-and-drag scrolling INSIDE the open project room — same grab-to-move
   // feel as the page, scoped to the room's own scroll so the story reads easily.
   useEffect(() => {

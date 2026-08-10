@@ -61,6 +61,33 @@ export const site = {
   //           { type:"image", src }. The first item is the room's hero.
   projects: [
     {
+      slug: "anadani-group",
+      tag: "Web · Corporate · i18n",
+      name: "ANADANI GROUP",
+      accent: "#DCA62C",
+      bg: "linear-gradient(160deg,#1c1509,#050506)",
+      glow: "rgba(220,166,44,.30)",
+      sub: "A Luxembourg trading group and its three brands, in six languages",
+      cover: "/projects/anadani-group/cover.jpg",
+      overview:
+        "The corporate site of ANADANI GROUP COMPANY S.à r.l., an international trading group headquartered in Luxembourg — a black-and-gold 'Sovereign Gold' identity carrying the group and its three owned brands (LUXSAFE safety footwear, LUXORA biomass fuels, THERMOLUX heating systems) across fifteen routes in six languages.",
+      problem:
+        "A Luxembourg trading group selling into Europe and the Middle East had to earn the trust of professional buyers in their own language — six of them, including right-to-left Arabic — without the site feeling like six different sites.",
+      solution:
+        "I designed and built a fully statically-rendered Next.js site: one design system of black, gold and hairlines, 775 translated keys per locale, full RTL handling for Arabic, a dedicated page and product story for each of the three brands, and a contact pipeline that fails loudly rather than swallowing an enquiry.",
+      result:
+        "Ninety prerendered pages that load instantly, read as one institution in every language, and give each brand a storefront worthy of it.",
+      stack: ["Next.js 16", "Tailwind v4", "i18n · 6 Locales", "GSAP · Lenis", "SEO"],
+      live: "https://anadanigroupbyahmedslim.vercel.app",
+      media: [
+        { type: "image", src: "/projects/anadani-group/img1.jpg" },
+        { type: "image", src: "/projects/anadani-group/img2.jpg" },
+        { type: "image", src: "/projects/anadani-group/img3.jpg" },
+        { type: "image", src: "/projects/anadani-group/img4.jpg" },
+        { type: "image", src: "/projects/anadani-group/img5.jpg" },
+      ],
+    },
+    {
       slug: "tera-energy",
       tag: "Brand · Web · Marketing",
       name: "Tera Energy",
@@ -414,6 +441,19 @@ export const sections = [
 
 // Per-project translated text, keyed by slug. Media / accents / links untouched.
 const projectsFR = {
+  "anadani-group": {
+    tag: "Web · Corporate · i18n",
+    sub: "Un groupe de négoce luxembourgeois et ses trois marques, en six langues",
+    overview:
+      "Le site corporate d'ANADANI GROUP COMPANY S.à r.l., un groupe de négoce international basé au Luxembourg — une identité noir et or « Sovereign Gold » qui porte le groupe et ses trois marques propres (LUXSAFE, chaussures de sécurité ; LUXORA, combustibles biomasse ; THERMOLUX, systèmes de chauffage) sur quinze pages et six langues.",
+    problem:
+      "Un groupe de négoce luxembourgeois vendant en Europe et au Moyen-Orient devait gagner la confiance d'acheteurs professionnels dans leur propre langue — six au total, dont l'arabe en écriture de droite à gauche — sans que le site ne ressemble à six sites différents.",
+    solution:
+      "J'ai conçu et développé un site Next.js entièrement rendu en statique : un seul système de design fait de noir, d'or et de filets, 775 clés traduites par langue, une gestion RTL complète pour l'arabe, une page et un récit produit dédiés à chacune des trois marques, et un formulaire de contact qui échoue bruyamment plutôt que d'avaler une demande.",
+    result:
+      "Quatre-vingt-dix pages pré-rendues qui s'affichent instantanément, se lisent comme une seule institution dans chaque langue, et donnent à chaque marque une vitrine à sa hauteur.",
+    stack: ["Next.js 16", "Tailwind v4", "i18n · 6 Langues", "GSAP · Lenis", "SEO"],
+  },
   "tera-energy": {
     tag: "Marque · Web · Marketing",
     sub: "Lancement d'une marque de boisson énergisante premium en Tunisie",

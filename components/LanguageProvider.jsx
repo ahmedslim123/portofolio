@@ -16,12 +16,17 @@ export function LanguageProvider({ children }) {
   useEffect(() => {
     try {
       const saved = localStorage.getItem("lang");
-      if (saved === "fr" || saved === "en") setLang(saved);
+      if (saved && locales[saved]) setLang(saved);
     } catch {}
   }, []);
 
   useEffect(() => {
+    const dir = locales[lang]?.dir || "ltr";
     document.documentElement.lang = lang;
+    // Arabic flips the whole page. Setting `dir` on <html> is what makes the
+    // browser mirror flex/grid order, text alignment and scrollbar side for
+    // free; the CSS only has to fix what is positioned absolutely.
+    document.documentElement.dir = dir;
   }, [lang]);
 
   const change = (next) => {

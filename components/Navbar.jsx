@@ -36,6 +36,23 @@ function FlagFR() {
     </svg>
   );
 }
+// Arabic is flagged with Tunisia — this is a personal portfolio, and the
+// Arabic-speaking visitors it is written for are Tunisian first.
+// Crescent = red disc with a smaller white disc punched out of it.
+function FlagTN() {
+  return (
+    <svg className="flag-svg" viewBox="0 0 24 16" aria-hidden focusable="false">
+      <rect width="24" height="16" fill="#E70013" />
+      <circle cx="12" cy="8" r="5" fill="#fff" />
+      <circle cx="12" cy="8" r="3.4" fill="#E70013" />
+      <circle cx="12.9" cy="8" r="2.7" fill="#fff" />
+      <path
+        fill="#E70013"
+        d="M13.3 6.4 13.66 7.5 14.82 7.5 13.88 8.19 14.24 9.29 13.3 8.61 12.36 9.29 12.72 8.19 11.78 7.5 12.94 7.5 Z"
+      />
+    </svg>
+  );
+}
 
 export default function Navbar({ scrollTo }) {
   const { site, sections, ui, lang, setLang } = useI18n();
@@ -78,26 +95,23 @@ export default function Navbar({ scrollTo }) {
       </div>
 
       <div className="lang-switch" role="group" aria-label={ui.lang.label}>
-        <button
-          type="button"
-          className={`lang-btn${lang === "en" ? " active" : ""}`}
-          onClick={() => setLang("en")}
-          aria-pressed={lang === "en"}
-          aria-label={ui.lang.english}
-          title={ui.lang.english}
-        >
-          <FlagUS />
-        </button>
-        <button
-          type="button"
-          className={`lang-btn${lang === "fr" ? " active" : ""}`}
-          onClick={() => setLang("fr")}
-          aria-pressed={lang === "fr"}
-          aria-label={ui.lang.french}
-          title={ui.lang.french}
-        >
-          <FlagFR />
-        </button>
+        {[
+          ["en", FlagUS, ui.lang.english],
+          ["fr", FlagFR, ui.lang.french],
+          ["ar", FlagTN, ui.lang.arabic],
+        ].map(([code, Flag, label]) => (
+          <button
+            key={code}
+            type="button"
+            className={`lang-btn${lang === code ? " active" : ""}`}
+            onClick={() => setLang(code)}
+            aria-pressed={lang === code}
+            aria-label={label}
+            title={label}
+          >
+            <Flag />
+          </button>
+        ))}
       </div>
     </nav>
   );

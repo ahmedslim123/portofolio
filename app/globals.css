@@ -1,6 +1,60 @@
 /* ============================================================================
    CHAMBER OF CURIOSITIES — Global styles & design tokens
    ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   Arabic typefaces — self-hosted, and downloaded ONLY when Arabic is on screen.
+
+   Cinzel, Cormorant and Space Mono carry no Arabic glyphs, so without these the
+   Arabic locale would fall back to whatever the OS happens to have. Files are
+   copied from @fontsource into /public/fonts by way of the repo, so nothing is
+   fetched from fonts.gstatic.com at build time.
+
+   The `unicode-range` is the important part: it lists only Arabic codepoints,
+   so an English or French visitor's browser matches nothing against these faces
+   and never requests the files. The cost is paid by Arabic readers alone.
+---------------------------------------------------------------------------- */
+@font-face {
+  font-family: "Amiri";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/amiri-arabic-400-normal.woff2") format("woff2");
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1,
+    U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74,
+    U+FE76-FEFC;
+}
+@font-face {
+  font-family: "Amiri";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/amiri-arabic-700-normal.woff2") format("woff2");
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1,
+    U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74,
+    U+FE76-FEFC;
+}
+@font-face {
+  font-family: "Cairo";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/cairo-arabic-400-normal.woff2") format("woff2");
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1,
+    U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74,
+    U+FE76-FEFC;
+}
+@font-face {
+  font-family: "Cairo";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/cairo-arabic-600-normal.woff2") format("woff2");
+  unicode-range: U+0600-06FF, U+0750-077F, U+0870-088E, U+0890-0891, U+0897-08E1,
+    U+08E3-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74,
+    U+FE76-FEFC;
+}
+
 :root {
   --void: #0b0f2b; /* deep indigo background */
   --void-2: #070a1e; /* deeper void */
@@ -17,9 +71,20 @@
   --glass: rgba(18, 22, 48, 0.42);
   --glass-line: rgba(229, 193, 111, 0.22);
 
-  --display: var(--font-display), "Cinzel", serif;
-  --body: var(--font-body), "Cormorant Garamond", Georgia, serif;
-  --mono: var(--font-mono), "Space Mono", "Courier New", monospace;
+  /* "Amiri"/"Cairo" lead every stack, and that placement is load-bearing.
+     They carry ONLY Arabic glyphs (see the unicode-range on their @font-face
+     above), so Latin text never matches them and falls straight through to
+     Cinzel/Cormorant/Space Mono — while Arabic text resolves to them on the
+     first hop.
+
+     They cannot sit at the end: `var(--font-*)` expands to Next's whole chain
+     including its generated "… Fallback" face, which is a local system font
+     with broad coverage. Measured, that face answered for Arabic and the
+     browser never reached the real Arabic fonts — they were never even
+     downloaded, and Arabic rendered in whatever the OS supplied. */
+  --display: "Amiri", var(--font-display), "Cinzel", serif;
+  --body: "Amiri", var(--font-body), "Cormorant Garamond", Georgia, serif;
+  --mono: "Cairo", var(--font-mono), "Space Mono", "Courier New", monospace;
 
   --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
   --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -1814,4 +1879,149 @@ body.dragging * {
     animation-duration: 0.001s !important;
     transition-duration: 0.15s !important;
   }
+}
+
+/* ============================================================================
+   ARABIC / RIGHT-TO-LEFT
+
+   `dir="rtl"` on <html> already mirrors flex order, text alignment and the
+   scrollbar side. What it cannot do is undo choices that were made for Latin
+   type, and there are two that matter:
+
+   1. LETTER-SPACING. Arabic is cursive — the letters of a word are joined.
+      Adding tracking severs those joins and renders the word as a row of
+      disconnected shapes. It is the single most common way Arabic ends up
+      looking broken on a site designed around Latin type, and this design
+      leans on 0.2em–0.5em tracking almost everywhere. Every element that
+      carries translated text gets it reset; elements that stay Latin (the
+      logo wordmark, skill names) deliberately keep theirs.
+
+   2. ANYTHING POSITIONED WITH left/right. Absolute positioning is immune to
+      `dir`, so the dot nav, the room close button and the timeline spine all
+      have to be mirrored by hand.
+   ============================================================================ */
+
+/* --- 1. Cursive joins: kill tracking on everything that renders Arabic --- */
+[dir="rtl"] .intro-eyebrow,
+[dir="rtl"] .intro-title h1,
+[dir="rtl"] .intro-title p,
+[dir="rtl"] .intro-hint,
+[dir="rtl"] .intro-hint .pulse,
+[dir="rtl"] .enter-btn,
+[dir="rtl"] .eyebrow,
+[dir="rtl"] .nav-links a,
+[dir="rtl"] .dots button span,
+[dir="rtl"] .hero-role,
+[dir="rtl"] .btn,
+[dir="rtl"] .scroll-cue,
+[dir="rtl"] .stat .lbl,
+[dir="rtl"] .door .tag,
+[dir="rtl"] .door .interior .enter,
+[dir="rtl"] .room-hero .tag,
+[dir="rtl"] .monolith h4,
+[dir="rtl"] .pill,
+[dir="rtl"] .tnode .yr,
+[dir="rtl"] .field label,
+[dir="rtl"] .form-status,
+[dir="rtl"] .footer .sig,
+[dir="rtl"] .footer .links a,
+[dir="rtl"] .footer .fine {
+  letter-spacing: normal;
+  word-spacing: 0.06em;
+}
+
+/* The wordmark and the skill orbs stay in Latin, so they keep their tracking. */
+[dir="rtl"] .logo {
+  letter-spacing: 0.22em;
+}
+[dir="rtl"] .orb .nm {
+  letter-spacing: 0.06em;
+}
+
+/* Arabic runs taller than Latin at the same size — diacritics above, descenders
+   below — so tight Latin leading makes it feel cramped and clips marks. */
+[dir="rtl"] .lead,
+[dir="rtl"] .about-text p,
+[dir="rtl"] .room-overview,
+[dir="rtl"] .monolith p,
+[dir="rtl"] .tnode p,
+[dir="rtl"] .hero-bio {
+  line-height: 2;
+}
+[dir="rtl"] .h-title,
+[dir="rtl"] .room-hero h2 {
+  line-height: 1.5;
+}
+
+/* --- 2. Mirror what `dir` cannot reach (absolute/fixed positioning) --- */
+[dir="rtl"] .dots {
+  right: auto;
+  left: 24px;
+}
+[dir="rtl"] .dots button span {
+  right: auto;
+  left: 18px;
+}
+[dir="rtl"] .room-close {
+  right: auto;
+  left: 22px;
+}
+[dir="rtl"] .timeline {
+  padding-left: 0;
+  padding-right: 40px;
+}
+[dir="rtl"] .timeline::before {
+  left: auto;
+  right: 7px;
+}
+[dir="rtl"] .tnode {
+  padding: 0 32px 50px 0;
+}
+[dir="rtl"] .tnode::before {
+  left: auto;
+  right: -39px;
+}
+
+/* Blocks that were explicitly left-aligned for Latin must follow the text. */
+[dir="rtl"] .door,
+[dir="rtl"] .field {
+  text-align: right;
+}
+
+/* The door leaf is a physical object, not text: its hinge, seam and handle stay
+   where they are. Mirroring them would fight the 3D open animation for no gain.
+   Only the label block inside the leaf follows the reading direction. */
+[dir="rtl"] .door .meta {
+  text-align: right;
+}
+
+/* --- 3. Bidi isolation: runs that must never be reordered by the RTL flow ---
+   The bidi algorithm reorders mixed strings by rule, and for three of them the
+   rule produces the wrong reading. Each is a self-contained left-to-right unit
+   that happens to sit in a right-to-left page, so each is isolated explicitly:
+
+     .logo        "AHMED·SLIM" is a Latin wordmark; RTL rendered it "SLIM·AHMED".
+     .hero-phone  "+216 94 687 669" rendered as "669 687 94 216+" — the leading
+                  "+" is bidi-neutral and got pushed to the far end.
+     .tnode .yr   "2026 — الآن" is a date range; numerals and an Arabic word on
+                  either side of a dash swap under RTL and reverse the range.
+   `isolate` (not `embed`) keeps each unit from affecting the text around it. */
+[dir="rtl"] .logo,
+[dir="rtl"] .hero-phone,
+[dir="rtl"] .tnode .yr {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+/* …but they still have to sit on the reading edge of their column. */
+[dir="rtl"] .tnode .yr {
+  text-align: right;
+}
+
+/* Arabic sits taller than Latin inside the same box: hamza and other marks ride
+   above the letters, and `.hero-name` pairs line-height 1.0 with an
+   overflow:hidden mask (needed for the line-slide reveal). At 124px that mask
+   shaves the top off "أحمد". Extra leading gives the marks room without
+   touching the animation. */
+[dir="rtl"] .hero-name {
+  line-height: 1.45;
 }

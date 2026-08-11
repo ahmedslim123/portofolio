@@ -275,6 +275,7 @@ export const site = {
       result:
         "A living, interactive museum of Mediterranean heritage, open from any browser.",
       stack: ["WebXR", "Three.js", "AI Chatbot", "Photogrammetry"],
+      live: "https://sbiba.vercel.app",
       media: [
         { type: "youtube", id: "HIAKOd00bEg", poster: "/projects/sbiba-heritage/demo.jpg" },
       ],

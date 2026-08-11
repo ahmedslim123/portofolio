@@ -1,7 +1,11 @@
 "use client";
 
-/** The Grand Door overlay — title, hint, and (for reduced-motion/touch) a
- *  manual "Enter the Chamber" button. The 3D door itself lives in the canvas. */
+import { useI18n } from "@/components/LanguageProvider";
+
+/** The Grand Door overlay — it names whose portfolio the visitor is about to
+ *  enter, then hands over to the scene. The 3D door itself lives in the canvas.
+ *  Strings come from the locale dictionary; the name and role are read straight
+ *  from `site`, so this can never disagree with the hero below it. */
 export default function IntroOverlay({
   titleRef,
   hintRef,
@@ -9,27 +13,26 @@ export default function IntroOverlay({
   onEnter,
   hidden,
 }) {
+  const { site, ui } = useI18n();
+
   if (hidden) return null;
 
   return (
     <div className="intro" aria-hidden={hidden}>
       <div ref={titleRef} className="intro-title">
-        <h1>CHAMBER OF CURIOSITIES</h1>
-        <p>The Door as a Gateway to Knowledge</p>
+        <span className="intro-eyebrow">{ui.intro.eyebrow}</span>
+        <h1>{site.name}</h1>
+        <p>{site.role}</p>
       </div>
 
       {showEnter ? (
-        <button
-          className="enter-btn"
-          style={{ opacity: 1 }}
-          onClick={onEnter}
-        >
-          Enter the Chamber
+        <button className="enter-btn" style={{ opacity: 1 }} onClick={onEnter}>
+          {ui.intro.enter}
         </button>
       ) : (
         <div ref={hintRef} className="intro-hint">
-          The door is awakening
-          <span className="pulse">◈ &nbsp; OPENING &nbsp; ◈</span>
+          {ui.intro.hint}
+          <span className="pulse">{ui.intro.pulse}</span>
         </div>
       )}
     </div>

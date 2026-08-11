@@ -676,6 +676,16 @@ export const sectionsFR = [
 
 /* ---- UI string dictionaries (hard-coded labels in the components) ---- */
 const uiEN = {
+  // The grand-door overlay. The name and role themselves come from `site.name`
+  // and `site.role`, so the intro can never drift from the rest of the site.
+  intro: {
+    eyebrow: "You are entering the portfolio of",
+    hint: "The door is opening",
+    // Non-breaking spaces — plain ones collapse in HTML and the diamonds end
+    // up hugging the word.
+    pulse: "◈  ENTERING  ◈",
+    enter: "Enter the Portfolio",
+  },
   hero: { viewProjects: "View Projects", getInTouch: "Get in Touch", scroll: "Scroll" },
   about: { eyebrow: "About · The Maker", title: "Behind the Door" },
   skills: {
@@ -720,6 +730,12 @@ const uiEN = {
 };
 
 const uiFR = {
+  intro: {
+    eyebrow: "Vous entrez dans le portfolio de",
+    hint: "La porte s'ouvre",
+    pulse: "◈  ENTRÉE  ◈",
+    enter: "Entrer dans le Portfolio",
+  },
   hero: { viewProjects: "Voir les Projets", getInTouch: "Me Contacter", scroll: "Défiler" },
   about: { eyebrow: "À Propos · L'Artisan", title: "Derrière la Porte" },
   skills: {

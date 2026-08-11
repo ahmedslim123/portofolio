@@ -171,7 +171,9 @@ button {
   text-align: center;
 }
 .intro-hint .pulse {
-  display: inline-block;
+  /* Block, not inline-block: its margin-top only ever made sense as a second
+     line, and inline it just sat a few px below the baseline of the line above. */
+  display: block;
   margin-top: 10px;
   color: var(--cyan);
   font-size: 10px;
@@ -179,28 +181,52 @@ button {
 }
 .intro-title {
   position: absolute;
-  top: 14%;
+  /* Raised from 14%: the block is three lines now, not two, and at 14% the
+     role line landed on top of the lit door where it could not be read. */
+  top: 9%;
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
   opacity: 0;
+  /* The role line is wider than the old tagline it replaced; bound the block
+     so heavy letter-spacing wraps instead of running off a phone screen. */
+  width: min(92vw, 720px);
+}
+.intro-eyebrow {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--titanium);
+  opacity: 0.88;
+  margin-bottom: 16px;
+  /* The door behind this text is animated and bright; these small mono lines
+     need their own ground or they wash out mid-animation. */
+  text-shadow: 0 2px 14px rgba(2, 4, 14, 0.95), 0 0 4px rgba(2, 4, 14, 0.9);
 }
 .intro-title h1 {
   font-family: var(--display);
   font-weight: 600;
-  font-size: clamp(20px, 3.4vw, 40px);
+  font-size: clamp(24px, 4.6vw, 52px);
   letter-spacing: 0.34em;
+  /* The name is read from `site.name` in sentence case — the caps are a
+     styling decision, not something to bake into the content. */
+  text-transform: uppercase;
   color: var(--gold);
-  text-shadow: 0 0 28px rgba(229, 193, 111, 0.5);
+  text-shadow: 0 0 28px rgba(229, 193, 111, 0.5), 0 2px 18px rgba(2, 4, 14, 0.85);
 }
 .intro-title p {
   font-family: var(--mono);
   font-size: 10px;
   letter-spacing: 0.5em;
   color: var(--titanium);
-  opacity: 0.7;
+  opacity: 0.88;
   margin-top: 14px;
   text-transform: uppercase;
+  text-wrap: balance;
+  line-height: 1.9;
+  text-shadow: 0 2px 14px rgba(2, 4, 14, 0.95), 0 0 4px rgba(2, 4, 14, 0.9);
 }
 .flash {
   position: fixed;

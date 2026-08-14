@@ -1,33 +1,12 @@
-import { Cinzel, Cormorant_Garamond, Space_Mono } from "next/font/google";
+import ReactDOM from "react-dom";
 import "./globals.css";
+import { asset } from "@/lib/asset";
 
-/* Display — engraved, cathedral serif for headings & name.
-   Only 600/700/800 are referenced in globals.css, so we load exactly those —
-   trimming three unused weight files from the critical first paint. */
-const cinzel = Cinzel({
-  subsets: ["latin"],
-  weight: ["600", "700", "800"],
-  variable: "--font-display",
-  display: "swap",
-});
-
-/* Body — elegant high-contrast serif for prose. No italic is used anywhere in
-   the styles, so we ship only the normal styles — dropping three font files. */
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal"],
-  variable: "--font-body",
-  display: "swap",
-});
-
-/* Mono — holographic HUD labels & eyebrows */
-const spaceMono = Space_Mono({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-mono",
-  display: "swap",
-});
+/* Fonts are self-hosted from public/fonts and declared with @font-face at the
+   top of globals.css. They used to be loaded through `next/font/google`, which
+   reaches fonts.gstatic.com during the build — an unreliable dependency here,
+   and the same reason the Arabic faces were already self-hosted. Run
+   `npm run fonts` to re-copy them from @fontsource. */
 
 // The public URL the portfolio is shared from (InfinityFree custom domain).
 // metadataBase turns the relative og image path into the absolute URL that
@@ -85,13 +64,30 @@ export const viewport = {
   initialScale: 1,
 };
 
+// The three faces the very first screen is written in. A self-hosted font is
+// only discovered once the stylesheet has been parsed; preloading them starts
+// the download alongside the CSS instead of a round trip after it, so the
+// intro paints in its real type rather than swapping fonts under the visitor.
+const PRELOAD_FONTS = [
+  "/fonts/cinzel-latin-700-normal.woff2",
+  "/fonts/cormorant-garamond-latin-400-normal.woff2",
+  "/fonts/space-mono-latin-400-normal.woff2",
+];
+
 export default function RootLayout({ children }) {
+  // ReactDOM.preload rather than rendering <link> tags: React hoists link
+  // elements into <head> on its own, so rendering them emitted each preload
+  // twice. This API dedupes.
+  for (const href of PRELOAD_FONTS) {
+    ReactDOM.preload(asset(href), {
+      as: "font",
+      type: "font/woff2",
+      crossOrigin: "anonymous",
+    });
+  }
+
   return (
-    <html
-      lang="en"
-      className={`${cinzel.variable} ${cormorant.variable} ${spaceMono.variable}`}
-      suppressHydrationWarning
-    >
+    <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning>{children}</body>
     </html>
   );

@@ -55,6 +55,72 @@
     U+FE76-FEFC;
 }
 
+/* -----------------------------------------------------------------------------
+   Latin faces — self-hosted for the same reason as the Arabic ones above.
+   These were `next/font/google`, which fetches from fonts.gstatic.com during
+   the BUILD; the files now sit in public/fonts and are copied from @fontsource
+   by `npm run fonts`. Only the three weights of Cinzel, three of Cormorant and
+   two of Space Mono that this stylesheet actually asks for are shipped.
+   No `unicode-range`: these are the default faces, so they answer for
+   everything the Arabic subsets above decline.
+----------------------------------------------------------------------------- */
+@font-face {
+  font-family: "Cinzel";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/cinzel-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Cinzel";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/cinzel-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Cinzel";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("/fonts/cinzel-latin-800-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/cormorant-garamond-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/cormorant-garamond-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/cormorant-garamond-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/space-mono-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/space-mono-latin-700-normal.woff2") format("woff2");
+}
+
 :root {
   --void: #0b0f2b; /* deep indigo background */
   --void-2: #070a1e; /* deeper void */
@@ -69,22 +135,23 @@
   --ink: #ede9df;
   --muted: #8a8fb0;
   --glass: rgba(18, 22, 48, 0.42);
+  /* The opaque stand-in for a frosted panel. `backdrop-filter` re-blurs
+     everything behind an element on every frame it moves — measured at 11 FPS
+     across a full page scroll — so panels that travel through the viewport use
+     this instead. Over the near-black void the two read the same. */
+  --glass-solid: rgba(17, 21, 46, 0.82);
   --glass-line: rgba(229, 193, 111, 0.22);
 
   /* "Amiri"/"Cairo" lead every stack, and that placement is load-bearing.
      They carry ONLY Arabic glyphs (see the unicode-range on their @font-face
      above), so Latin text never matches them and falls straight through to
      Cinzel/Cormorant/Space Mono — while Arabic text resolves to them on the
-     first hop.
-
-     They cannot sit at the end: `var(--font-*)` expands to Next's whole chain
-     including its generated "… Fallback" face, which is a local system font
-     with broad coverage. Measured, that face answered for Arabic and the
-     browser never reached the real Arabic fonts — they were never even
-     downloaded, and Arabic rendered in whatever the OS supplied. */
-  --display: "Amiri", var(--font-display), "Cinzel", serif;
-  --body: "Amiri", var(--font-body), "Cormorant Garamond", Georgia, serif;
-  --mono: "Cairo", var(--font-mono), "Space Mono", "Courier New", monospace;
+     first hop. Putting them last does not work: a broad-coverage fallback
+     answers for Arabic first and the real Arabic faces are never downloaded
+     at all (measured — Arabic silently rendered in an OS font). */
+  --display: "Amiri", "Cinzel", serif;
+  --body: "Amiri", "Cormorant Garamond", Georgia, serif;
+  --mono: "Cairo", "Space Mono", "Courier New", monospace;
 
   --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
   --ease-out-back: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -361,6 +428,51 @@ button {
     padding: 92px 0;
   }
 }
+/* NOTE: `content-visibility: auto` on .section was tried here and REMOVED —
+   it measured consistently worse (32 fps vs 40, twelve frames over 100ms vs
+   two). Deferring the layout of a section until it scrolls in just moves the
+   work to the exact moment the frame budget is already spent. Don't re-add it
+   without measuring a full wheel scroll, twice. */
+
+/* Sections scrolled out of view stop animating (see Chamber.jsx). CSS keeps
+   `infinite` animations ticking off-screen forever otherwise, and every one of
+   them bills the same main thread the scroll is trying to use. */
+[data-idle] *,
+[data-idle] *::before,
+[data-idle] *::after {
+  animation-play-state: paused !important;
+}
+
+/* ---- scroll reveal (see components/Reveal.jsx) ----
+   Compositor-only: opacity + transform, one class toggle per element, once.
+   The curve matches the Framer Motion easing this replaced, so the motion is
+   unchanged — it just stops competing with the scroll for the main thread. */
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, var(--reveal-y, 42px), 0);
+  transition:
+    opacity 1s var(--ease-out-quart),
+    transform 1s var(--ease-out-quart);
+  transition-delay: var(--reveal-delay, 0s);
+}
+/* `none`, not translate3d(0,0,0): CSS interpolates a transform list to the
+   identity matrix, so this still animates — but once it settles the element is
+   left with no transform at all, and so no permanent compositing layer or
+   stacking context on forty elements (the doors below need their own 3D). */
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+/* Nothing to animate for a visitor who asked for less motion — and nothing to
+   hide if the transition never runs. */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 .eyebrow {
   font-family: var(--mono);
   font-size: 12.5px;
@@ -413,11 +525,11 @@ button {
   transition: 0.4s;
 }
 .nav.scrolled {
-  /* Slightly more opaque bg + a lighter blur: a 14px backdrop blur on a
-     full-width fixed bar re-blurs the page every scroll frame — the main cause
-     of scroll jank. 8px looks the same but costs far less. */
-  background: rgba(7, 10, 30, 0.72);
-  backdrop-filter: blur(8px);
+  /* No backdrop blur. A full-width fixed bar is the worst possible place for
+     one: the browser re-blurs a strip of the page on EVERY scroll frame, for
+     the entire visit. An opaque bar is free and, over this background, looks
+     the same. */
+  background: rgba(7, 10, 30, 0.93);
   border-bottom: 1px solid rgba(229, 193, 111, 0.14);
   padding: 14px 34px;
 }
@@ -503,8 +615,8 @@ button {
   padding: 5px;
   border-radius: 999px;
   border: 1px solid rgba(229, 193, 111, 0.22);
-  background: rgba(7, 10, 30, 0.4);
-  backdrop-filter: blur(10px);
+  /* Lives inside the fixed nav, so it inherited the nav's per-frame reblur. */
+  background: rgba(7, 10, 30, 0.72);
 }
 .lang-btn {
   display: grid;
@@ -835,8 +947,7 @@ button {
   padding: 26px;
   border: 1px solid var(--glass-line);
   border-radius: 16px;
-  background: var(--glass);
-  backdrop-filter: blur(8px);
+  background: var(--glass-solid);
   position: relative;
   overflow: hidden;
 }
@@ -1448,12 +1559,13 @@ button {
   box-sizing: border-box;
   border-radius: 50%;
   color: #fff;
-  background: rgba(8, 11, 30, 0.5);
+  background: rgba(8, 11, 30, 0.72);
   border: 1.5px solid var(--accent, #00f7ff);
   box-shadow:
     0 0 34px -4px var(--accent, #00f7ff),
     inset 0 0 22px -10px var(--accent, #00f7ff);
-  backdrop-filter: blur(6px);
+  /* Had a backdrop blur under an `infinite` pulse animation — the worst pairing
+     there is, since the blur is recomputed on every frame of the loop. */
   transition: transform 0.4s var(--ease-out-quart), box-shadow 0.4s ease;
   animation: ytPulse 2.6s ease-in-out infinite;
 }
@@ -1703,8 +1815,7 @@ body.dragging * {
   margin: 56px auto 0;
   padding: 48px;
   border-radius: 22px;
-  background: var(--glass);
-  backdrop-filter: blur(12px);
+  background: var(--glass-solid);
   border: 1px solid var(--glass-line);
   position: relative;
   overflow: hidden;

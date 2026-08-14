@@ -42,6 +42,12 @@ const embedSrc = (type, id) =>
 const embedThumb = (type, id, poster) =>
   poster || (type === "youtube" ? `https://i.ytimg.com/vi/${id}/maxresdefault.jpg` : "");
 
+// The thumbnail strip paints 90x58 chips. scripts/optimize-images.cjs writes a
+// 240px `-thumb.webp` next to every gallery frame, so the strip costs a few KB
+// instead of re-downloading the full-size frames it sits under.
+const chip = (src) =>
+  typeof src === "string" && src.endsWith(".webp") ? src.replace(/\.webp$/, "-thumb.webp") : src;
+
 // A lightweight video "facade": we show the poster + a play button and only
 // mount the heavy iframe once the visitor actually clicks — so the page stays
 // fast and never lags loading embeds it may never need. Works for YouTube + Vimeo.
@@ -316,9 +322,14 @@ export default function Projects() {
                         >
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
-                            src={asset(m.type === "image" ? m.src : embedThumb(m.type, m.id, m.poster))}
+                            src={asset(
+                              chip(m.type === "image" ? m.src : embedThumb(m.type, m.id, m.poster))
+                            )}
                             alt=""
                             loading="lazy"
+                            decoding="async"
+                            width="90"
+                            height="58"
                           />
                           {m.type !== "image" && <span className="tplay">▶</span>}
                         </button>

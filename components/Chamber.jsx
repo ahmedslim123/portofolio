@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import gsap from "gsap";
 import Lenis from "lenis";
 
 import Atmosphere from "@/components/Atmosphere";
 import Cursor from "@/components/Cursor";
-import Background from "@/components/three/Background";
 import IntroOverlay from "@/components/IntroOverlay";
 import Navbar from "@/components/Navbar";
 import DotNav from "@/components/DotNav";
@@ -19,6 +19,16 @@ import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import { useReducedMotion, useIsTouch } from "@/hooks/useReducedMotion";
+
+// three + @react-three/* + postprocessing is 1.35 MB of JavaScript — bigger
+// than everything else on the site combined. Imported statically it sat in the
+// first-paint bundle, so the browser had to download and parse all of it before
+// it could draw a single word of the intro. Split out, the overlay paints
+// immediately and the WebGL door streams in behind it (`ssr: false` because the
+// canvas is client-only anyway, and the whole site is a static export).
+const Background = dynamic(() => import("@/components/three/Background"), {
+  ssr: false,
+});
 
 /**
  * Chamber — the experience orchestrator.
@@ -237,6 +247,33 @@ export default function Chamber() {
     };
   }, []);
 
+  /* ----------------- Pause animations in off-screen sections ---------------- */
+  // A CSS animation keeps running when its element is scrolled out of view, and
+  // these are all `infinite`: twelve door arrows pulsing, the skill orbs
+  // drifting, the contact ring spinning — all of it ticking while the visitor
+  // is still reading the hero. Measured at idle, the always-on animations were
+  // the whole main-thread cost of the page: 40% busy with them, 10% without.
+  // Pausing whatever is off-screen leaves only what is actually being looked at.
+  useEffect(() => {
+    if (!entered) return;
+    const sections = Array.from(document.querySelectorAll("main.scene .section"));
+    if (!sections.length) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          // `data-idle` drives `animation-play-state: paused` in globals.css.
+          e.target.toggleAttribute("data-idle", !e.isIntersecting);
+        }
+      },
+      // A screen of margin either side: animations are already running by the
+      // time a section scrolls into view, never caught starting.
+      { rootMargin: "100% 0px" }
+    );
+    sections.forEach((s) => io.observe(s));
+    return () => io.disconnect();
+  }, [entered]);
+
   /* ------------------- Click-and-drag scrolling (grab to scroll) ------------ */
   // Grab anywhere on the page (except real interactive elements) and move up or
   // down to scroll — makes navigating and lining up hovers effortless on
@@ -309,7 +346,7 @@ export default function Chamber() {
   return (
     <LanguageProvider>
       <Atmosphere />
-      <Background fx={fx} onError={() => setWebglFailed(true)} />
+      <Background fx={fx} entered={entered} onError={() => setWebglFailed(true)} />
       <Cursor />
 
       <IntroOverlay

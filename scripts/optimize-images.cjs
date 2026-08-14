@@ -1,0 +1,125 @@
+/**
+ * Rebuild every served image from the originals.
+ *
+ *   node scripts/optimize-images.cjs          # rebuild public/ from assets-src/
+ *   node scripts/optimize-images.cjs --dry    # report only
+ *
+ * Why this exists: the doors were shipping 1200x1760 JPEGs to paint a 259x380
+ * tile, and the gallery thumbnail strip was downloading full 1920x1080 frames
+ * to paint 90x58 chips — 2.6 MB of images on the hall alone.
+ *
+ * Layout:
+ *   assets-src/**            the untouched originals — the archive, never served
+ *   public/projects/**       generated WebP only, sized to what is painted
+ *
+ * Originals are MOVED here on first run, so nothing is lost and nothing is
+ * shipped twice. Re-run after adding a project (drop its originals in
+ * assets-src/projects/<slug>/ first).
+ */
+const fs = require("node:fs");
+const path = require("node:path");
+const sharp = require("sharp");
+
+const ROOT = path.join(__dirname, "..");
+const SRC = path.join(ROOT, "assets-src");
+const PUB = path.join(ROOT, "public");
+const DRY = process.argv.includes("--dry");
+
+// Painted sizes measured in the browser at 1280x720, doubled for retina.
+//   door cover   259x380  -> 560 wide
+//   gallery main 828x466  -> 1600 wide (also covers a 1440px viewport)
+//   thumb chip    90x58   -> 240 wide
+// Gallery frames sit at q68: they are grainy AI-generated renders, and grain is
+// exactly what a lossy codec spends its bitrate on. At 1600px the difference is
+// invisible while the heaviest frame drops from 382 KB to well under a third.
+const RULES = [
+  { test: /(^|\/)ahmed\.\w+$/i, width: 720, quality: 82, thumb: false },
+  { test: /(^|\/)cover\.\w+$/i, width: 560, quality: 76, thumb: false },
+  { test: /.*/, width: 1600, quality: 68, thumb: true },
+];
+const THUMB = { width: 240, quality: 70 };
+
+// og.jpg must stay a JPEG: WhatsApp/Facebook/LinkedIn scrapers still reject
+// WebP share cards. The favicon is left alone too.
+const KEEP_AS_IS = new Set(["og.jpg", "favicon.ico"]);
+
+const isRaster = (f) => /\.(jpe?g|png)$/i.test(f);
+const walk = (d) =>
+  fs.existsSync(d)
+    ? fs
+        .readdirSync(d, { withFileTypes: true })
+        .flatMap((e) => (e.isDirectory() ? walk(path.join(d, e.name)) : [path.join(d, e.name)]))
+    : [];
+
+/** First run: move the originals out of public/ into assets-src/. */
+function migrate() {
+  const originals = walk(PUB).filter((f) => isRaster(f) && !KEEP_AS_IS.has(path.basename(f)));
+  if (!originals.length) return 0;
+  for (const f of originals) {
+    const dest = path.join(SRC, path.relative(PUB, f));
+    if (DRY) continue;
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    fs.renameSync(f, dest);
+  }
+  return originals.length;
+}
+
+const kb = (n) => (n / 1024).toFixed(0);
+
+(async () => {
+  const moved = migrate();
+  if (moved) console.log(`moved ${moved} originals into assets-src/\n`);
+
+  const sources = walk(SRC).filter(isRaster);
+  if (!sources.length) {
+    console.error("no originals found in assets-src/ — nothing to do.");
+    process.exitCode = 1;
+    return;
+  }
+
+  let before = 0;
+  let after = 0;
+  const rows = [];
+
+  for (const src of sources) {
+    const rel = path.relative(SRC, src).split(path.sep).join("/");
+    const rule = RULES.find((r) => r.test.test(rel));
+    const meta = await sharp(src).metadata();
+    const srcBytes = fs.statSync(src).size;
+    before += srcBytes;
+
+    const outputs = [
+      { suffix: "", width: rule.width, quality: rule.quality },
+      ...(rule.thumb ? [{ suffix: "-thumb", ...THUMB }] : []),
+    ];
+
+    for (const o of outputs) {
+      const outRel = rel.replace(/\.\w+$/, `${o.suffix}.webp`);
+      const out = path.join(PUB, outRel);
+      // Never upscale: a source smaller than the target keeps its own size.
+      const w = Math.min(o.width, meta.width);
+      if (!DRY) {
+        fs.mkdirSync(path.dirname(out), { recursive: true });
+        await sharp(src)
+          .resize({ width: w, withoutEnlargement: true })
+          .webp({ quality: o.quality, effort: 6 })
+          .toFile(out);
+      }
+      const outBytes = DRY ? 0 : fs.statSync(out).size;
+      after += outBytes;
+      rows.push(
+        `${kb(srcBytes).padStart(5)} KB ${`${meta.width}x${meta.height}`.padEnd(10)}` +
+          ` ->${kb(outBytes).padStart(5)} KB ${`${w}w`.padEnd(6)} ${outRel}`
+      );
+    }
+  }
+
+  console.log(rows.sort().join("\n"));
+  console.log("\n" + "-".repeat(60));
+  console.log(
+    `${sources.length} originals (${(before / 1024 / 1024).toFixed(2)} MB)` +
+      ` -> ${rows.length} WebP (${(after / 1024 / 1024).toFixed(2)} MB)` +
+      `   saved ${(((before - after) / before) * 100).toFixed(0)}%`
+  );
+  if (DRY) console.log("(dry run — nothing written)");
+})();

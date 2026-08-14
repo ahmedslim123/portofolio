@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
+
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import * as THREE from "three";
 
@@ -86,8 +87,16 @@ function Rig({ fx }) {
 
 /** Post stack — Bloom makes the emissive veins glow and a vignette frames the
  *  void. (We dropped the chromatic-aberration pass: it was a full-screen pass
- *  every frame for a barely-visible fringe — removing it keeps the continuous
- *  render cheap so the scene stays smooth without ever throttling resolution.)
+ *  every frame for a barely-visible fringe.)
+ *
+ *  This runs during the DOOR INTRO ONLY. Bloom's mipmap blur is several
+ *  full-screen passes per frame; keeping it alive behind the scrolling
+ *  portfolio measured as the single most expensive thing on the page. The
+ *  intro is six seconds with nothing else on screen, so it can afford it —
+ *  the ambient void afterwards cannot, and doesn't need it: the star shader
+ *  draws its own glow, and the vignette is already a static CSS layer
+ *  (`.vignette` in <Atmosphere/>) that costs nothing.
+ *
  *  NOTE: we deliberately do NOT pass a `ref` to any effect — in React 19 `ref`
  *  is a regular prop and @react-three/postprocessing's wrapEffect does
  *  `JSON.stringify(restProps)`, which throws on the circular effect instance. */
@@ -109,16 +118,48 @@ function Effects() {
 }
 
 /**
+ * Paces the ambient void at 30 fps instead of 60.
+ *
+ * Behind the portfolio the scene is slow drift — clouds breathing over ~9s,
+ * stars twinkling, a gentle pointer parallax. Half the frames are
+ * indistinguishable there, and every one we skip is a full additive
+ * repaint of the viewport handed back to the scroll. The door intro is
+ * deliberately NOT throttled: it is fast camera motion with nothing else
+ * competing for the frame.
+ */
+function AmbientFrameRate({ fps = 30 }) {
+  const invalidate = useThree((s) => s.invalidate);
+
+  useEffect(() => {
+    let raf;
+    let last = 0;
+    const interval = 1000 / fps;
+    const loop = (t) => {
+      raf = requestAnimationFrame(loop);
+      // -1ms of slack: rAF timestamps land a hair under the interval and would
+      // otherwise drop us to every third frame (20 fps).
+      if (t - last >= interval - 1) {
+        last = t;
+        invalidate();
+      }
+    };
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+  }, [invalidate, fps]);
+
+  return null;
+}
+
+/**
  * The persistent WebGL backdrop. Renders the grand door during the intro, then
  * settles into an ambient drifting void behind the portfolio.
  */
-export default function Background({ fx, onError }) {
+export default function Background({ fx, entered, onError }) {
   const [ok, setOk] = useState(true);
   // The render loop runs continuously so the ambient void NEVER freezes, jumps
   // or restarts on a click/scroll — the animation stays perfectly smooth while
   // the visitor navigates. We only pause when the tab is hidden (invisible to
-  // the visitor, saves the GPU/battery), and the DPR is fixed (no runtime
-  // resolution switching), so nothing about the picture ever changes on input.
+  // the visitor, saves the GPU/battery).
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
@@ -147,7 +188,9 @@ export default function Background({ fx, onError }) {
   return (
     <Canvas
       className="bg-canvas"
-      frameloop={visible ? "always" : "never"}
+      // Hidden tab: stop entirely. Portfolio: render on demand, driven at 30 fps
+      // by <AmbientFrameRate/>. Intro: every frame, it is the whole show.
+      frameloop={!visible ? "never" : entered ? "demand" : "always"}
       style={{
         position: "fixed",
         inset: 0,
@@ -156,9 +199,11 @@ export default function Background({ fx, onError }) {
         zIndex: -2,
         display: "block",
       }}
-      // Fixed DPR (capped at 1.5) — picked once per device, never changed at
-      // runtime, so the scene can't shimmer/sharpen as you scroll or click.
-      dpr={[1, 1.5]}
+      // Two fixed steps, switched exactly once — under the whiteout, where the
+      // change is invisible. The door is a detailed lit object and deserves the
+      // pixels; the ambient void is soft additive glows where DPR 1 is
+      // indistinguishable, and costs 2.25x less fill on a 1.5x display.
+      dpr={entered ? 1 : [1, 1.5]}
       gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
       camera={{ position: [0, 0, 8], fov: 60, near: 0.1, far: 200 }}
       onCreated={({ gl }) => {
@@ -171,14 +216,27 @@ export default function Background({ fx, onError }) {
       }}
     >
       <fogExp2 attach="fog" args={[0x070a1e, 0.045]} />
-      <Lights />
-      <Ground />
+
+      {/* Door phase only. Once the visitor is through, ALL of this is
+          unmounted — it is the entire lit half of the scene. The door and the
+          ground are the only MeshStandardMaterials here, so retiring them
+          retires the four-light rig with them (the nebula, the shooting stars
+          and the starfield are unlit basic/shader materials). What is left
+          behind the portfolio is an unlit scene with no post-processing. */}
+      {!entered && (
+        <>
+          <Lights />
+          <Ground />
+          <GrandDoor fx={fx} />
+          <Effects />
+        </>
+      )}
+
       <Nebula />
       <ShootingStars />
       <ParticleField fx={fx} />
-      <GrandDoor fx={fx} />
       <Rig fx={fx} />
-      <Effects />
+      {entered && visible && <AmbientFrameRate />}
     </Canvas>
   );
 }

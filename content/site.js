@@ -19,7 +19,7 @@ export const site = {
   initials: "AS",
   // Drop a square image in /public and set this to e.g. "/me.jpg" to replace
   // the initials. Leave "" to keep the animated initials portal.
-  photo: "/ahmed.jpg",
+  photo: "/ahmed.webp",
 
   /* ---- Hero / About ------------------------------------------------------ */
   heroBio:
@@ -68,7 +68,7 @@ export const site = {
       bg: "linear-gradient(160deg,#1c1509,#050506)",
       glow: "rgba(220,166,44,.30)",
       sub: "A Luxembourg trading group and its three brands, in six languages",
-      cover: "/projects/anadani-group/cover.jpg",
+      cover: "/projects/anadani-group/cover.webp",
       overview:
         "The corporate site of ANADANI GROUP S.à r.l. — a Luxembourg trading group and its three owned brands, in one black-and-gold identity across six languages.",
       problem:
@@ -80,11 +80,11 @@ export const site = {
       stack: ["Next.js 16", "Tailwind v4", "i18n · 6 Locales", "GSAP · Lenis", "SEO"],
       live: "https://anadanigroupbyahmedslim.vercel.app",
       media: [
-        { type: "image", src: "/projects/anadani-group/img1.jpg" },
-        { type: "image", src: "/projects/anadani-group/img2.jpg" },
-        { type: "image", src: "/projects/anadani-group/img3.jpg" },
-        { type: "image", src: "/projects/anadani-group/img4.jpg" },
-        { type: "image", src: "/projects/anadani-group/img5.jpg" },
+        { type: "image", src: "/projects/anadani-group/img1.webp" },
+        { type: "image", src: "/projects/anadani-group/img2.webp" },
+        { type: "image", src: "/projects/anadani-group/img3.webp" },
+        { type: "image", src: "/projects/anadani-group/img4.webp" },
+        { type: "image", src: "/projects/anadani-group/img5.webp" },
       ],
     },
     {
@@ -95,7 +95,7 @@ export const site = {
       bg: "linear-gradient(160deg,#2a2008,#0c0a03)",
       glow: "rgba(231,180,58,.32)",
       sub: "Launching a premium energy-drink brand in Tunisia",
-      cover: "/projects/tera-energy/cover.jpg",
+      cover: "/projects/tera-energy/cover.webp",
       overview:
         "I led the digital launch of Tera Energy — owning the brand identity, the showcase site and the campaign that built anticipation before its debut.",
       problem:
@@ -111,9 +111,9 @@ export const site = {
         instagram: "https://www.instagram.com/teraenergyx/",
       },
       media: [
-        { type: "image", src: "/projects/tera-energy/img1.jpg" },
-        { type: "image", src: "/projects/tera-energy/img3.jpg" },
-        { type: "image", src: "/projects/tera-energy/img5.jpg" },
+        { type: "image", src: "/projects/tera-energy/img1.webp" },
+        { type: "image", src: "/projects/tera-energy/img3.webp" },
+        { type: "image", src: "/projects/tera-energy/img5.webp" },
       ],
     },
     {
@@ -124,7 +124,7 @@ export const site = {
       bg: "linear-gradient(160deg,#12240c,#050a03)",
       glow: "rgba(127,184,78,.30)",
       sub: "A digital home for a family house of natural remedies",
-      cover: "/projects/koroko/cover.jpg",
+      cover: "/projects/koroko/cover.webp",
       overview:
         "A warm, story-driven site for Établissement Korokoro & Fils — a family house in Bénin crafting traditional plant-based remedies for generations.",
       problem:
@@ -136,9 +136,9 @@ export const site = {
       stack: ["Next.js", "Web Design", "Brand Identity", "UI/UX"],
       live: "https://korokobyahmedslim.vercel.app/",
       media: [
-        { type: "image", src: "/projects/koroko/img1.jpg" },
-        { type: "image", src: "/projects/koroko/img2.jpg" },
-        { type: "image", src: "/projects/koroko/img3.jpg" },
+        { type: "image", src: "/projects/koroko/img1.webp" },
+        { type: "image", src: "/projects/koroko/img2.webp" },
+        { type: "image", src: "/projects/koroko/img3.webp" },
       ],
     },
     {
@@ -149,7 +149,7 @@ export const site = {
       bg: "linear-gradient(160deg,#20160d,#080503)",
       glow: "rgba(199,162,78,.30)",
       sub: "A bilingual B2B storefront for Bourbon vanilla from Madagascar",
-      cover: "/projects/soafeno-vanilla/cover.jpg",
+      cover: "/projects/soafeno-vanilla/cover.webp",
       overview:
         "A refined bilingual (FR/EN) showcase for Soafeno Trading — a direct producer and exporter of premium Bourbon vanilla from Madagascar.",
       problem:
@@ -161,9 +161,9 @@ export const site = {
       stack: ["Next.js", "Three.js", "GSAP", "i18n FR/EN"],
       live: "https://soafenotradingbyahmedslim.vercel.app/",
       media: [
-        { type: "image", src: "/projects/soafeno-vanilla/img1.jpg" },
-        { type: "image", src: "/projects/soafeno-vanilla/img2.jpg" },
-        { type: "image", src: "/projects/soafeno-vanilla/img3.jpg" },
+        { type: "image", src: "/projects/soafeno-vanilla/img1.webp" },
+        { type: "image", src: "/projects/soafeno-vanilla/img2.webp" },
+        { type: "image", src: "/projects/soafeno-vanilla/img3.webp" },
       ],
     },
     {
@@ -174,7 +174,7 @@ export const site = {
       bg: "linear-gradient(160deg,#0c3b39,#04100e)",
       glow: "rgba(242,168,29,.32)",
       sub: "A taste of Venezuela — a Caribbean restaurant lands in Dijon",
-      cover: "/projects/palmiche/cover.jpg",
+      cover: "/projects/palmiche/cover.webp",
       overview:
         "A sun-soaked showcase for Palmiché, a Venezuelan restaurant bringing arepas, empanadas and tequeños to Dijon, France.",
       problem:
@@ -186,9 +186,9 @@ export const site = {
       stack: ["Next.js", "Framer Motion", "Web Design", "Brand Identity"],
       live: "https://palmichebyahmedslim.vercel.app/",
       media: [
-        { type: "image", src: "/projects/palmiche/img1.jpg" },
-        { type: "image", src: "/projects/palmiche/img2.jpg" },
-        { type: "image", src: "/projects/palmiche/img3.jpg" },
+        { type: "image", src: "/projects/palmiche/img1.webp" },
+        { type: "image", src: "/projects/palmiche/img2.webp" },
+        { type: "image", src: "/projects/palmiche/img3.webp" },
       ],
     },
     {
@@ -199,7 +199,7 @@ export const site = {
       bg: "linear-gradient(160deg,#0e2a1a,#05100a)",
       glow: "rgba(70,222,131,.30)",
       sub: "A next-gen SaaS platform for AI recruitment",
-      cover: "/projects/talentmatch-ai/cover.jpg",
+      cover: "/projects/talentmatch-ai/cover.webp",
       overview:
         "A high-converting SaaS product for TalentMatch AI, a platform that optimizes hiring with AI — high-tech, yet effortless to read.",
       problem:
@@ -210,7 +210,7 @@ export const site = {
         "A premium experience that communicates the AI value instantly and converts.",
       stack: ["Next.js", "AI Integration", "SaaS UI", "UI/UX Prototyping"],
       media: [
-        { type: "vimeo", id: "1199156171", poster: "/projects/talentmatch-ai/demo.jpg" },
+        { type: "vimeo", id: "1199156171", poster: "/projects/talentmatch-ai/demo.webp" },
       ],
     },
     {
@@ -221,7 +221,7 @@ export const site = {
       bg: "linear-gradient(160deg,#0e1d3a,#05080f)",
       glow: "rgba(76,141,255,.32)",
       sub: "An AI fitness coach & health-tracking platform",
-      cover: "/projects/wakelni/cover.jpg",
+      cover: "/projects/wakelni/cover.webp",
       overview:
         "A full-stack AI fitness app tracking calories, macros, hydration, steps and body metrics in real time, with a personal AI coach.",
       problem:
@@ -232,7 +232,7 @@ export const site = {
         "A polished companion that turns raw metrics into actionable daily guidance.",
       stack: ["Next.js", "AI Chatbot", "Full-Stack", "UI/UX Prototyping"],
       media: [
-        { type: "youtube", id: "773TvTNtYtE", poster: "/projects/wakelni/demo.jpg" },
+        { type: "youtube", id: "773TvTNtYtE", poster: "/projects/wakelni/demo.webp" },
       ],
     },
     {
@@ -243,7 +243,7 @@ export const site = {
       bg: "linear-gradient(160deg,#161a3a,#07060f)",
       glow: "rgba(124,131,255,.32)",
       sub: "An AI-powered candidate sourcing dashboard",
-      cover: "/projects/recruitment-control-room/cover.jpg",
+      cover: "/projects/recruitment-control-room/cover.webp",
       overview:
         "A full-stack platform that centralizes candidate qualification, campaign execution and AI-generated outreach in one control room.",
       problem:
@@ -254,7 +254,7 @@ export const site = {
         "One clean interface that runs the entire hiring workflow end to end.",
       stack: ["Next.js", "Supabase", "AI Integration", "Full-Stack"],
       media: [
-        { type: "youtube", id: "E6lU7RN1UJE", poster: "/projects/recruitment-control-room/demo.jpg" },
+        { type: "youtube", id: "E6lU7RN1UJE", poster: "/projects/recruitment-control-room/demo.webp" },
       ],
     },
     {
@@ -265,7 +265,7 @@ export const site = {
       bg: "linear-gradient(160deg,#2c1810,#0e0805)",
       glow: "rgba(232,129,74,.30)",
       sub: "Bringing ancient heritage to life with AI & 3D",
-      cover: "/projects/sbiba-heritage/cover.jpg",
+      cover: "/projects/sbiba-heritage/cover.webp",
       overview:
         "An immersive web experience bringing the heritage of Sbiba to life — photogrammetry 3D monuments, an AI guide and a community.",
       problem:
@@ -277,7 +277,7 @@ export const site = {
       stack: ["WebXR", "Three.js", "AI Chatbot", "Photogrammetry"],
       live: "https://sbiba.vercel.app",
       media: [
-        { type: "youtube", id: "HIAKOd00bEg", poster: "/projects/sbiba-heritage/demo.jpg" },
+        { type: "youtube", id: "HIAKOd00bEg", poster: "/projects/sbiba-heritage/demo.webp" },
       ],
     },
     {
@@ -288,7 +288,7 @@ export const site = {
       bg: "linear-gradient(160deg,#241c0c,#0c0a05)",
       glow: "rgba(203,162,75,.30)",
       sub: "A luxury storefront for premium nuts & exports",
-      cover: "/projects/city-group/cover.jpg",
+      cover: "/projects/city-group/cover.webp",
       overview:
         "A sophisticated storefront for City Group SARL, specialists in high-quality natural cashews and premium dried fruits.",
       problem:
@@ -300,7 +300,7 @@ export const site = {
       stack: ["Web Design", "UI/UX Prototyping", "HTML/CSS", "JavaScript"],
       live: "https://snoussimohamedmokhtar.github.io/city-group/",
       media: [
-        { type: "youtube", id: "bqU7jNR7fPs", poster: "/projects/city-group/demo.jpg" },
+        { type: "youtube", id: "bqU7jNR7fPs", poster: "/projects/city-group/demo.webp" },
       ],
     },
     {
@@ -311,7 +311,7 @@ export const site = {
       bg: "linear-gradient(160deg,#0c2a28,#05100e)",
       glow: "rgba(45,212,191,.30)",
       sub: "E-commerce marketing & seasonal campaigns",
-      cover: "/projects/mriguel-ecommerce/cover.jpg",
+      cover: "/projects/mriguel-ecommerce/cover.webp",
       overview:
         "As e-commerce marketing manager for Mriguel Store, I drove growth through seasonal campaigns — graphics and short-form video ads.",
       problem:
@@ -326,7 +326,7 @@ export const site = {
         instagram: "https://www.instagram.com/mriguelstoree/",
       },
       media: [
-        { type: "image", src: "/projects/mriguel-ecommerce/thumb.jpg" },
+        { type: "image", src: "/projects/mriguel-ecommerce/thumb.webp" },
       ],
     },
     {
@@ -337,7 +337,7 @@ export const site = {
       bg: "linear-gradient(160deg,#1f1238,#0a0610)",
       glow: "rgba(168,85,247,.32)",
       sub: "Cinematic editing — Premiere Pro, CapCut & AI",
-      cover: "/projects/video-montage/cover.jpg",
+      cover: "/projects/video-montage/cover.webp",
       overview:
         "A reel of professional montages made with Premiere Pro, CapCut and AI tools — from raw footage to color, sound and delivery.",
       problem:
@@ -348,7 +348,7 @@ export const site = {
         "Clean, engaging videos delivered on time and on brief, every time.",
       stack: ["Premiere Pro", "CapCut", "AI VFX", "Color Grading"],
       media: [
-        { type: "youtube", id: "sSIguVxr9NU", poster: "/projects/video-montage/reel.jpg" },
+        { type: "youtube", id: "sSIguVxr9NU", poster: "/projects/video-montage/reel.webp" },
       ],
     },
   ],

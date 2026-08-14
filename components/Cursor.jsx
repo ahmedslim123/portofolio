@@ -31,18 +31,39 @@ export default function Cursor() {
       );
       ring.classList.toggle("hot", !!hot);
     };
+    // The ring eases toward the pointer, so it only needs to animate while it
+    // is still catching up. This loop used to run forever: it rewrote
+    // `ring.style.transform` on every frame of the entire visit, which meant a
+    // style recalculation every frame even with the mouse sitting still — and
+    // that cost is paid out of the same main thread the scroll needs. Now it
+    // parks itself once it has arrived, and the pointer wakes it.
     const loop = () => {
-      rx += (mx - rx) * 0.18;
-      ry += (my - ry) * 0.18;
+      const dx = mx - rx;
+      const dy = my - ry;
+      rx += dx * 0.18;
+      ry += dy * 0.18;
       ring.style.transform = `translate3d(${rx}px, ${ry}px, 0) translate(-50%, -50%)`;
+      // Under a tenth of a pixel from the target: nothing left to animate.
+      if (Math.abs(dx) < 0.1 && Math.abs(dy) < 0.1) {
+        raf = 0;
+        return;
+      }
       raf = requestAnimationFrame(loop);
     };
+    const wake = () => {
+      if (!raf) raf = requestAnimationFrame(loop);
+    };
 
-    window.addEventListener("mousemove", onMove);
+    const onMoveAndWake = (e) => {
+      onMove(e);
+      wake();
+    };
+
+    window.addEventListener("mousemove", onMoveAndWake);
     window.addEventListener("mouseover", onOver);
-    raf = requestAnimationFrame(loop);
+    wake();
     return () => {
-      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mousemove", onMoveAndWake);
       window.removeEventListener("mouseover", onOver);
       cancelAnimationFrame(raf);
     };

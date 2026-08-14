@@ -72,11 +72,11 @@ export const site = {
       overview:
         "The corporate site of ANADANI GROUP S.à r.l. — a Luxembourg trading group and its three owned brands, in one black-and-gold identity across six languages.",
       problem:
-        "A group selling into Europe and the Middle East had to earn buyers' trust in six languages, Arabic included.",
+        "A Luxembourg trading group was selling into Europe and the Middle East off a PDF profile — buyers in six languages had nothing to check it against.",
       solution:
-        "I built a statically-rendered Next.js site: one design system, 775 keys per locale, full Arabic RTL, and a page per brand.",
+        "I built one statically-rendered Next.js site for the group and its three brands: a single design system, 775 translated keys per locale, and full Arabic right-to-left.",
       result:
-        "Ninety prerendered pages that load instantly and read as one institution in every language.",
+        "Ninety prerendered pages on one domain. Six markets now read the same institution, each in its own language and script — no attachment, no separate site per brand.",
       stack: ["Next.js 16", "Tailwind v4", "i18n · 6 Locales", "GSAP · Lenis", "SEO"],
       live: "https://anadanigroupbyahmedslim.vercel.app",
       media: [
@@ -99,11 +99,11 @@ export const site = {
       overview:
         "I led the digital launch of Tera Energy — owning the brand identity, the showcase site and the campaign that built anticipation before its debut.",
       problem:
-        "A brand-new beverage had to enter the Tunisian market with a premium identity and no existing audience.",
+        "A new energy drink had to launch in Tunisia against established imports — with no brand, no audience and no site.",
       solution:
-        "I designed the identity, built the showcase site (teraenergy.at) and produced the full library of campaign visuals.",
+        "I owned the whole launch: the visual identity, the showcase site at teraenergy.at, and the campaign library that fed Facebook and Instagram.",
       result:
-        "A cohesive premium brand and a teaser campaign that generated real anticipation ahead of launch.",
+        "The brand reached shelves with one coherent look across can, web and social, and a teaser campaign already running before the first can shipped.",
       stack: ["Brand Design", "Web Development", "UI/UX", "Photoshop", "Social Campaign"],
       live: "https://www.teraenergy.at",
       social: {
@@ -128,11 +128,11 @@ export const site = {
       overview:
         "A warm, story-driven site for Établissement Korokoro & Fils — a family house in Bénin crafting traditional plant-based remedies for generations.",
       problem:
-        "A respected family business with 43+ remedies and a rich heritage had no digital presence at all.",
+        "Four generations of plant-based remedies in Bénin, 43 products, and not one page online — buyers abroad had no way to find or verify the house.",
       solution:
-        "I built an elegant heritage site around their flagship soap, pommade, honey and NONI juice, with direct call and WhatsApp paths.",
+        "I built a heritage-led site around the flagship soap, pommade, honey and NONI juice, putting the family story up front and a one-tap call or WhatsApp on every product.",
       result:
-        "A premium online presence that turns generations of know-how into a brand ready for export.",
+        "The full catalogue of 43 remedies is online with the story behind it, and an enquiry now reaches the workshop directly from any phone.",
       stack: ["Next.js", "Web Design", "Brand Identity", "UI/UX"],
       live: "https://korokobyahmedslim.vercel.app/",
       media: [
@@ -153,11 +153,11 @@ export const site = {
       overview:
         "A refined bilingual (FR/EN) showcase for Soafeno Trading — a direct producer and exporter of premium Bourbon vanilla from Madagascar.",
       problem:
-        "A direct-from-origin vanilla exporter had to earn professional buyers' trust and stand apart from resellers.",
+        "A direct-from-origin vanilla producer looked identical online to the resellers sitting between it and European buyers.",
       solution:
-        "I built an animated one-page site with a custom 3D hero, the full grade catalog, the field-to-export process and quote CTAs.",
+        "I built a bilingual one-page storefront: a custom 3D vanilla hero, the full grade catalogue, the field-to-export chain step by step, and a quote request at every stage.",
       result:
-        "A high-end export experience that positions Soafeno as a direct-from-origin partner worldwide.",
+        "The chain from Madagascar plantation to shipped crate reads in a single scroll, in French and English — the one argument that separates a producer from a middleman.",
       stack: ["Next.js", "Three.js", "GSAP", "i18n FR/EN"],
       live: "https://soafenotradingbyahmedslim.vercel.app/",
       media: [
@@ -178,11 +178,11 @@ export const site = {
       overview:
         "A sun-soaked showcase for Palmiché, a Venezuelan restaurant bringing arepas, empanadas and tequeños to Dijon, France.",
       problem:
-        "A new Venezuelan restaurant needed a vibrant identity to introduce a little-known cuisine and drive orders.",
+        "A Venezuelan restaurant opening in Dijon had to explain arepas, empanadas and tequeños to a city that had never eaten them.",
       solution:
-        "I built a tropical site with a deep-teal and amber identity, an animated menu, the story of the arepa and clear ordering paths.",
+        "I built a warm teal-and-amber site that leads with the food: an animated menu, the story of the arepa, and an ordering path that never leaves the page.",
       result:
-        "A mouth-watering online home that makes Venezuelan cuisine feel irresistible and ready to order.",
+        "The menu now does the explaining before anyone walks in, and every dish is one tap from an order.",
       stack: ["Next.js", "Framer Motion", "Web Design", "Brand Identity"],
       live: "https://palmichebyahmedslim.vercel.app/",
       media: [
@@ -203,11 +203,11 @@ export const site = {
       overview:
         "A high-converting SaaS product for TalentMatch AI, a platform that optimizes hiring with AI — high-tech, yet effortless to read.",
       problem:
-        "An AI recruitment startup needed a product that felt cutting-edge yet instantly understandable.",
+        "An AI recruitment startup had a genuinely technical product and about thirty seconds to make a hiring manager understand it.",
       solution:
-        "I designed and built the landing page and a clean job-management dashboard with custom visuals and a fluid UX.",
+        "I designed and built the landing page and the job-management dashboard together, so the promise on the page and the product behind it speak the same language.",
       result:
-        "A premium experience that communicates the AI value instantly and converts.",
+        "A visitor understands what the AI actually does before the second scroll, and the dashboard on the next click proves it rather than restating it.",
       stack: ["Next.js", "AI Integration", "SaaS UI", "UI/UX Prototyping"],
       media: [
         { type: "vimeo", id: "1199156171", poster: "/projects/talentmatch-ai/demo.webp" },
@@ -225,11 +225,11 @@ export const site = {
       overview:
         "A full-stack AI fitness app tracking calories, macros, hydration, steps and body metrics in real time, with a personal AI coach.",
       problem:
-        "People juggling fitness goals had no single smart place to track nutrition and progress with real guidance.",
+        "Tracking calories, macros, hydration, steps and body metrics meant four apps — and no advice at the end of any of them.",
       solution:
-        "I built a daily overview, 7-day charts, TDEE & BMI, goal pacing and an AI coach — multilingual on a clean dark UI.",
+        "I built one full-stack app: a daily overview, seven-day charts, TDEE and BMI, goal pacing, and an AI coach reading the same data — multilingual, on a dark UI.",
       result:
-        "A polished companion that turns raw metrics into actionable daily guidance.",
+        "One screen answers “am I on track?”, and the coach turns that answer into the next action instead of leaving it on a chart.",
       stack: ["Next.js", "AI Chatbot", "Full-Stack", "UI/UX Prototyping"],
       media: [
         { type: "youtube", id: "773TvTNtYtE", poster: "/projects/wakelni/demo.webp" },
@@ -247,11 +247,11 @@ export const site = {
       overview:
         "A full-stack platform that centralizes candidate qualification, campaign execution and AI-generated outreach in one control room.",
       problem:
-        "Recruiters ran sourcing, qualification and outreach across scattered tools with no single source of truth.",
+        "Recruiters ran sourcing, qualification and outreach across scattered tools, with no single source of truth on any candidate.",
       solution:
-        "I built a unified dashboard with role-based access, Supabase auth, AI-assisted outreach and live pipeline analytics.",
+        "I built one dashboard on Supabase: role-based access, AI-assisted outreach drafting, and pipeline analytics updating live.",
       result:
-        "One clean interface that runs the entire hiring workflow end to end.",
+        "The whole hiring workflow runs in one place, and every recruiter sees the same pipeline state instead of their own copy of it.",
       stack: ["Next.js", "Supabase", "AI Integration", "Full-Stack"],
       media: [
         { type: "youtube", id: "E6lU7RN1UJE", poster: "/projects/recruitment-control-room/demo.webp" },
@@ -269,11 +269,11 @@ export const site = {
       overview:
         "An immersive web experience bringing the heritage of Sbiba to life — photogrammetry 3D monuments, an AI guide and a community.",
       problem:
-        "The historical heritage of Sbiba deserved a modern, engaging way to be explored and preserved digitally.",
+        "Sbiba's Roman and Byzantine heritage sat in archives almost nobody visits, and was eroding faster than it was being recorded.",
       solution:
-        "I built a WebXR experience with 3D-scanned monuments, an AI chatbot, and selfies transformed into historical portraits.",
+        "I scanned the monuments into 3D by photogrammetry and wrapped them in a WebXR experience with an AI guide, plus portraits that place a visitor inside the period.",
       result:
-        "A living, interactive museum of Mediterranean heritage, open from any browser.",
+        "The monuments are explorable from any browser with no app to install — and the scans stand as a record that outlives the stone.",
       stack: ["WebXR", "Three.js", "AI Chatbot", "Photogrammetry"],
       live: "https://sbiba.vercel.app",
       media: [
@@ -292,11 +292,11 @@ export const site = {
       overview:
         "A sophisticated storefront for City Group SARL, specialists in high-quality natural cashews and premium dried fruits.",
       problem:
-        "A premium nut & dried-fruit exporter had no digital presence worthy of its product quality.",
+        "A premium cashew and dried-fruit exporter was claiming quality it had no way to show a buyer.",
       solution:
-        "I designed a conversion-focused storefront with refined typography, rich product cards and a warm premium aesthetic.",
+        "I designed a conversion-focused storefront: refined typography, product cards that carry the grades and tasting notes, and a palette matched to the goods.",
       result:
-        "A polished flagship that elevates the brand online and showcases the full range.",
+        "The whole range is now presentable in a single link, and the product finally looks the way the exporter describes it.",
       stack: ["Web Design", "UI/UX Prototyping", "HTML/CSS", "JavaScript"],
       live: "https://snoussimohamedmokhtar.github.io/city-group/",
       media: [
@@ -315,11 +315,11 @@ export const site = {
       overview:
         "As e-commerce marketing manager for Mriguel Store, I drove growth through seasonal campaigns — graphics and short-form video ads.",
       problem:
-        "An online retailer needed consistent, scroll-stopping creative to grow engagement across seasonal moments.",
+        "An online store needed creative that could stop a scroll every season — not one good campaign followed by silence.",
       solution:
-        "I produced a steady stream of campaign graphics and video ads on a cohesive identity across Facebook and Instagram.",
+        "As e-commerce marketing manager I ran a steady output of campaign graphics and short-form video ads on one identity, across Facebook and Instagram.",
       result:
-        "A high-engagement social presence that kept the store top-of-mind every season.",
+        "The store held one visual voice through every seasonal peak, with new creative shipping on a schedule instead of ad hoc.",
       stack: ["Graphic Design", "Video Ads", "Photoshop", "Social Media"],
       social: {
         facebook: "https://www.facebook.com/MriguelStore",
@@ -341,11 +341,11 @@ export const site = {
       overview:
         "A reel of professional montages made with Premiere Pro, CapCut and AI tools — from raw footage to color, sound and delivery.",
       problem:
-        "Clients needed engaging, on-brand videos with clean pacing, color and sound — delivered fast.",
+        "Clients needed video that holds attention — cut to rhythm, colour-graded, properly mixed — and needed it on a campaign deadline.",
       solution:
-        "I structured the narrative, graded color, synced audio and added AI-assisted effects for a polished final cut.",
+        "I built a repeatable pipeline in Premiere Pro and CapCut — rough cut, colour grade, sound mix, delivery — using AI tools only where they save real time.",
       result:
-        "Clean, engaging videos delivered on time and on brief, every time.",
+        "Short-form edits that keep pace with a feed, on a turnaround that fits a campaign calendar rather than a film schedule.",
       stack: ["Premiere Pro", "CapCut", "AI VFX", "Color Grading"],
       media: [
         { type: "youtube", id: "sSIguVxr9NU", poster: "/projects/video-montage/reel.webp" },
@@ -400,7 +400,9 @@ export const site = {
   ],
 
   /* ---- Contact + footer links ------------------------------------------- */
-  email: "slim.ahmed@esprit.tn",
+  // Shown as a pill in the hero beside the phone, and used by the contact
+  // section and footer. FR/AR inherit it — it is language-neutral.
+  email: "ahmedslim007@gmail.com",
   phone: "+21694687669",
   phoneDisplay: "+216 94 687 669",
   // WhatsApp deep-link — wa.me wants the number in international form with NO
@@ -448,11 +450,11 @@ const projectsFR = {
     overview:
       "Le site corporate d'ANADANI GROUP S.à r.l. — un groupe de négoce luxembourgeois et ses trois marques, sous une identité noir et or, en six langues.",
     problem:
-      "Un groupe vendant en Europe et au Moyen-Orient devait gagner la confiance des acheteurs en six langues, arabe compris.",
+      "Un groupe de négoce luxembourgeois vendait en Europe et au Moyen-Orient avec un simple PDF — les acheteurs, en six langues, n'avaient rien pour le vérifier.",
     solution:
-      "J'ai développé un site Next.js statique : un seul système de design, 775 clés par langue, le RTL arabe complet et une page par marque.",
+      "J'ai développé un seul site Next.js statique pour le groupe et ses trois marques : un système de design unique, 775 clés traduites par langue, et le RTL arabe complet.",
     result:
-      "Quatre-vingt-dix pages pré-rendues, instantanées, qui se lisent comme une seule institution dans chaque langue.",
+      "Quatre-vingt-dix pages pré-rendues sur un seul domaine. Six marchés lisent désormais la même institution, chacun dans sa langue et son écriture — sans pièce jointe ni site séparé par marque.",
     stack: ["Next.js 16", "Tailwind v4", "i18n · 6 Langues", "GSAP · Lenis", "SEO"],
   },
   "tera-energy": {
@@ -461,11 +463,11 @@ const projectsFR = {
     overview:
       "J'ai piloté le lancement digital de Tera Energy — l'identité de marque, le site vitrine et la campagne qui a créé l'attente avant ses débuts.",
     problem:
-      "Une toute nouvelle boisson devait entrer sur le marché tunisien avec une identité premium et sans audience.",
+      "Une nouvelle boisson énergisante devait se lancer en Tunisie face aux imports installés — sans marque, sans audience et sans site.",
     solution:
-      "J'ai conçu l'identité, développé le site vitrine (teraenergy.at) et produit toute la bibliothèque de visuels de campagne.",
+      "J'ai porté tout le lancement : l'identité visuelle, le site vitrine teraenergy.at, et la bibliothèque de campagne qui a alimenté Facebook et Instagram.",
     result:
-      "Une marque premium cohérente et une campagne teaser qui a généré une vraie attente avant le lancement.",
+      "La marque est arrivée en rayon avec une identité cohérente de la canette au web et au social, et une campagne teaser déjà en ligne avant la première canette.",
     stack: ["Design de Marque", "Développement Web", "UI/UX", "Photoshop", "Campagne Sociale"],
   },
   koroko: {
@@ -474,11 +476,11 @@ const projectsFR = {
     overview:
       "Un site chaleureux pour l'Établissement Korokoro & Fils — une maison familiale béninoise qui façonne des remèdes à base de plantes depuis des générations.",
     problem:
-      "Une entreprise familiale respectée, forte de plus de 43 remèdes et d'un riche héritage, n'avait aucune présence en ligne.",
+      "Quatre générations de remèdes à base de plantes au Bénin, 43 produits, et pas une seule page en ligne — les acheteurs étrangers ne pouvaient ni la trouver ni la vérifier.",
     solution:
-      "J'ai construit un site élégant autour de leur savon et pommade phares, du miel et du jus de NONI, avec appel et WhatsApp directs.",
+      "J'ai construit un site porté par l'héritage familial autour du savon, de la pommade, du miel et du jus de NONI, avec l'histoire de la maison en ouverture et un appel ou un WhatsApp à portée de doigt sur chaque produit.",
     result:
-      "Une présence en ligne premium qui transforme des générations de savoir-faire en une marque prête pour l'export.",
+      "Le catalogue complet des 43 remèdes est en ligne avec l'histoire qui va avec, et une demande atteint désormais l'atelier directement depuis n'importe quel téléphone.",
     stack: ["Next.js", "Design Web", "Identité de Marque", "UI/UX"],
   },
   "soafeno-vanilla": {
@@ -487,11 +489,11 @@ const projectsFR = {
     overview:
       "Une vitrine bilingue (FR/EN) raffinée pour Soafeno Trading — producteur et exportateur direct de vanille Bourbon premium de Madagascar.",
     problem:
-      "Un exportateur de vanille en direct devait gagner la confiance des acheteurs professionnels et se démarquer des revendeurs.",
+      "Un producteur de vanille en direct de l'origine était, en ligne, indiscernable des revendeurs placés entre lui et les acheteurs européens.",
     solution:
-      "J'ai développé un site one-page animé : hero 3D sur mesure, catalogue des grades, parcours champ-export et CTA de devis.",
+      "J'ai développé une vitrine bilingue en une page : hero 3D sur mesure, catalogue complet des grades, chaîne du champ à l'export étape par étape, et une demande de devis à chaque niveau.",
     result:
-      "Une expérience export haut de gamme qui positionne Soafeno comme partenaire direct de l'origine dans le monde entier.",
+      "La chaîne, de la plantation malgache à la caisse expédiée, se lit d'un seul défilement, en français et en anglais — le seul argument qui distingue un producteur d'un intermédiaire.",
     stack: ["Next.js", "Three.js", "GSAP", "i18n FR/EN"],
   },
   palmiche: {
@@ -500,11 +502,11 @@ const projectsFR = {
     overview:
       "Une vitrine ensoleillée pour Palmiché, un restaurant vénézuélien qui apporte arepas, empanadas et tequeños à Dijon.",
     problem:
-      "Un nouveau restaurant vénézuélien avait besoin d'une identité vibrante pour faire découvrir une cuisine méconnue.",
+      "Un restaurant vénézuélien ouvrant à Dijon devait expliquer arepas, empanadas et tequeños à une ville qui n'en avait jamais mangé.",
     solution:
-      "J'ai construit un site tropical bleu-canard et ambre, avec un menu animé, l'histoire de l'arepa et des parcours de commande clairs.",
+      "J'ai construit un site chaleureux bleu-canard et ambre qui met la cuisine en avant : menu animé, histoire de l'arepa, et un parcours de commande qui ne quitte jamais la page.",
     result:
-      "Une vitrine appétissante qui rend la cuisine vénézuélienne irrésistible et prête à commander.",
+      "Le menu fait la pédagogie avant même qu'on pousse la porte, et chaque plat est à un geste d'une commande.",
     stack: ["Next.js", "Framer Motion", "Design Web", "Identité de Marque"],
   },
   "talentmatch-ai": {
@@ -513,11 +515,11 @@ const projectsFR = {
     overview:
       "Un produit SaaS à forte conversion pour TalentMatch AI, une plateforme qui optimise le recrutement par l'IA — high-tech et limpide.",
     problem:
-      "Une startup de recrutement par IA avait besoin d'un produit à la fois avant-gardiste et immédiatement compréhensible.",
+      "Une startup de recrutement par IA avait un produit réellement technique et une trentaine de secondes pour le faire comprendre à un responsable RH.",
     solution:
-      "J'ai conçu la landing page et un tableau de bord de gestion des offres épuré, avec des visuels sur mesure et une UX fluide.",
+      "J'ai conçu et développé la landing page et le tableau de bord de gestion des offres ensemble, pour que la promesse de la page et le produit derrière parlent la même langue.",
     result:
-      "Une expérience premium qui communique instantanément la valeur de l'IA et convertit.",
+      "Le visiteur comprend ce que fait réellement l'IA avant le deuxième défilement, et le tableau de bord, au clic suivant, le démontre au lieu de le répéter.",
     stack: ["Next.js", "Intégration IA", "UI SaaS", "Prototypage UI/UX"],
   },
   wakelni: {
@@ -526,11 +528,11 @@ const projectsFR = {
     overview:
       "Une application full-stack de coaching fitness par IA qui suit calories, macros, hydratation, pas et mesures en temps réel, avec un coach IA.",
     problem:
-      "Les personnes jonglant avec leurs objectifs fitness n'avaient aucun espace unique pour suivre nutrition et progression.",
+      "Suivre calories, macros, hydratation, pas et mesures corporelles imposait quatre applications — et aucun conseil au bout d'aucune.",
     solution:
-      "J'ai développé un aperçu quotidien, des graphiques sur 7 jours, le TDEE & l'IMC, le suivi d'objectifs et un coach IA — multilingue.",
+      "J'ai développé une seule application full-stack : aperçu quotidien, graphiques sur sept jours, TDEE et IMC, suivi d'objectifs, et un coach IA qui lit les mêmes données — multilingue, sur une interface sombre.",
     result:
-      "Un compagnon soigné qui transforme des données brutes en conseils quotidiens concrets.",
+      "Un seul écran répond à « est-ce que je suis dans les clous ? », et le coach transforme cette réponse en action suivante au lieu de la laisser sur un graphique.",
     stack: ["Next.js", "Chatbot IA", "Full-Stack", "Prototypage UI/UX"],
   },
   "recruitment-control-room": {
@@ -540,11 +542,11 @@ const projectsFR = {
     overview:
       "Une plateforme full-stack qui centralise la qualification des candidats, les campagnes et la prise de contact par IA dans une seule salle de contrôle.",
     problem:
-      "Les recruteurs géraient sourcing, qualification et prise de contact sur des outils éparpillés, sans source unique de vérité.",
+      "Les recruteurs géraient sourcing, qualification et prise de contact sur des outils éparpillés, sans source unique de vérité sur le moindre candidat.",
     solution:
-      "J'ai construit un tableau de bord unifié : gestion des rôles, auth Supabase, prise de contact par IA et analyses en temps réel.",
+      "J'ai construit un seul tableau de bord sur Supabase : accès par rôle, rédaction des prises de contact assistée par IA, et analyses du pipeline mises à jour en direct.",
     result:
-      "Une interface épurée qui pilote tout le flux de recrutement de bout en bout.",
+      "Tout le flux de recrutement tient au même endroit, et chaque recruteur voit le même état du pipeline au lieu de sa propre copie.",
     stack: ["Next.js", "Supabase", "Intégration IA", "Full-Stack"],
   },
   "sbiba-heritage": {
@@ -553,11 +555,11 @@ const projectsFR = {
     overview:
       "Une expérience web immersive qui fait revivre le patrimoine de Sbiba — monuments 3D par photogrammétrie, guide IA et communauté.",
     problem:
-      "Le patrimoine historique de Sbiba méritait une manière moderne d'être exploré et préservé numériquement.",
+      "Le patrimoine romain et byzantin de Sbiba dormait dans des archives que presque personne ne consulte, et s'érodait plus vite qu'il n'était documenté.",
     solution:
-      "J'ai construit une expérience WebXR avec des monuments scannés en 3D, un chatbot IA et des selfies transformés en portraits historiques.",
+      "J'ai scanné les monuments en 3D par photogrammétrie et les ai enveloppés dans une expérience WebXR avec un guide IA, plus des portraits qui placent le visiteur dans l'époque.",
     result:
-      "Un musée vivant du patrimoine méditerranéen, ouvert depuis n'importe quel navigateur.",
+      "Les monuments s'explorent depuis n'importe quel navigateur, sans rien installer — et les scans constituent un relevé qui survivra à la pierre.",
     stack: ["WebXR", "Three.js", "Chatbot IA", "Photogrammétrie"],
   },
   "city-group": {
@@ -566,11 +568,11 @@ const projectsFR = {
     overview:
       "Une vitrine digitale sophistiquée pour City Group SARL, spécialiste des noix de cajou naturelles et des fruits secs premium.",
     problem:
-      "Un exportateur premium de noix et fruits secs n'avait aucune présence digitale à la hauteur de ses produits.",
+      "Un exportateur premium de noix de cajou et de fruits secs revendiquait une qualité qu'il n'avait aucun moyen de montrer à un acheteur.",
     solution:
-      "J'ai conçu une vitrine orientée conversion, avec une typographie raffinée, de riches fiches produits et une esthétique premium.",
+      "J'ai conçu une vitrine orientée conversion : typographie raffinée, fiches produits qui portent les calibres et les notes de dégustation, et une palette accordée à la marchandise.",
     result:
-      "Une vitrine soignée qui valorise la marque en ligne et met en avant toute la gamme.",
+      "Toute la gamme se présente désormais en un seul lien, et le produit ressemble enfin à ce que l'exportateur en dit.",
     stack: ["Design Web", "Prototypage UI/UX", "HTML/CSS", "JavaScript"],
   },
   "mriguel-ecommerce": {
@@ -579,11 +581,11 @@ const projectsFR = {
     overview:
       "Responsable marketing e-commerce de Mriguel Store, j'ai stimulé la croissance par des campagnes saisonnières — visuels et publicités vidéo courtes.",
     problem:
-      "Un détaillant en ligne avait besoin de créations accrocheuses et cohérentes pour porter l'engagement à chaque temps fort.",
+      "Une boutique en ligne avait besoin de créations capables d'arrêter le scroll à chaque saison — pas d'une bonne campagne suivie d'un silence.",
     solution:
-      "J'ai produit un flux constant de visuels et de publicités vidéo sur une identité cohérente, sur Facebook et Instagram.",
+      "Comme responsable marketing e-commerce, j'ai assuré une production régulière de visuels de campagne et de publicités vidéo courtes sur une identité unique, sur Facebook et Instagram.",
     result:
-      "Une présence sociale à fort engagement qui a gardé la boutique en tête à chaque saison.",
+      "La boutique a tenu une seule voix visuelle sur chaque pic saisonnier, avec de nouvelles créations livrées à un rythme régulier plutôt qu'au coup par coup.",
     stack: ["Design Graphique", "Publicités Vidéo", "Photoshop", "Réseaux Sociaux"],
   },
   "video-montage": {
@@ -593,11 +595,11 @@ const projectsFR = {
     overview:
       "Une bobine de montages professionnels réalisés avec Premiere Pro, CapCut et l'IA — des rushes à l'étalonnage, au son et à la livraison.",
     problem:
-      "Les clients avaient besoin de vidéos engageantes et fidèles à leur marque, au rythme maîtrisé, livrées rapidement.",
+      "Les clients avaient besoin de vidéos qui retiennent l'attention — montées au rythme, étalonnées, mixées proprement — et dans un délai de campagne.",
     solution:
-      "J'ai structuré le récit, étalonné les couleurs, synchronisé l'audio et ajouté des effets assistés par IA pour un rendu final soigné.",
+      "J'ai mis en place une chaîne reproductible sous Premiere Pro et CapCut — dérushage, étalonnage, mixage, livraison — avec l'IA seulement là où elle fait gagner du temps.",
     result:
-      "Des vidéos propres et engageantes, livrées dans les délais et conformes au brief, à chaque fois.",
+      "Des montages courts qui tiennent le rythme d'un fil d'actualité, dans un délai calé sur un calendrier de campagne et non sur un planning de tournage.",
     stack: ["Premiere Pro", "CapCut", "VFX IA", "Color Grading"],
   },
 };
@@ -697,11 +699,11 @@ const projectsAR = {
     overview:
       "الموقع المؤسسي لشركة ANADANI GROUP — مجموعة تجارية مقرّها لوكسمبورغ وعلاماتها الثلاث، بهوية واحدة من الأسود والذهبي عبر ستّ لغات.",
     problem:
-      "مجموعة تبيع في أوروبا والشرق الأوسط كان عليها كسب ثقة المشترين بستّ لغات، من بينها العربية.",
+      "مجموعة تجارية لوكسمبورغية كانت تبيع في أوروبا والشرق الأوسط بملفّ PDF فقط — والمشترون، بستّ لغات، لم يكن لديهم ما يتحقّقون منه.",
     solution:
-      "بنيتُ موقع Next.js مُولّدًا مسبقًا بالكامل: نظام تصميم واحد، و775 مفتاحًا لكل لغة، ودعم كامل للاتجاه من اليمين إلى اليسار، وصفحة لكل علامة.",
+      "بنيتُ موقع Next.js واحدًا مُولّدًا مسبقًا للمجموعة وعلاماتها الثلاث: نظام تصميم واحد، و775 مفتاحًا مترجمًا لكل لغة، ودعم كامل للاتجاه من اليمين إلى اليسار.",
     result:
-      "تسعون صفحة جاهزة مسبقًا تُفتح فورًا وتُقرأ كمؤسسة واحدة بكل لغة.",
+      "تسعون صفحة مُولّدة مسبقًا على نطاق واحد. ستّة أسواق تقرأ اليوم المؤسّسة ذاتها، كلٌّ بلغته وحرفه — بلا مرفقات ولا موقع منفصل لكل علامة.",
     stack: ["Next.js 16", "Tailwind v4", "ستّ لغات", "GSAP · Lenis", "SEO"],
   },
   "tera-energy": {
@@ -710,11 +712,11 @@ const projectsAR = {
     overview:
       "قدتُ الإطلاق الرقمي لـ Tera Energy — الهوية البصرية، والموقع التعريفي، والحملة التي صنعت الترقّب قبل النزول إلى السوق.",
     problem:
-      "علامة مشروبات جديدة كليًا كان عليها دخول السوق التونسية بهوية فاخرة ومن دون أي جمهور سابق.",
+      "مشروب طاقة جديد كان عليه دخول السوق التونسية في مواجهة الماركات المستوردة الراسخة — بلا هوية ولا جمهور ولا موقع.",
     solution:
-      "صمّمتُ الهوية، وطوّرتُ الموقع التعريفي (teraenergy.at)، وأنتجتُ مكتبة كاملة من تصاميم الحملة.",
+      "تولّيتُ الإطلاق كاملًا: الهوية البصرية، والموقع التعريفي teraenergy.at، ومكتبة الحملة التي غذّت فيسبوك وإنستغرام.",
     result:
-      "حضور فاخر ومتماسك للعلامة، وحملة تشويقية صنعت ترقّبًا حقيقيًا قبل الإطلاق.",
+      "وصلت العلامة إلى الرفوف بمظهر واحد متماسك من العلبة إلى الموقع إلى وسائل التواصل، وبحملة تشويقية كانت تعمل قبل وصول أوّل علبة.",
     stack: ["تصميم الهوية", "تطوير الويب", "UI/UX", "Photoshop", "حملة رقمية"],
   },
   koroko: {
@@ -723,11 +725,11 @@ const projectsAR = {
     overview:
       "موقع دافئ لمؤسسة Korokoro & Fils — دار عائلية في بنين تصنع علاجات نباتية تقليدية منذ أجيال.",
     problem:
-      "شركة عائلية محترمة تملك أكثر من 43 علاجًا وإرثًا غنيًا لم يكن لها أي حضور رقمي.",
+      "أربعة أجيال من العلاجات النباتية في بنين، و43 منتجًا، ولا صفحة واحدة على الإنترنت — لم يكن للمشترين في الخارج سبيل لإيجاد الدار أو التحقّق منها.",
     solution:
-      "بنيتُ موقعًا أنيقًا حول صابونها ومرهمها الأشهر والعسل وعصير النوني، مع مسارات اتصال وواتساب مباشرة.",
+      "بنيتُ موقعًا يقوده الإرث العائلي حول الصابون والمرهم والعسل وعصير NONI، مع قصّة الدار في الواجهة وزرّ اتصال أو واتساب على كل منتج.",
     result:
-      "حضور رقمي راقٍ يحوّل أجيالًا من الخبرة إلى علامة جاهزة للتصدير.",
+      "الكتالوج الكامل بعلاجاته الثلاثة والأربعين صار على الإنترنت مع القصّة التي تسنده، وأيّ استفسار يصل الورشة مباشرةً من أي هاتف.",
     stack: ["Next.js", "تصميم ويب", "هوية بصرية", "UI/UX"],
   },
   "soafeno-vanilla": {
@@ -736,11 +738,11 @@ const projectsAR = {
     overview:
       "واجهة أنيقة ثنائية اللغة لشركة Soafeno Trading — منتِج ومصدِّر مباشر لفانيليا بوربون الفاخرة من مدغشقر.",
     problem:
-      "مصدّر فانيليا من المنشأ مباشرة كان عليه كسب ثقة المشترين المحترفين وتمييز نفسه عن الوسطاء.",
+      "منتج فانيليا من المنشأ مباشرةً كان يبدو على الإنترنت مطابقًا تمامًا للوسطاء الواقفين بينه وبين المشترين الأوروبيين.",
     solution:
-      "طوّرتُ موقعًا من صفحة واحدة متحرّكة: واجهة ثلاثية الأبعاد مخصّصة، وكتالوج الدرجات، ومسار الحقل إلى التصدير، وأزرار طلب عرض سعر.",
+      "طوّرتُ واجهة بيع ثنائية اللغة من صفحة واحدة: واجهة ثلاثية الأبعاد مخصّصة، وكتالوج الدرجات كاملًا، وسلسلة الحقل إلى التصدير خطوةً بخطوة، وطلب عرض سعر عند كل مرحلة.",
     result:
-      "تجربة تصدير راقية تضع Soafeno كشريك مباشر من المنشأ حول العالم.",
+      "السلسلة، من مزرعة مدغشقر إلى الصندوق المشحون، تُقرأ في تمرير واحد بالفرنسية والإنجليزية — وهي الحجّة الوحيدة التي تفصل المنتِج عن الوسيط.",
     stack: ["Next.js", "Three.js", "GSAP", "لغتان"],
   },
   palmiche: {
@@ -749,11 +751,11 @@ const projectsAR = {
     overview:
       "واجهة مشمسة لمطعم Palmiché الفنزويلي الذي يقدّم الأريباس والإمبانادا والتيكينوس في مدينة ديجون الفرنسية.",
     problem:
-      "مطعم فنزويلي جديد احتاج هوية نابضة تعرّف بمطبخ لا يعرفه كثيرون.",
+      "مطعم فنزويلي يفتح أبوابه في ديجون كان عليه أن يشرح الأريبا والإمبانادا والتيكينيوس لمدينة لم تذقها قطّ.",
     solution:
-      "بنيتُ موقعًا استوائيًا بهوية زرقاء داكنة وكهرمانية، مع قائمة طعام متحرّكة، وقصّة الأريبا، ومسارات طلب واضحة.",
+      "بنيتُ موقعًا دافئًا بالأزرق المخضرّ والكهرماني يضع الطعام في المقدّمة: قائمة متحرّكة، وقصّة الأريبا، ومسار طلب لا يغادر الصفحة أبدًا.",
     result:
-      "واجهة تفتح الشهية وتجعل المطبخ الفنزويلي مغريًا وجاهزًا للطلب.",
+      "القائمة تتكفّل بالشرح قبل أن يدخل أحد من الباب، وكل طبق على بُعد لمسة واحدة من الطلب.",
     stack: ["Next.js", "Framer Motion", "تصميم ويب", "هوية بصرية"],
   },
   "talentmatch-ai": {
@@ -762,11 +764,11 @@ const projectsAR = {
     overview:
       "منتج SaaS عالي التحويل لـ TalentMatch AI، منصّة تُحسّن التوظيف بالذكاء الاصطناعي — تقنية متقدّمة وواضحة في آنٍ واحد.",
     problem:
-      "شركة توظيف ناشئة احتاجت منتجًا يبدو متقدّمًا ومفهومًا من النظرة الأولى.",
+      "شركة توظيف ناشئة بالذكاء الاصطناعي كان لديها منتج تقنيّ فعلًا، وثلاثون ثانية تقريبًا لتجعل مسؤول التوظيف يفهمه.",
     solution:
-      "صمّمتُ وطوّرتُ صفحة الهبوط ولوحة إدارة الوظائف بتصاميم مخصّصة وتجربة استخدام سلسة.",
+      "صمّمتُ وطوّرتُ صفحة الهبوط ولوحة إدارة الوظائف معًا، حتى يتحدّث الوعد المكتوب في الصفحة والمنتج الذي خلفه اللغة نفسها.",
     result:
-      "تجربة راقية توصل قيمة الذكاء الاصطناعي فورًا وتحوّل الزائر إلى عميل.",
+      "يفهم الزائر ما يفعله الذكاء الاصطناعي فعلًا قبل التمرير الثاني، ولوحة التحكّم في النقرة التالية تُثبت ذلك بدل أن تكرّره.",
     stack: ["Next.js", "تكامل ذكاء اصطناعي", "واجهة SaaS", "نماذج UI/UX"],
   },
   wakelni: {
@@ -775,11 +777,11 @@ const projectsAR = {
     overview:
       "تطبيق لياقة متكامل بالذكاء الاصطناعي يتتبّع السعرات والعناصر الغذائية والترطيب والخطوات وقياسات الجسم لحظيًا، مع مدرّب ذكي.",
     problem:
-      "من يوازنون بين أهداف اللياقة لم يجدوا مكانًا واحدًا ذكيًا لتتبّع التغذية والتقدّم.",
+      "تتبّع السعرات والعناصر الغذائية والترطيب والخطوات وقياسات الجسم كان يتطلّب أربعة تطبيقات — ولا نصيحة واحدة في نهاية أيٍّ منها.",
     solution:
-      "طوّرتُ لوحة يومية، ورسومًا بيانية لسبعة أيام، وحساب TDEE ومؤشّر كتلة الجسم، وتتبّع الأهداف، ومدرّبًا ذكيًا — متعدّد اللغات.",
+      "طوّرتُ تطبيقًا متكاملًا واحدًا: لوحة يومية، ورسوم بيانية لسبعة أيام، وحساب TDEE ومؤشّر كتلة الجسم، وتتبّع الأهداف، ومدرّبًا ذكيًا يقرأ البيانات نفسها — متعدّد اللغات، بواجهة داكنة.",
     result:
-      "رفيق مصقول يحوّل الأرقام الخام إلى إرشاد يومي قابل للتنفيذ.",
+      "شاشة واحدة تجيب عن سؤال «هل أنا على المسار؟»، والمدرّب يحوّل تلك الإجابة إلى الخطوة التالية بدل أن يتركها رسمًا بيانيًا.",
     stack: ["Next.js", "روبوت محادثة ذكي", "تطوير متكامل", "نماذج UI/UX"],
   },
   "recruitment-control-room": {
@@ -789,11 +791,11 @@ const projectsAR = {
     overview:
       "منصّة متكاملة تجمع تأهيل المرشّحين وتنفيذ الحملات والتواصل المولَّد بالذكاء الاصطناعي في غرفة تحكّم واحدة.",
     problem:
-      "كان المسؤولون عن التوظيف يديرون الاستقطاب والتأهيل والتواصل عبر أدوات متفرّقة دون مصدر موحّد للحقيقة.",
+      "كان المسؤولون عن التوظيف يديرون الاستقطاب والتأهيل والتواصل عبر أدوات متفرّقة، دون مصدر موحّد للحقيقة عن أي مرشّح.",
     solution:
-      "بنيتُ لوحة موحّدة بصلاحيات حسب الدور، ومصادقة Supabase، وتواصلًا بمساعدة الذكاء الاصطناعي، وتحليلات لحظية.",
+      "بنيتُ لوحة واحدة على Supabase: صلاحيات حسب الدور، وصياغة رسائل التواصل بمساعدة الذكاء الاصطناعي، وتحليلات لمسار التوظيف تتحدّث لحظيًا.",
     result:
-      "واجهة واحدة نظيفة تدير مسار التوظيف كاملًا من أوّله إلى آخره.",
+      "مسار التوظيف كلّه يجري في مكان واحد، ويرى كل مسؤول توظيف الحالة نفسها للمسار بدل نسخته الخاصة منها.",
     stack: ["Next.js", "Supabase", "تكامل ذكاء اصطناعي", "تطوير متكامل"],
   },
   "sbiba-heritage": {
@@ -803,11 +805,11 @@ const projectsAR = {
     overview:
       "تجربة ويب غامرة تُحيي تراث سبيبة — معالم ثلاثية الأبعاد بالمسح التصويري، ودليل ذكي، ومجتمع تفاعلي.",
     problem:
-      "تراث سبيبة التاريخي كان يستحقّ طريقة حديثة وجذّابة لاستكشافه وحفظه رقميًا.",
+      "تراث سبيبة الروماني والبيزنطي كان قابعًا في أرشيفات لا يكاد أحد يزورها، ويتآكل أسرع ممّا يُوثَّق.",
     solution:
-      "بنيتُ تجربة WebXR بمعالم ممسوحة ثلاثية الأبعاد، وروبوت محادثة ذكي، وصور شخصية تتحوّل إلى بورتريهات تاريخية.",
+      "مسحتُ المعالم ثلاثيّ الأبعاد بالمسح التصويري، وغلّفتها في تجربة WebXR مع دليل ذكي، إضافةً إلى بورتريهات تضع الزائر داخل الحقبة.",
     result:
-      "متحف حيّ للتراث المتوسّطي، مفتوح من أي متصفّح.",
+      "المعالم تُستكشف من أي متصفّح دون تثبيت أي تطبيق — وتبقى المسوحات سجلًّا يعمّر أطول من الحجر نفسه.",
     stack: ["WebXR", "Three.js", "روبوت محادثة ذكي", "المسح التصويري"],
   },
   "city-group": {
@@ -816,11 +818,11 @@ const projectsAR = {
     overview:
       "واجهة رقمية راقية لشركة City Group SARL، المتخصّصة في الكاجو الطبيعي عالي الجودة والفواكه المجفّفة الفاخرة.",
     problem:
-      "مصدّر مكسّرات وفواكه مجفّفة فاخرة لم يكن له حضور رقمي يليق بجودة منتجاته.",
+      "مصدّر كاجو وفواكه مجفّفة فاخرة كان يدّعي جودةً لا يملك أي وسيلة لعرضها على مشترٍ.",
     solution:
-      "صمّمتُ واجهة موجّهة للتحويل بطباعة أنيقة وبطاقات منتجات غنيّة وجماليات فاخرة.",
+      "صمّمتُ واجهة موجّهة للتحويل: طباعة أنيقة، وبطاقات منتجات تحمل الأحجام وملاحظات التذوّق، ولوحة ألوان متناغمة مع البضاعة.",
     result:
-      "واجهة مصقولة ترفع مكانة العلامة رقميًا وتعرض التشكيلة كاملة.",
+      "التشكيلة كاملةً صارت تُعرَض برابط واحد، وأصبح المنتج أخيرًا يبدو كما يصفه المصدّر.",
     stack: ["تصميم ويب", "نماذج UI/UX", "HTML/CSS", "JavaScript"],
   },
   "mriguel-ecommerce": {
@@ -829,11 +831,11 @@ const projectsAR = {
     overview:
       "بصفتي مسؤول التسويق الإلكتروني لمتجر Mriguel، قدتُ النمو عبر حملات موسمية — تصاميم وإعلانات فيديو قصيرة.",
     problem:
-      "متجر إلكتروني احتاج تصاميم متماسكة وجاذبة للنظر لرفع التفاعل في كل موسم.",
+      "متجر إلكتروني احتاج تصاميم قادرة على إيقاف التمرير في كل موسم — لا حملة واحدة ناجحة يتبعها صمت.",
     solution:
-      "أنتجتُ تدفّقًا مستمرًا من تصاميم الحملات وإعلانات الفيديو بهوية موحّدة على فيسبوك وإنستغرام.",
+      "بصفتي مسؤول التسويق للتجارة الإلكترونية، أدرتُ إنتاجًا منتظمًا لتصاميم الحملات وإعلانات الفيديو القصيرة بهوية واحدة، على فيسبوك وإنستغرام.",
     result:
-      "حضور اجتماعي عالي التفاعل أبقى المتجر حاضرًا في كل موسم.",
+      "حافظ المتجر على صوت بصري واحد في كل ذروة موسمية، مع تصاميم جديدة تُسلَّم وفق إيقاع منتظم لا حسب الظروف.",
     stack: ["تصميم جرافيك", "إعلانات فيديو", "Photoshop", "التواصل الاجتماعي"],
   },
   "video-montage": {
@@ -843,11 +845,11 @@ const projectsAR = {
     overview:
       "شريط من أعمال المونتاج الاحترافي بـ Premiere Pro و CapCut وأدوات الذكاء الاصطناعي — من اللقطات الخام إلى التدرّج اللوني والصوت والتسليم.",
     problem:
-      "احتاج العملاء مقاطع جذّابة ومطابقة لهويّتهم، بإيقاع محكم وتسليم سريع.",
+      "احتاج العملاء فيديو يمسك الانتباه — مونتاج على الإيقاع، وتدرّج لوني، ومزج صوتي سليم — وضمن مهلة حملة تسويقية.",
     solution:
-      "بنيتُ السرد، وضبطتُ التدرّج اللوني، وزامنتُ الصوت، وأضفتُ مؤثّرات بمساعدة الذكاء الاصطناعي لنسخة نهائية مصقولة.",
+      "أنشأتُ سلسلة عمل قابلة للتكرار على Premiere Pro و CapCut — مونتاج أوّلي، وتدرّج لوني، ومزج صوتي، وتسليم — مع استخدام الذكاء الاصطناعي حيث يوفّر وقتًا فعليًا فقط.",
     result:
-      "مقاطع نظيفة وجذّابة، تُسلَّم في وقتها ووفق المطلوب، في كل مرّة.",
+      "مقاطع قصيرة تجاري إيقاع خطّ الأخبار، ضمن مهلة تناسب تقويم حملة تسويقية لا جدول تصوير سينمائي.",
     stack: ["Premiere Pro", "CapCut", "مؤثّرات ذكية", "التدرّج اللوني"],
   },
 };
@@ -942,7 +944,13 @@ const uiEN = {
     pulse: "◈  ENTERING  ◈",
     enter: "Enter the Portfolio",
   },
-  hero: { viewProjects: "View Projects", getInTouch: "Get in Touch", scroll: "Scroll" },
+  hero: {
+    viewProjects: "View Projects",
+    getInTouch: "Get in Touch",
+    scroll: "Scroll",
+    callMe: "Call me",
+    emailMe: "Email me",
+  },
   about: { eyebrow: "About · The Maker", title: "Behind the Door" },
   skills: {
     eyebrow: "Arsenal · Languages & Tools",
@@ -992,7 +1000,13 @@ const uiFR = {
     pulse: "◈  ENTRÉE  ◈",
     enter: "Entrer dans le Portfolio",
   },
-  hero: { viewProjects: "Voir les Projets", getInTouch: "Me Contacter", scroll: "Défiler" },
+  hero: {
+    viewProjects: "Voir les Projets",
+    getInTouch: "Me Contacter",
+    scroll: "Défiler",
+    callMe: "M'appeler",
+    emailMe: "M'écrire",
+  },
   about: { eyebrow: "À Propos · L'Artisan", title: "Derrière la Porte" },
   skills: {
     eyebrow: "Arsenal · Langages & Outils",
@@ -1042,7 +1056,13 @@ const uiAR = {
     pulse: "◈  دخول  ◈",
     enter: "ادخل إلى المعرض",
   },
-  hero: { viewProjects: "استعرض المشاريع", getInTouch: "تواصل معي", scroll: "مرّر" },
+  hero: {
+    viewProjects: "استعرض المشاريع",
+    getInTouch: "تواصل معي",
+    scroll: "مرّر",
+    callMe: "اتّصل بي",
+    emailMe: "راسلني",
+  },
   about: { eyebrow: "نبذة · الصانع", title: "خلف الباب" },
   skills: {
     eyebrow: "الترسانة · اللغات والأدوات",

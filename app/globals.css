@@ -730,6 +730,16 @@ button {
     gap: 48px;
   }
 }
+/* The decorative rings around the portrait are wider than a phone screen (485px
+   against 390), and they were extending the document to 438px — the whole page
+   could be dragged sideways. `clip` rather than `hidden`: it trims the overflow
+   without turning the hero into a scroll container. Scoped to the hero on
+   purpose — #projects holds the position:fixed project room, and clipping an
+   ancestor of a fixed element is not worth the risk. */
+.hero {
+  overflow-x: clip;
+}
+
 .hero-name {
   font-family: var(--display);
   font-weight: 800;
@@ -748,6 +758,43 @@ button {
 .hero-name .ln span {
   display: inline-block;
 }
+
+/* ---- hero entrance ----
+   Was Framer Motion on seven elements. Framer animates by writing inline styles
+   from JavaScript every frame; here the whole entrance is opacity and transform
+   on a fixed curve, which the compositor can run on its own. Moving it to CSS
+   also takes framer-motion off the first-paint bundle — the project room is now
+   its only consumer, and that loads on demand.
+   `--d` carries each element's stagger delay from the markup. */
+.hero-fade {
+  opacity: 0;
+  transform: translate3d(0, 30px, 0);
+  transition:
+    opacity 1s var(--ease-out-quart),
+    transform 1s var(--ease-out-quart);
+  transition-delay: var(--d, 0s);
+}
+.hero.revealed .hero-fade {
+  opacity: 1;
+  transform: none;
+}
+/* The name slides up out of its own overflow mask, line by line. */
+.hero-name .ln span {
+  transform: translate3d(0, 110%, 0);
+  transition: transform 1s cubic-bezier(0.16, 0.84, 0.44, 1);
+  transition-delay: var(--d, 0s);
+}
+.hero.revealed .hero-name .ln span {
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-fade,
+  .hero-name .ln span {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
 .hero-role {
   font-family: var(--mono);
   font-size: 14px;
@@ -756,11 +803,18 @@ button {
   color: var(--cyan);
   margin: 28px 0 18px;
 }
-.hero-phone {
+/* Phone + email sit side by side and wrap to two rows when the column is
+   narrow, so the email never overflows on a phone. */
+.hero-contacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0 0 24px;
+}
+.hero-contact {
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  margin: 0 0 24px;
   padding: 8px 16px;
   border-radius: 999px;
   border: 1px solid rgba(229, 193, 111, 0.28);
@@ -772,16 +826,37 @@ button {
   cursor: none;
   transition: border-color 0.3s, background 0.3s, box-shadow 0.3s, transform 0.3s;
 }
-.hero-phone svg {
+.hero-contact svg {
   width: 16px;
   height: 16px;
   color: var(--cyan);
+  flex: none;
 }
-.hero-phone:hover {
+.hero-contact:hover {
   border-color: var(--gold);
   background: rgba(229, 193, 111, 0.12);
   box-shadow: 0 0 22px -6px rgba(229, 193, 111, 0.6);
   transform: translateY(-2px);
+}
+/* The address is longer than the number and carries no spaces to break on, so
+   it loses the wide tracking and is allowed to shrink rather than overflow. */
+.hero-mail {
+  letter-spacing: 0.06em;
+  min-width: 0;
+}
+.hero-mail span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 480px) {
+  .hero-contact {
+    font-size: 12.5px;
+    padding: 8px 13px;
+  }
+  .hero-contacts {
+    gap: 8px;
+  }
 }
 .hero-bio {
   font-size: 23px;
@@ -2130,13 +2205,16 @@ body.dragging * {
    that happens to sit in a right-to-left page, so each is isolated explicitly:
 
      .logo        "AHMED·SLIM" is a Latin wordmark; RTL rendered it "SLIM·AHMED".
-     .hero-phone  "+216 94 687 669" rendered as "669 687 94 216+" — the leading
-                  "+" is bidi-neutral and got pushed to the far end.
+     .hero-contact
+                  "+216 94 687 669" rendered as "669 687 94 216+" — the leading
+                  "+" is bidi-neutral and got pushed to the far end. The email
+                  address is isolated for the same reason: "@" and "." are
+                  neutral characters sitting between Latin runs.
      .tnode .yr   "2026 — الآن" is a date range; numerals and an Arabic word on
                   either side of a dash swap under RTL and reverse the range.
    `isolate` (not `embed`) keeps each unit from affecting the text around it. */
 [dir="rtl"] .logo,
-[dir="rtl"] .hero-phone,
+[dir="rtl"] .hero-contact,
 [dir="rtl"] .tnode .yr {
   direction: ltr;
   unicode-bidi: isolate;

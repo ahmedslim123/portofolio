@@ -1,11 +1,15 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { useI18n } from "@/components/LanguageProvider";
 import { asset } from "@/lib/asset";
 
-const EASE = [0.165, 0.84, 0.44, 1];
-
+/**
+ * The hero entrance is pure CSS (see `.hero-fade` / `.hero-name .ln span` in
+ * globals.css). Adding `revealed` to the section starts every transition; each
+ * element carries its own delay in a `--d` custom property. This used to be
+ * Framer Motion — moving it out left the project room as framer's only
+ * consumer, so it no longer ships in the first-paint bundle.
+ */
 export default function Hero({ revealed, scrollTo }) {
   const { site, ui } = useI18n();
   const words = site.name.split(" ");
@@ -15,84 +19,97 @@ export default function Hero({ revealed, scrollTo }) {
     scrollTo(`#${id}`);
   };
 
-  const fade = (delay) => ({
-    initial: { opacity: 0, y: 30 },
-    animate: revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 },
-    transition: { duration: 1, ease: EASE, delay },
-  });
+  const delay = (s) => ({ "--d": `${s}s` });
 
   return (
-    <section id="hero" className="hero section" data-name="Home">
+    <section
+      id="hero"
+      className={`hero section${revealed ? " revealed" : ""}`}
+      data-name="Home"
+    >
       <div className="wrap">
         <div className="hero-grid">
           <div>
-            <motion.div className="eyebrow" {...fade(0.5)}>
+            <div className="eyebrow hero-fade" style={delay(0.5)}>
               {site.role}
-            </motion.div>
+            </div>
             <h1 className="hero-name">
               {words.map((w, i) => (
                 <span className="ln" key={i}>
-                  {/* framer drives the line slide so it always settles visible,
-                      even if the intro's GSAP context is reverted mid-reveal */}
-                  <motion.span
-                    initial={{ yPercent: 110 }}
-                    animate={revealed ? { yPercent: 0 } : { yPercent: 110 }}
-                    transition={{ duration: 1.0, ease: [0.16, 0.84, 0.44, 1], delay: 0.35 + i * 0.12 }}
-                  >
-                    {w}
-                  </motion.span>
+                  <span style={delay(0.35 + i * 0.12)}>{w}</span>
                 </span>
               ))}
             </h1>
-            <motion.div className="hero-role" {...fade(0.7)}>
+            <div className="hero-role hero-fade" style={delay(0.7)}>
               {site.tagline}
-            </motion.div>
-            {site.phone && (
-              <motion.a className="hero-phone" href={`tel:${site.phone}`} {...fade(0.78)}>
-                <svg viewBox="0 0 24 24" aria-hidden focusable="false">
-                  <path
-                    fill="currentColor"
-                    d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.58 3.6a1 1 0 0 1-.25 1l-2.23 2.2Z"
-                  />
-                </svg>
-                <span>{site.phoneDisplay || site.phone}</span>
-              </motion.a>
+            </div>
+            {(site.phone || site.email) && (
+              <div className="hero-contacts hero-fade" style={delay(0.78)}>
+                {site.phone && (
+                  <a
+                    className="hero-contact hero-phone"
+                    href={`tel:${site.phone}`}
+                    aria-label={`${ui.hero.callMe}: ${site.phoneDisplay || site.phone}`}
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden focusable="false">
+                      <path
+                        fill="currentColor"
+                        d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.58 3.6a1 1 0 0 1-.25 1l-2.23 2.2Z"
+                      />
+                    </svg>
+                    <span>{site.phoneDisplay || site.phone}</span>
+                  </a>
+                )}
+                {site.email && (
+                  <a
+                    className="hero-contact hero-mail"
+                    href={`mailto:${site.email}`}
+                    aria-label={`${ui.hero.emailMe}: ${site.email}`}
+                  >
+                    <svg viewBox="0 0 24 24" aria-hidden focusable="false">
+                      <path
+                        fill="currentColor"
+                        d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm0 2v.4l8 5 8-5V6H4Zm16 12V8.7l-7.47 4.67a1 1 0 0 1-1.06 0L4 8.7V18h16Z"
+                      />
+                    </svg>
+                    <span>{site.email}</span>
+                  </a>
+                )}
+              </div>
             )}
-            <motion.p className="hero-bio" {...fade(0.8)}>
+            <p className="hero-bio hero-fade" style={delay(0.8)}>
               {site.heroBio}
-            </motion.p>
-            <motion.div className="hero-cta" {...fade(0.95)}>
-              <a
-                href="#projects"
-                className="btn primary"
-                onClick={(e) => go(e, "projects")}
-              >
+            </p>
+            <div className="hero-cta hero-fade" style={delay(0.95)}>
+              <a href="#projects" className="btn primary" onClick={(e) => go(e, "projects")}>
                 {ui.hero.viewProjects}
               </a>
-              <a
-                href="#contact"
-                className="btn ghost"
-                onClick={(e) => go(e, "contact")}
-              >
+              <a href="#contact" className="btn ghost" onClick={(e) => go(e, "contact")}>
                 {ui.hero.getInTouch}
               </a>
-            </motion.div>
+            </div>
           </div>
 
-          <motion.div {...fade(0.6)}>
+          <div className="hero-fade" style={delay(0.6)}>
             <div className="portal">
               <div className="ring r2" />
               <div className="ring" />
               <div className="photo">
                 {site.photo ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={asset(site.photo)} alt={site.name} />
+                  <img
+                    src={asset(site.photo)}
+                    alt={site.name}
+                    width="720"
+                    height="720"
+                    decoding="async"
+                  />
                 ) : (
                   <div className="initials">{site.initials}</div>
                 )}
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
       <div className="scroll-cue">

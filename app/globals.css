@@ -813,13 +813,15 @@ button {
     gap: 48px;
   }
 }
-/* The decorative rings around the portrait are wider than a phone screen (485px
-   against 390), and they were extending the document to 438px — the whole page
-   could be dragged sideways. `clip` rather than `hidden`: it trims the overflow
-   without turning the hero into a scroll container. Scoped to the hero on
-   purpose — #projects holds the position:fixed project room, and clipping an
-   ancestor of a fixed element is not worth the risk. */
-.hero {
+/* Several sections carry decorative circles wider than a phone screen — the
+   rings around the portrait (485px against 390), the skill orbs, the spinning
+   ring in the contact card. Left alone they extend the document sideways and
+   the whole page can be dragged horizontally.
+   `clip` rather than `hidden`: it trims the overflow without turning the
+   section into a scroll container.
+   #projects is deliberately excluded — it holds the position:fixed project
+   room, and clipping an ancestor of a fixed element is not worth the risk. */
+.section:not(#projects) {
   overflow-x: clip;
 }
 

@@ -40,17 +40,31 @@ export const site = {
 
   /* ---- Skills constellation --------------------------------------------- */
   // pct = proficiency (shown on hover). size = orb diameter in px (mastery).
+  //
+  // Curated against the twelve projects below, so every orb is something a
+  // visitor can go and verify by opening a door. Counted across the project
+  // stacks: Next.js carries 6 of the 12, UI/UX work appears in 8, AI in 4,
+  // Three.js and video in 2 each.
+  //
+  // Deliberately dropped, because no project on this site demonstrates them:
+  // MongoDB (Supabase is the database that actually ships), Illustrator
+  // (Photoshop covers the design story), Flutter and Spring Boot (real skills,
+  // but nothing here proves them — put them back the day a mobile or Java
+  // project joins the hall), and Python (the AI work is better represented by
+  // "AI Integration", which is what the projects are actually tagged with).
+  //
+  // The order matters: SPOTS in components/Skills.jsx places orb `i` at
+  // position `i`, and the two are laid out together so nothing collides.
   skills: [
-    { name: "JavaScript", pct: 90, size: 152 },
-    { name: "React JS", pct: 88, size: 144 },
-    { name: "Photoshop", pct: 88, size: 140 },
-    { name: "Python", pct: 82, size: 130 },
-    { name: "Illustrator", pct: 84, size: 134 },
-    { name: "Flutter", pct: 80, size: 126 },
-    { name: "Figma", pct: 82, size: 124 },
-    { name: "Spring Boot", pct: 76, size: 128 },
-    { name: "MongoDB", pct: 78, size: 120 },
-    { name: "Premiere Pro", pct: 80, size: 124 },
+    { name: "Next.js", pct: 92, size: 156 },
+    { name: "React", pct: 90, size: 148 },
+    { name: "JavaScript", pct: 90, size: 146 },
+    { name: "Three.js", pct: 82, size: 128 },
+    { name: "AI Integration", pct: 84, size: 134 },
+    { name: "UI/UX Design", pct: 86, size: 136 },
+    { name: "GSAP", pct: 85, size: 132 },
+    { name: "Photoshop", pct: 88, size: 138 },
+    { name: "Premiere Pro", pct: 80, size: 122 },
   ],
 
   /* ---- Project doors ----------------------------------------------------- */

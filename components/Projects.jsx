@@ -48,6 +48,19 @@ const embedThumb = (type, id, poster) =>
 const chip = (src) =>
   typeof src === "string" && src.endsWith(".webp") ? src.replace(/\.webp$/, "-thumb.webp") : src;
 
+// The 900px variant, for phones. A gallery frame paints at 253x142 there, and
+// decoding the 1600px file instead blocked the main thread for 185ms every time
+// a door opened — measured: opening the same door a second time, with the image
+// already decoded, produced no long tasks at all.
+const small = (src) =>
+  typeof src === "string" && src.endsWith(".webp") ? src.replace(/\.webp$/, "-sm.webp") : src;
+
+// Matches the <source media> below, so the preload fetches the same file the
+// browser is about to pick rather than a second one.
+const PHONE_MQ = "(max-width: 700px)";
+const galleryVariant = (src) =>
+  typeof window !== "undefined" && window.matchMedia(PHONE_MQ).matches ? small(src) : src;
+
 // A lightweight video "facade": we show the poster + a play button and only
 // mount the heavy iframe once the visitor actually clicks — so the page stays
 // fast and never lags loading embeds it may never need. Works for YouTube + Vimeo.
@@ -93,6 +106,24 @@ const roomVariants = {
   },
   exit: { opacity: 0, rotateY: 12, y: 40, scale: 0.95, transition: { duration: 0.4, ease: EASE } },
 };
+
+// The phone version of the same entrance.
+//
+// Framer Motion animates on the main thread by writing inline styles. Traced on
+// a phone, the full entrance rewrote the style attribute of EIGHT elements on
+// every frame for ~700ms — the room, its hero, gallery, overview, monoliths,
+// pills and links — each write dirtying style for that subtree, all while the
+// room is also being laid out and paints for the first time.
+//
+// So phones animate the container only: one element, opacity and translate,
+// both compositor properties (rotateY and scale would additionally force the
+// browser to re-rasterise a full-screen panel at a 3x pixel ratio every frame).
+// The children simply arrive with it. Desktops keep the full staggered swing.
+const roomVariantsLite = {
+  hidden: { opacity: 0, y: 44 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
+  exit: { opacity: 0, y: 28, transition: { duration: 0.3, ease: EASE } },
+};
 const sectionVariants = {
   hidden: { opacity: 0, y: 26 },
   show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
@@ -105,19 +136,37 @@ export default function Projects() {
   const [openIdx, setOpenIdx] = useState(null);
   const [modalIdx, setModalIdx] = useState(null);
   const [activeMedia, setActiveMedia] = useState(0);
+  // Set from the click handler (never an effect), so it is a plain event-driven
+  // state update and the value is always correct for the room about to open.
+  const [phone, setPhone] = useState(false);
   const timer = useRef();
   const roomRef = useRef(null);
 
   const project = modalIdx != null ? site.projects[modalIdx] : null;
   const media = project?.media || [];
   const current = media[activeMedia] || media[0];
+  // Undefined on phones: a motion element with no variants does not join the
+  // parent's animation, so the seven staggered children stop being written to
+  // every frame. See roomVariantsLite above.
+  const childVariants = phone ? undefined : sectionVariants;
 
   const openDoor = (i) => {
     if (openIdx === i) return;
     clearTimeout(timer.current);
     setOpenIdx(i);
     setActiveMedia(0);
-    // let the leaf swing + light flood before the room rises
+    setPhone(typeof window !== "undefined" && window.matchMedia(PHONE_MQ).matches);
+    // The leaf takes 720ms to swing before the room mounts. Spend that gap
+    // fetching AND decoding the first gallery frame, so the room arrives with
+    // its image ready instead of blocking the main thread on decode at the
+    // exact moment it animates in.
+    const first = site.projects[i]?.media?.find((m) => m.type === "image");
+    if (first?.src) {
+      const img = new Image();
+      img.decoding = "async";
+      img.src = asset(galleryVariant(first.src));
+      img.decode?.().catch(() => {});
+    }
     timer.current = setTimeout(() => setModalIdx(i), 720);
   };
 
@@ -260,7 +309,7 @@ export default function Projects() {
             <motion.div
               className="room"
               ref={roomRef}
-              variants={roomVariants}
+              variants={phone ? roomVariantsLite : roomVariants}
               initial="hidden"
               animate="show"
               exit="exit"
@@ -268,7 +317,7 @@ export default function Projects() {
               <motion.div
                 className="room-hero"
                 style={{ "--accent": project.accent }}
-                variants={sectionVariants}
+                variants={childVariants}
               >
                 <button className="room-close" onClick={close} aria-label="Close">
                   ✕
@@ -281,7 +330,7 @@ export default function Projects() {
               </motion.div>
 
               {current && (
-                <motion.div className="room-gallery" variants={sectionVariants}>
+                <motion.div className="room-gallery" variants={childVariants}>
                   <div className="gallery-main" style={{ "--accent": project.accent }}>
                     <AnimatePresence mode="wait">
                       <motion.div
@@ -303,8 +352,19 @@ export default function Projects() {
                             preload="metadata"
                           />
                         ) : (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={asset(current.src)} alt={project.name} />
+                          // <picture> rather than srcset/sizes: on a 3x phone
+                          // the browser multiplies the slot width by the device
+                          // pixel ratio and picks the 1600px file anyway. A
+                          // media query is the only way to say "small screen,
+                          // small file" and have it obeyed.
+                          <picture>
+                            <source
+                              media={PHONE_MQ}
+                              srcSet={asset(small(current.src))}
+                              type="image/webp"
+                            />
+                            <img src={asset(current.src)} alt={project.name} decoding="async" />
+                          </picture>
                         )}
                       </motion.div>
                     </AnimatePresence>
@@ -341,11 +401,11 @@ export default function Projects() {
 
               <div className="room-body">
                 {project.overview && (
-                  <motion.p className="room-overview" variants={sectionVariants}>
+                  <motion.p className="room-overview" variants={childVariants}>
                     {project.overview}
                   </motion.p>
                 )}
-                <motion.div className="monoliths" variants={sectionVariants}>
+                <motion.div className="monoliths" variants={childVariants}>
                   {[
                     [ui.projects.problem, project.problem],
                     [ui.projects.solution, project.solution],
@@ -359,7 +419,7 @@ export default function Projects() {
                       </div>
                     ))}
                 </motion.div>
-                <motion.div className="pills" variants={sectionVariants}>
+                <motion.div className="pills" variants={childVariants}>
                   {project.stack.map((s) => (
                     <span className="pill" key={s}>
                       {s}
@@ -367,7 +427,7 @@ export default function Projects() {
                   ))}
                 </motion.div>
                 {(project.github || project.live || project.social) && (
-                  <motion.div className="room-links" variants={sectionVariants}>
+                  <motion.div className="room-links" variants={childVariants}>
                     {project.github && (
                       <a className="btn primary" href={project.github} target="_blank" rel="noopener noreferrer">
                         ◈ GitHub

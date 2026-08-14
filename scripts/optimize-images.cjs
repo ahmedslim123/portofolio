@@ -38,6 +38,12 @@ const RULES = [
   { test: /.*/, width: 1600, quality: 68, thumb: true },
 ];
 const THUMB = { width: 240, quality: 70 };
+// The phone variant. A gallery frame paints at 253x142 on a 390px screen, but
+// the browser was handed the full 1600px file and had to decode 1.44 megapixels
+// on a phone CPU — measured as a 185ms main-thread block every time a project
+// door opened. Projects.jsx serves this one to small screens via <picture>,
+// which (unlike srcset/sizes) is not overridden by a 3x device pixel ratio.
+const SMALL = { width: 900, quality: 68 };
 
 // og.jpg must stay a JPEG: WhatsApp/Facebook/LinkedIn scrapers still reject
 // WebP share cards. The favicon is left alone too.
@@ -90,7 +96,7 @@ const kb = (n) => (n / 1024).toFixed(0);
 
     const outputs = [
       { suffix: "", width: rule.width, quality: rule.quality },
-      ...(rule.thumb ? [{ suffix: "-thumb", ...THUMB }] : []),
+      ...(rule.thumb ? [{ suffix: "-sm", ...SMALL }, { suffix: "-thumb", ...THUMB }] : []),
     ];
 
     for (const o of outputs) {

@@ -228,8 +228,13 @@ export default function Chamber() {
   }, [entered, reduced]);
 
   /* ------------------- Lock the page while a project room is open ----------- */
-  // When a door opens, freeze the underlying page (Lenis + native scroll) so it
-  // can NEVER move or bleed behind the room. Projects fires these events.
+  // When a door opens, freeze the underlying page so it can NEVER move or bleed
+  // behind the room. Projects fires these events.
+  //
+  // NOTE: replacing `body{overflow:hidden}` with wheel/touchmove swallowing was
+  // tried here and reverted — on a phone it changed nothing measurable (the
+  // full-document Layout when a room opens dirties the same ~720 boxes either
+  // way, because a phone has no scrollbar for the overflow change to remove).
   useEffect(() => {
     const lock = () => {
       lenisRef.current?.stop();

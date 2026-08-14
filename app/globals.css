@@ -617,6 +617,89 @@ button {
   }
 }
 
+/* nav tools — sound toggle + language switcher, kept on one baseline */
+.nav-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Sound toggle. Reflects what the audio is actually doing: struck speaker and
+   flat bars when silent, open speaker with the bars moving when playing. */
+.sound-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(229, 193, 111, 0.22);
+  background: rgba(7, 10, 30, 0.72);
+  color: var(--titanium);
+  cursor: none;
+  transition: color 0.3s, border-color 0.3s, background 0.3s;
+}
+.sound-btn svg {
+  width: 16px;
+  height: 16px;
+}
+.sound-btn:hover {
+  color: var(--ink);
+  border-color: rgba(229, 193, 111, 0.5);
+}
+.sound-btn.on {
+  color: var(--gold);
+  border-color: rgba(229, 193, 111, 0.45);
+}
+/* Three little bars. They only animate while sound is on, and they sit inside
+   a section that is never marked idle, so nothing pauses them mid-track. */
+.sound-btn .eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+.sound-btn .eq i {
+  width: 2px;
+  height: 3px;
+  border-radius: 1px;
+  background: currentColor;
+  opacity: 0.55;
+  transform-origin: 50% 100%;
+}
+.sound-btn.on .eq i {
+  animation: eqBar 1.1s ease-in-out infinite;
+}
+.sound-btn.on .eq i:nth-child(2) {
+  animation-duration: 0.78s;
+}
+.sound-btn.on .eq i:nth-child(3) {
+  animation-duration: 1.35s;
+}
+@keyframes eqBar {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(3.4);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sound-btn.on .eq i {
+    animation: none;
+    transform: scaleY(2);
+  }
+}
+@media (max-width: 600px) {
+  /* On a phone the nav is tight — keep the speaker, drop the bars. */
+  .sound-btn {
+    padding: 6px 9px;
+  }
+  .sound-btn .eq {
+    display: none;
+  }
+}
+
 /* language switcher — flag-only toggle (real SVG flags) */
 .lang-switch {
   display: inline-flex;

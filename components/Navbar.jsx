@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useI18n } from "@/components/LanguageProvider";
+import Ambience from "@/components/Ambience";
 
 // Real SVG flags — emoji flags (🇺🇸/🇫🇷) fall back to "US"/"FR" letters on
 // Windows, so we draw them instead to guarantee a crisp flag everywhere.
@@ -54,7 +55,7 @@ function FlagTN() {
   );
 }
 
-export default function Navbar({ scrollTo }) {
+export default function Navbar({ scrollTo, revealed }) {
   const { site, sections, ui, lang, setLang } = useI18n();
   const [scrolled, setScrolled] = useState(false);
 
@@ -94,7 +95,10 @@ export default function Navbar({ scrollTo }) {
           ))}
       </div>
 
-      <div className="lang-switch" role="group" aria-label={ui.lang.label}>
+      <div className="nav-tools">
+        <Ambience entered={revealed} />
+
+        <div className="lang-switch" role="group" aria-label={ui.lang.label}>
         {[
           ["en", FlagUS, ui.lang.english],
           ["fr", FlagFR, ui.lang.french],
@@ -112,6 +116,7 @@ export default function Navbar({ scrollTo }) {
             <Flag />
           </button>
         ))}
+        </div>
       </div>
     </nav>
   );

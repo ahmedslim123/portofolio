@@ -951,6 +951,7 @@ const uiEN = {
     callMe: "Call me",
     emailMe: "Email me",
   },
+  sound: { on: "Turn the music on", off: "Turn the music off" },
   about: { eyebrow: "About · The Maker", title: "Behind the Door" },
   skills: {
     eyebrow: "Arsenal · Languages & Tools",
@@ -1007,6 +1008,7 @@ const uiFR = {
     callMe: "M'appeler",
     emailMe: "M'écrire",
   },
+  sound: { on: "Activer la musique", off: "Couper la musique" },
   about: { eyebrow: "À Propos · L'Artisan", title: "Derrière la Porte" },
   skills: {
     eyebrow: "Arsenal · Langages & Outils",
@@ -1063,6 +1065,7 @@ const uiAR = {
     callMe: "اتّصل بي",
     emailMe: "راسلني",
   },
+  sound: { on: "تشغيل الموسيقى", off: "إيقاف الموسيقى" },
   about: { eyebrow: "نبذة · الصانع", title: "خلف الباب" },
   skills: {
     eyebrow: "الترسانة · اللغات والأدوات",

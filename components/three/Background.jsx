@@ -131,20 +131,42 @@ function AmbientFrameRate({ fps = 30 }) {
   const invalidate = useThree((s) => s.invalidate);
 
   useEffect(() => {
-    let raf;
-    let last = 0;
+    let raf = 0;
+    let timer = 0;
+    let stopped = false;
+    let last = performance.now();
     const interval = 1000 / fps;
-    const loop = (t) => {
-      raf = requestAnimationFrame(loop);
-      // -1ms of slack: rAF timestamps land a hair under the interval and would
-      // otherwise drop us to every third frame (20 fps).
-      if (t - last >= interval - 1) {
-        last = t;
-        invalidate();
-      }
+
+    // The previous version called requestAnimationFrame every frame and threw
+    // half of them away. That still asked the browser for sixty frames a second
+    // to use thirty, and a requested frame is not free even when we draw
+    // nothing in it: the browser runs the whole pipeline for it, and style
+    // recalculation is billed for every running CSS animation on the page.
+    // Measured on the idle portfolio, the frame cadence — not the WebGL draw —
+    // was what set the main thread's workload.
+    //
+    // So the rAF is now only *pending* when a frame is actually wanted: sleep
+    // on a timer, wake, ask for one frame, draw, sleep again. The wait is
+    // measured from the last draw so the cadence does not drift slower as the
+    // work in each frame grows.
+    const draw = () => {
+      last = performance.now();
+      invalidate();
+      sleep();
     };
-    raf = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(raf);
+    const sleep = () => {
+      const wait = Math.max(0, interval - (performance.now() - last));
+      timer = setTimeout(() => {
+        if (!stopped) raf = requestAnimationFrame(draw);
+      }, wait);
+    };
+    draw();
+
+    return () => {
+      stopped = true;
+      cancelAnimationFrame(raf);
+      clearTimeout(timer);
+    };
   }, [invalidate, fps]);
 
   return null;
@@ -156,11 +178,26 @@ function AmbientFrameRate({ fps = 30 }) {
  */
 export default function Background({ fx, entered, onError }) {
   const [ok, setOk] = useState(true);
-  // The render loop runs continuously so the ambient void NEVER freezes, jumps
-  // or restarts on a click/scroll — the animation stays perfectly smooth while
-  // the visitor navigates. We only pause when the tab is hidden (invisible to
-  // the visitor, saves the GPU/battery).
+  // The ambient void draws steadily while the visitor navigates, so it never
+  // freezes, jumps or restarts on a click or a scroll. It stops only when
+  // nobody can see it: a hidden tab, or a project room covering the screen.
   const [visible, setVisible] = useState(true);
+  // A project room is an opaque full-screen panel. Everything behind it —
+  // including this canvas — is being drawn for nobody, so the loop stops for as
+  // long as the room is up. Same events that stop the scroll and park the CSS
+  // animations (see Chamber.jsx).
+  const [covered, setCovered] = useState(false);
+
+  useEffect(() => {
+    const cover = () => setCovered(true);
+    const uncover = () => setCovered(false);
+    window.addEventListener("chamber:modal-open", cover);
+    window.addEventListener("chamber:modal-close", uncover);
+    return () => {
+      window.removeEventListener("chamber:modal-open", cover);
+      window.removeEventListener("chamber:modal-close", uncover);
+    };
+  }, []);
 
   useEffect(() => {
     try {
@@ -188,9 +225,18 @@ export default function Background({ fx, entered, onError }) {
   return (
     <Canvas
       className="bg-canvas"
-      // Hidden tab: stop entirely. Portfolio: render on demand, driven at 30 fps
-      // by <AmbientFrameRate/>. Intro: every frame, it is the whole show.
-      frameloop={!visible ? "never" : entered ? "demand" : "always"}
+      // Portfolio: render on demand, driven at 30 fps by <AmbientFrameRate/>.
+      // Intro: every frame, it is the whole show.
+      //
+      // Deliberately never "never". Flipping frameloop to "never" and back does
+      // stop the canvas, but it does not reliably start again — measured: after
+      // closing a project room the backdrop stayed frozen for the rest of the
+      // visit, on every section. Stopping is instead expressed by not asking
+      // for frames at all: `demand` only draws when something calls invalidate,
+      // and <AmbientFrameRate/> — the only caller — is unmounted while the tab
+      // is hidden or a room is covering the screen. Same saving, and resuming
+      // is just React mounting a component again.
+      frameloop={entered ? "demand" : "always"}
       style={{
         position: "fixed",
         inset: 0,
@@ -236,7 +282,7 @@ export default function Background({ fx, entered, onError }) {
       <ShootingStars />
       <ParticleField fx={fx} />
       <Rig fx={fx} />
-      {entered && visible && <AmbientFrameRate />}
+      {entered && visible && !covered && <AmbientFrameRate />}
     </Canvas>
   );
 }

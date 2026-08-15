@@ -4,22 +4,29 @@ import Reveal from "@/components/Reveal";
 import { useI18n } from "@/components/LanguageProvider";
 
 // Scattered centre points (left%, top%) for the galaxy layout on desktop —
-// one per skill, in the same order as `site.skills`. Laid out together with the
-// orb diameters so no two circles touch: the closest pair here still clears its
-// combined radii by ~40px at a 1000px-wide galaxy, which is the narrowest this
-// layout ever gets (below 860px the galaxy becomes a wrapping flex row and
-// these positions stop applying).
-// If you add or remove a skill, add or remove a spot here too.
+// one per skill, in the same order as `site.skills`.
+//
+// Laid out together with the orb diameters so no two circles touch, and with
+// enough slack that they still do not touch when one is hovered: `.orb:hover`
+// scales by 1.16, which adds ~12px of radius to the largest orbs. Measured at
+// 1440, 1024 and 900px wide — no overlaps anywhere, closest pair 35px, so
+// ~23px still clear mid-hover. Below 860px the galaxy becomes a wrapping flex
+// row and these positions stop applying.
+//
+// If you add or remove a skill, add or remove a spot here too, then re-measure.
 const SPOTS = [
-  [16, 26],
-  [40, 14],
-  [64, 25],
-  [87, 34],
-  [26, 60],
-  [51, 50],
-  [75, 62],
-  [36, 85],
-  [64, 84],
+  [14, 16],
+  [40, 13],
+  [66, 15],
+  [88, 34],
+  [14, 43],
+  [41, 41],
+  [64, 42],
+  [27, 65],
+  [50, 64],
+  [79, 62],
+  [22, 88],
+  [72, 87],
 ];
 
 export default function Skills() {

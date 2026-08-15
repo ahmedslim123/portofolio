@@ -46,12 +46,17 @@ export const site = {
   // stacks: Next.js carries 6 of the 12, UI/UX work appears in 8, AI in 4,
   // Three.js and video in 2 each.
   //
+  // CSS and Canva are the everyday tools behind the same work; Supabase is here
+  // because it is the database that actually ships (Recruitment Control Room)
+  // and because two projects are tagged "Full-Stack" — without it the list
+  // reads as front-end only, which the About section contradicts.
+  //
   // Deliberately dropped, because no project on this site demonstrates them:
-  // MongoDB (Supabase is the database that actually ships), Illustrator
-  // (Photoshop covers the design story), Flutter and Spring Boot (real skills,
-  // but nothing here proves them — put them back the day a mobile or Java
-  // project joins the hall), and Python (the AI work is better represented by
-  // "AI Integration", which is what the projects are actually tagged with).
+  // MongoDB (Supabase replaced it), Illustrator (Photoshop covers the design
+  // story), Flutter and Spring Boot (real skills, but nothing here proves them
+  // — put them back the day a mobile or Java project joins the hall), and
+  // Python (the AI work is better represented by "AI Integration", which is
+  // what the projects are actually tagged with).
   //
   // The order matters: SPOTS in components/Skills.jsx places orb `i` at
   // position `i`, and the two are laid out together so nothing collides.
@@ -59,11 +64,14 @@ export const site = {
     { name: "Next.js", pct: 92, size: 156 },
     { name: "React", pct: 90, size: 148 },
     { name: "JavaScript", pct: 90, size: 146 },
-    { name: "Three.js", pct: 82, size: 128 },
+    { name: "CSS", pct: 90, size: 142 },
     { name: "AI Integration", pct: 84, size: 134 },
     { name: "UI/UX Design", pct: 86, size: 136 },
+    { name: "Three.js", pct: 82, size: 128 },
     { name: "GSAP", pct: 85, size: 132 },
+    { name: "Supabase", pct: 78, size: 120 },
     { name: "Photoshop", pct: 88, size: 138 },
+    { name: "Canva", pct: 85, size: 118 },
     { name: "Premiere Pro", pct: 80, size: 122 },
   ],
 

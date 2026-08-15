@@ -1151,7 +1151,9 @@ button {
    ============================================================ */
 .galaxy {
   position: relative;
-  height: 600px;
+  /* Twelve orbs need a fourth row of breathing room; at 600px the bottom pair
+     crowded the row above it. */
+  height: 660px;
   margin-top: 64px;
 }
 /* a faint constellation glow tying the orbs together */

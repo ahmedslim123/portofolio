@@ -453,6 +453,18 @@ button {
   animation-play-state: paused !important;
 }
 
+/* While a project room is open it covers the viewport, and everything behind
+   it is animating for nobody. The observer above cannot catch this: the hall
+   is still intersecting, it is simply hidden. Chamber.jsx sets the attribute
+   from the same modal events that stop the scroll.
+
+   Deliberately no `.yt-play svg` here — that one lives *inside* the room, on
+   the video poster the visitor is looking at. The rest of the list cannot
+   appear inside a room (checked), so scoping under `.section` is enough. */
+[data-room-open] .section :is(.ring, .bar, .orb-slot, .orb-ring, .arrow, .ringfx) {
+  animation-play-state: paused !important;
+}
+
 /* ---- scroll reveal (see components/Reveal.jsx) ----
    Compositor-only: opacity + transform, one class toggle per element, once.
    The curve matches the Framer Motion easing this replaced, so the motion is

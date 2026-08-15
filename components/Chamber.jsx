@@ -239,10 +239,17 @@ export default function Chamber() {
     const lock = () => {
       lenisRef.current?.stop();
       document.body.style.overflow = "hidden";
+      // The room covers the viewport completely, but every decorative
+      // animation behind it kept running — twelve door arrows pulsing under an
+      // opaque panel nobody can see through. `data-room-open` parks them (see
+      // globals.css); the IntersectionObserver above cannot, because the hall
+      // is still, technically, intersecting.
+      document.documentElement.setAttribute("data-room-open", "");
     };
     const unlock = () => {
       lenisRef.current?.start();
       document.body.style.overflow = "";
+      document.documentElement.removeAttribute("data-room-open");
     };
     window.addEventListener("chamber:modal-open", lock);
     window.addEventListener("chamber:modal-close", unlock);
@@ -271,9 +278,15 @@ export default function Chamber() {
           e.target.toggleAttribute("data-idle", !e.isIntersecting);
         }
       },
-      // A screen of margin either side: animations are already running by the
-      // time a section scrolls into view, never caught starting.
-      { rootMargin: "100% 0px" }
+      // Was "100% 0px" — a full screen of margin either side. That is wide
+      // enough that a section *adjacent* to the visible one always counts as
+      // intersecting, so it never went idle. Measured: standing in #projects,
+      // #skills stayed awake and span its twelve orb haloes off-screen the
+      // whole time, while the sections further away were correctly paused.
+      // 25% is still a comfortable quarter-screen of lead, and pausing is
+      // resumption, not a restart: an arrow picks its pulse back up mid-cycle,
+      // so there is nothing to "catch starting".
+      { rootMargin: "25% 0px" }
     );
     sections.forEach((s) => io.observe(s));
     return () => io.disconnect();

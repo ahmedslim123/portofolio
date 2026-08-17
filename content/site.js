@@ -1010,8 +1010,10 @@ const uiEN = {
     traveler: "a traveler",
   },
   footer: {
-    rights:
-      "All rights reserved. Crafted with light, sound & mechanism — the Chamber of Curiosities.",
+    privacy: "Privacy",
+    // Shown next to the copyright. A real place under a real name is the
+    // cheapest trust signal a freelance site has.
+    location: "Sousse, Tunisia · Available worldwide",
   },
   lang: { label: "Language", english: "English", french: "Français", arabic: "العربية" },
 };
@@ -1067,8 +1069,8 @@ const uiFR = {
     traveler: "un voyageur",
   },
   footer: {
-    rights:
-      "Tous droits réservés. Façonné avec lumière, son & mécanisme — le Chamber of Curiosities.",
+    privacy: "Confidentialité",
+    location: "Sousse, Tunisie · Disponible partout dans le monde",
   },
   lang: { label: "Langue", english: "English", french: "Français", arabic: "العربية" },
 };
@@ -1125,7 +1127,8 @@ const uiAR = {
     traveler: "مسافر",
   },
   footer: {
-    rights: "جميع الحقوق محفوظة. صُنع بالضوء والصوت والآلية — قاعة العجائب.",
+    privacy: "الخصوصية",
+    location: "سوسة، تونس · متاح للعمل في كل مكان",
   },
   lang: { label: "اللغة", english: "English", french: "Français", arabic: "العربية" },
 };

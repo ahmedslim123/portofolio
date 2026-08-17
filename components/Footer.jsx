@@ -1,9 +1,11 @@
 "use client";
 
+import Link from "next/link";
+
 import { useI18n } from "@/components/LanguageProvider";
 
 export default function Footer() {
-  const { site } = useI18n();
+  const { site, ui } = useI18n();
   const year = new Date().getFullYear();
   return (
     <footer className="footer">
@@ -15,8 +17,14 @@ export default function Footer() {
               {s.label}
             </a>
           ))}
+          {/* next/link, not <a>: /privacy is a real route in the export, and the
+              client-side navigation keeps the visitor from paying for the whole
+              intro again on the way back. */}
+          <Link href="/privacy/">{ui.footer.privacy}</Link>
         </div>
-        <div className="fine">© {year} {site.name}</div>
+        <div className="fine">
+          © {year} {site.name} · {ui.footer.location}
+        </div>
       </div>
     </footer>
   );

@@ -2486,3 +2486,248 @@ body.dragging * {
 [dir="rtl"] .hero-name {
   line-height: 1.45;
 }
+
+/* ============================================================
+   STANDALONE PAGES — 404 and the privacy notice
+   ------------------------------------------------------------
+   Neither renders the chamber: no canvas, no Lenis, no intro. They are plain
+   documents that borrow the palette and the type, so a visitor who mistyped a
+   URL or came to read a legal notice gets something readable in one paint
+   instead of a six-second cinematic. Both restore the system cursor, because
+   the custom one only exists inside <Chamber/>.
+   ============================================================ */
+.nf,
+.doc {
+  cursor: auto;
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  padding: 60px 22px;
+  background:
+    radial-gradient(900px 700px at 78% -10%, rgba(30, 159, 255, 0.12), transparent 60%),
+    radial-gradient(700px 600px at 12% 8%, rgba(229, 193, 111, 0.1), transparent 55%),
+    linear-gradient(180deg, var(--void) 0%, var(--void-2) 45%, #04050f 100%);
+}
+
+/* ---- 404 ---- */
+.nf {
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+.nf-inner {
+  max-width: 34rem;
+}
+.nf-rune {
+  display: block;
+  width: 74px;
+  height: 74px;
+  margin: 0 auto 34px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  position: relative;
+  animation: spin 14s linear infinite;
+}
+.nf-rune::before {
+  content: "";
+  position: absolute;
+  inset: 17px;
+  border: 1px solid var(--cyan);
+  transform: rotate(45deg);
+  opacity: 0.8;
+}
+.nf-code {
+  font-family: var(--mono);
+  font-size: 13px;
+  letter-spacing: 0.5em;
+  color: var(--gold);
+  margin-bottom: 18px;
+}
+.nf-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(30px, 7vw, 52px);
+  line-height: 1.15;
+  color: var(--ink);
+}
+.nf-text {
+  font-family: var(--body);
+  font-size: 19px;
+  line-height: 1.75;
+  color: var(--muted);
+  margin: 22px auto 38px;
+  max-width: 30rem;
+}
+.nf-back {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border: 1px solid var(--glass-line);
+  border-radius: 999px;
+  /* 44px tall including the border — the minimum comfortable tap target. */
+  padding: 15px 30px;
+  transition: 0.3s;
+}
+.nf-back:hover {
+  color: var(--void-2);
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+/* ---- Long-form document (privacy) ---- */
+.doc-inner {
+  max-width: 46rem;
+  margin: 0 auto;
+}
+.doc-back {
+  /* inline-flex with a 44px floor rather than inline-block with padding: a
+     12px line of text plus padding came to 38px, under the minimum comfortable
+     tap target, and this is the only way off the page on a phone. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: 0.3s;
+}
+.doc-back:hover {
+  color: var(--cyan);
+}
+.doc-back-end {
+  margin-top: 48px;
+  padding-bottom: 40px;
+}
+.doc h1 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(32px, 6vw, 48px);
+  line-height: 1.15;
+  color: var(--ink);
+  margin-top: 26px;
+}
+.doc h2 {
+  font-family: var(--mono);
+  font-size: 12.5px;
+  font-weight: 400;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 46px 0 14px;
+}
+.doc-meta {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 14px;
+}
+.doc-lede {
+  font-size: 20px;
+  color: var(--titanium);
+  margin-top: 34px;
+}
+.doc p,
+.doc li {
+  font-family: var(--body);
+  /* 18px at a 1.8 line height: this is the one page on the site meant to be
+     read straight through rather than scrolled past. */
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.doc strong {
+  color: var(--titanium);
+  font-weight: 600;
+}
+.doc ul {
+  padding-left: 1.3em;
+  margin-bottom: 16px;
+}
+.doc li::marker {
+  color: var(--gold);
+}
+.doc code {
+  font-family: var(--mono);
+  font-size: 0.82em;
+  color: var(--cyan);
+  background: rgba(0, 247, 255, 0.07);
+  border-radius: 4px;
+  padding: 2px 6px;
+  /* A URL in a <code> must not push the page sideways on a phone. */
+  overflow-wrap: anywhere;
+}
+.doc a:not(.doc-back) {
+  color: var(--cyan);
+  border-bottom: 1px solid rgba(0, 247, 255, 0.35);
+  transition: 0.3s;
+}
+.doc a:not(.doc-back):hover {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+@media (max-width: 600px) {
+  .nf,
+  .doc {
+    padding: 40px 18px;
+  }
+  .doc p,
+  .doc li,
+  .nf-text {
+    font-size: 17px;
+  }
+  .doc-lede {
+    font-size: 18.5px;
+  }
+}
+
+/* ---- Keyboard focus -------------------------------------------------------
+   The site hides the system cursor and draws its own, which is fine for a
+   mouse and useless for someone driving it from the keyboard: without a focus
+   ring there is no way to know where Tab has landed. `:focus-visible` (not
+   `:focus`) is what makes this bearable — the browser only matches it for
+   keyboard and assistive-tech focus, so a clicked button does not light up.
+
+   Two rings, gold over dark: the outline itself and an offset shadow that keeps
+   it readable where the element sits on top of an image or a lit panel. The
+   selector is wrapped in :where() so it carries no specificity and any element
+   that wants its own focus treatment can simply declare one.
+
+   THIS BLOCK MUST STAY LAST IN THE FILE. :where() contributes nothing to
+   specificity, so these rules only win by source order — measured with it up in
+   the reset section, every later `transition: 0.3s` and every later `:focus`
+   rule beat it and the gold ring never appeared. Anything added below this
+   point silently disables the focus ring for the elements it touches. */
+:where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px rgba(7, 10, 30, 0.85);
+  /* Most interactive elements here carry a blanket `transition: 0.3s`, which
+     animates *every* property — including this outline. Measured on `.nav-links
+     a`: 300ms after Tab the ring was still 3px wide and the wrong colour,
+     easing from the browser default towards gold. A focus ring is a state
+     indicator, not decoration; it has to be there the instant focus lands, or
+     someone tabbing quickly is always one stop behind it.
+
+     !important, deliberately and only here. Those declarations are `.nav-links
+     a` and `.footer .links a` — one and two classes deep — while this selector
+     is inside :where() and contributes none, so source order cannot save it and
+     no amount of reordering will. Adding specificity instead would mean naming
+     every such element here and re-naming them whenever the markup moves. */
+  transition-property: none !important;
+}
+/* The contact inputs answer focus with a cyan border and a glow already, so
+   they keep the glow (their own `:focus` rule outranks the shadow above) and
+   only take a matching cyan outline, tucked in against the 10px corner. */
+.field input:focus-visible,
+.field textarea:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}

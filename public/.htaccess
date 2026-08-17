@@ -1,14 +1,18 @@
 # ============================================================================
-#  slimportofolio — Apache tuning for InfinityFree (static export)
+#  ahmedslim.com — Apache configuration for the static export
 #  Shipped via /public so it lands at the site root in /out → htdocs/.
 #  Every block is guarded by <IfModule> so a missing module never 500s.
+#
+#  This file is the Apache expression of the policy in public/_headers
+#  (Netlify / Cloudflare Pages) and vercel.json. Change one, change all three.
 # ============================================================================
 
 # ---- 1) Gzip/DEFLATE compression — shrinks JS/CSS/HTML transfer ~70% --------
 <IfModule mod_deflate.c>
   AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml \
     application/javascript application/x-javascript application/json \
-    image/svg+xml application/xml font/ttf font/otf
+    image/svg+xml application/xml font/ttf font/otf \
+    application/manifest+json
 </IfModule>
 
 # ---- 2) Long-lived caching for immutable, content-hashed assets -------------
@@ -20,6 +24,7 @@
   ExpiresByType image/jpeg             "access plus 1 month"
   ExpiresByType image/png              "access plus 1 month"
   ExpiresByType image/webp             "access plus 1 month"
+  ExpiresByType image/svg+xml          "access plus 1 month"
   ExpiresByType image/x-icon           "access plus 1 month"
   ExpiresByType text/html              "access plus 0 seconds"
 </IfModule>
@@ -33,9 +38,86 @@
   <FilesMatch "\.html$">
     Header set Cache-Control "no-cache, must-revalidate"
   </FilesMatch>
+  # The share card is fetched by scrapers that cache aggressively; a month is
+  # long enough to be cheap and short enough that a redesign lands this year.
+  <FilesMatch "^(og\.jpg|favicon\.ico|icon-.*\.png|apple-icon\.png)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
 </IfModule>
 
 # ---- 3) Keep-alive helps batch the many small _next chunks ------------------
 <IfModule mod_headers.c>
   Header set Connection keep-alive
 </IfModule>
+
+# ---- 4) Force HTTPS ---------------------------------------------------------
+# A visitor who types the bare domain arrives on http first. Redirect once,
+# permanently, before anything else is served.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# ---- 5) Security headers ----------------------------------------------------
+<IfModule mod_headers.c>
+  # Never serve these over plain http again, for a year, on any subdomain.
+  # NOT submitted to the browser preload list on purpose: preloading is
+  # effectively irreversible, and this domain is new.
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+  # Stop the browser guessing a file's type from its bytes — the mechanism
+  # behind "upload a .jpg, get it executed as script".
+  Header always set X-Content-Type-Options "nosniff"
+
+  # No one frames this site. (frame-ancestors in the CSP below says the same
+  # thing to modern browsers; this covers the old ones.)
+  Header always set X-Frame-Options "DENY"
+
+  # Send the full URL to ourselves, only the origin cross-site, and nothing at
+  # all when downgrading to http.
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+  # The site needs none of these. Denying them means an injected script cannot
+  # ask for them either.
+  Header always set Permissions-Policy "accelerometer=(), autoplay=(self), camera=(), display-capture=(), encrypted-media=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), xr-spatial-tracking=()"
+
+  # Content Security Policy — the allow-list of everywhere this page may talk to.
+  #
+  #   'unsafe-inline' in script-src is not laziness: a static export has no
+  #   server to mint a per-request nonce, and Next hydrates through inline
+  #   <script> tags. It is the one concession; everything else is locked to a
+  #   named host. The three third parties are the only ones the code touches:
+  #     i.ytimg.com                YouTube poster frames on the video doors
+  #     youtube-nocookie / vimeo   the players themselves, loaded only on click
+  #     formspree.io               where the contact form posts
+  Header always set Content-Security-Policy "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self' https://formspree.io; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://i.ytimg.com; font-src 'self'; media-src 'self'; connect-src 'self' https://formspree.io; worker-src 'self' blob:; child-src blob:; frame-src https://www.youtube-nocookie.com https://player.vimeo.com; manifest-src 'self'; upgrade-insecure-requests"
+</IfModule>
+
+# ---- 6) Don't hand out what isn't content -----------------------------------
+# No directory listing when a folder has no index file. Guarded: some shared
+# hosts forbid `Options` in .htaccess and answer an unguarded one with a 500.
+<IfModule mod_autoindex.c>
+  Options -Indexes
+</IfModule>
+
+# Version control metadata, editor leftovers and dotfiles are not public.
+# A readable /.git/config leaks the whole source history.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule (^|/)\.(?!well-known)([^./]+)(/|$) - [F,L]
+</IfModule>
+<FilesMatch "^\.|\.(bak|config|dist|fla|inc|ini|log|psd|sh|sql|sw[op]|env)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+# ---- 7) Custom error pages --------------------------------------------------
+# Next writes app/not-found.js to /404.html in the export.
+ErrorDocument 404 /404.html

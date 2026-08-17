@@ -1,6 +1,16 @@
 import ReactDOM from "react-dom";
 import "./globals.css";
 import { asset } from "@/lib/asset";
+import {
+  jsonLd,
+  OG_IMAGE,
+  SHARE_TITLE,
+  SITE_DESC,
+  SITE_TITLE,
+  SITE_URL,
+  THEME_COLOR,
+  PERSON,
+} from "@/lib/seo";
 
 /* Fonts are self-hosted from public/fonts and declared with @font-face at the
    top of globals.css. They used to be loaded through `next/font/google`, which
@@ -8,60 +18,98 @@ import { asset } from "@/lib/asset";
    and the same reason the Arabic faces were already self-hosted. Run
    `npm run fonts` to re-copy them from @fontsource. */
 
-// The public URL the portfolio is shared from (InfinityFree custom domain).
-// metadataBase turns the relative og image path into the absolute URL that
-// social scrapers (WhatsApp, Facebook, LinkedIn, iMessage, X) require.
-const SITE_URL = "https://slimportofolio.great-site.net";
-const SITE_NAME = "slimportofolio";
-const SITE_DESC =
-  "Ahmed Slim — Software Engineer & Creative Developer. Web, mobile & AI apps and brand design, in an immersive cinematic portfolio.";
-
 export const metadata = {
+  // Turns every relative path below (og.jpg, the canonical) into the absolute
+  // URL that social scrapers require — a relative og:image is simply dropped by
+  // WhatsApp and Facebook, and the link renders as a bare grey rectangle.
   metadataBase: new URL(SITE_URL),
-  title: SITE_NAME,
+
+  // `default` (not a bare string) so any page added later inherits the suffix
+  // through `template` without repeating the name.
+  title: { default: SITE_TITLE, template: `%s — ${PERSON.name}` },
   description: SITE_DESC,
-  applicationName: SITE_NAME,
+  applicationName: SHARE_TITLE,
   keywords: [
-    "slimportofolio",
     "Ahmed Slim",
-    "portfolio",
-    "software engineer",
+    "Ahmed Slim portfolio",
+    "ahmedslim.com",
+    "software engineer Tunisia",
     "creative developer",
-    "web developer Tunisia",
-    "AI",
-    "graphic design",
+    "développeur web Tunisie",
+    "freelance developer Sousse",
+    "Next.js developer",
+    "Three.js portfolio",
+    "AI integration",
+    "graphic design Tunisia",
   ],
-  authors: [{ name: "Ahmed Slim" }],
+  authors: [{ name: PERSON.name, url: SITE_URL }],
+  creator: PERSON.name,
+  publisher: PERSON.name,
+  category: "technology",
   alternates: { canonical: "/" },
-  icons: { icon: "/favicon.ico" },
-  openGraph: {
-    title: SITE_NAME,
-    description: SITE_DESC,
-    url: SITE_URL,
-    siteName: SITE_NAME,
-    type: "website",
-    locale: "en_US",
-    images: [
-      {
-        url: "/og.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Ahmed Slim — slimportofolio",
-      },
-    ],
+
+  // Explicit rather than implied. `max-image-preview: large` is the flag that
+  // lets Google show the big thumbnail next to the result instead of a favicon.
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
+
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    siteName: SHARE_TITLE,
+    title: SHARE_TITLE,
+    description: SITE_DESC,
+    locale: "en_US",
+    // The page carries all three languages behind a switch, so a scraper that
+    // honours these will still land on the same URL — it just knows the content
+    // exists in French and Arabic too.
+    alternateLocale: ["fr_FR", "ar_TN"],
+    images: [OG_IMAGE],
+  },
+
   twitter: {
     card: "summary_large_image",
-    title: SITE_NAME,
+    title: SHARE_TITLE,
     description: SITE_DESC,
-    images: ["/og.jpg"],
+    images: [OG_IMAGE.url],
   },
+
+  // Lets iOS use the real name and a dark status bar if the site is saved to
+  // the home screen, instead of the truncated <title> on a white bar.
+  appleWebApp: {
+    capable: true,
+    title: PERSON.name,
+    statusBarStyle: "black-translucent",
+  },
+
+  // Filled in from the environment after the domain is verified, so the token
+  // never has to be committed. Leave unset and the tag is simply not emitted.
+  verification: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION
+    ? { google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION }
+    : undefined,
+
+  // Icons come from the file conventions (app/favicon.ico, app/icon.svg,
+  // app/apple-icon.png); Next emits the <link> tags for them. Only the
+  // Microsoft tile, which has no file convention, is declared by hand.
+  other: { "msapplication-TileColor": THEME_COLOR },
 };
 
 export const viewport = {
-  themeColor: "#070A1E",
+  themeColor: THEME_COLOR,
   width: "device-width",
   initialScale: 1,
+  // Deliberately NOT maximum-scale/user-scalable=no: blocking pinch-zoom is a
+  // WCAG failure, and iOS ignores it anyway since 10.
+  colorScheme: "dark",
 };
 
 // The three faces the very first screen is written in. A self-hosted font is
@@ -88,7 +136,18 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning>
+        {children}
+        {/* Structured data. Rendered as a plain <script> rather than next/script
+            because it has to be in the static HTML for a crawler that does not
+            run JavaScript — which is most of them, including the WhatsApp and
+            LinkedIn scrapers. The JSON is built from a literal in lib/seo.js,
+            never from user input, so there is nothing to escape. */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd()) }}
+        />
+      </body>
     </html>
   );
 }

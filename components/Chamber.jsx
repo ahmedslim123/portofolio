@@ -135,7 +135,19 @@ export default function Chamber() {
         return;
       }
 
-      gsap.set(titleRef.current, { opacity: 0 });
+      // NOTE: no `gsap.set(titleRef, { opacity: 0 })` here any more, and that
+      // omission is deliberate. The title's entrance is now a CSS animation
+      // (`.intro-title` in globals.css) so it paints without waiting for this
+      // bundle to download and execute — it was the LCP element and it was
+      // costing twelve seconds on a throttled phone. Hiding it again from
+      // JavaScript would undo exactly that: on a slow device the timeline
+      // starts *after* the CSS animation has finished, so this line would
+      // blank a title the visitor is already reading and re-fade it.
+      //
+      // The two opacity tweens below are kept, not because the title needs
+      // them — it is already at 1 by the time they run, so they are a no-op —
+      // but because they hold the timeline's shape. Every later beat is
+      // positioned relative to them.
       tl = gsap.timeline({ delay: 0.6 });
 
       // ── PHASE 1 · SENSING — title resolves, the veins draw their first breath
@@ -359,12 +371,23 @@ export default function Chamber() {
     };
   }, [entered, isTouch]);
 
+  // True while the door is parked waiting for a tap rather than playing itself.
+  // This is the normal path on any touch device (see the `pointer:coarse` probe
+  // in the intro effect above), so it is not an edge case — it is what most
+  // phone visitors see, for as long as they take to press the button.
   const showEnterBtn = (manualMode || webglFailed) && !entered;
 
   return (
     <LanguageProvider>
       <Atmosphere />
-      <Background fx={fx} entered={entered} onError={() => setWebglFailed(true)} />
+      <Background
+        fx={fx}
+        entered={entered}
+        // Waiting is not playing. Told this, the canvas paces itself at 30fps
+        // on demand instead of running the full door animation at 60.
+        awaitingEntry={showEnterBtn}
+        onError={() => setWebglFailed(true)}
+      />
       <Cursor />
 
       <IntroOverlay

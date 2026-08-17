@@ -123,9 +123,12 @@ function Effects() {
  * Behind the portfolio the scene is slow drift — clouds breathing over ~9s,
  * stars twinkling, a gentle pointer parallax. Half the frames are
  * indistinguishable there, and every one we skip is a full additive
- * repaint of the viewport handed back to the scroll. The door intro is
- * deliberately NOT throttled: it is fast camera motion with nothing else
- * competing for the frame.
+ * repaint of the viewport handed back to the scroll.
+ *
+ * Also used for the door while it waits for a tap, which is a still scene for
+ * the same reason. Only the door's PLAYING animation is left at full rate: it
+ * is fast camera motion with nothing else competing for the frame, and it lasts
+ * seven seconds.
  */
 function AmbientFrameRate({ fps = 30 }) {
   const invalidate = useThree((s) => s.invalidate);
@@ -176,7 +179,7 @@ function AmbientFrameRate({ fps = 30 }) {
  * The persistent WebGL backdrop. Renders the grand door during the intro, then
  * settles into an ambient drifting void behind the portfolio.
  */
-export default function Background({ fx, entered, onError }) {
+export default function Background({ fx, entered, awaitingEntry, onError }) {
   const [ok, setOk] = useState(true);
   // The ambient void draws steadily while the visitor navigates, so it never
   // freezes, jumps or restarts on a click or a scroll. It stops only when
@@ -187,6 +190,21 @@ export default function Background({ fx, entered, onError }) {
   // long as the room is up. Same events that stop the scroll and park the CSS
   // animations (see Chamber.jsx).
   const [covered, setCovered] = useState(false);
+  // Read once, at the very first render, and never changed afterwards — which
+  // is the whole point. A phone does not need 1.5x device pixels for a soft
+  // glowing door: it is the same argument already made for the ambient void
+  // below, and on a phone it is 2.25x the fill for something nobody can see.
+  //
+  // Deliberately NOT derived from `awaitingEntry`, even though that is the
+  // state it is really about. That prop arrives one render after mount, so the
+  // canvas would be built at 1.5x and immediately rebuilt at 1x — and the
+  // resize lands in the same frame as the Enter button's first paint. Measured:
+  // it pushed LCP from 3.4s to 5.7s across three runs. Probing here instead
+  // costs nothing, because this component is loaded `ssr: false` and therefore
+  // never renders anywhere `window` is missing.
+  const [coarse] = useState(
+    () => typeof window !== "undefined" && window.matchMedia("(pointer:coarse)").matches
+  );
 
   useEffect(() => {
     const cover = () => setCovered(true);
@@ -236,7 +254,17 @@ export default function Background({ fx, entered, onError }) {
       // and <AmbientFrameRate/> — the only caller — is unmounted while the tab
       // is hidden or a room is covering the screen. Same saving, and resuming
       // is just React mounting a component again.
-      frameloop={entered ? "demand" : "always"}
+      //
+      // `awaitingEntry` is the other half of that idea, and it is the common
+      // case on phones. Chamber.jsx sends every coarse-pointer device down the
+      // manual path: the door does not play itself, it parks and waits for a
+      // tap. While it waits nothing is moving except the shader drift — but
+      // this was still the single most expensive state on the site, running at
+      // sixty frames a second with the full Bloom stack, on the weakest
+      // hardware, for as long as the visitor took to decide. Measured under
+      // Lighthouse's mid-range phone, which never taps: thirty seconds of
+      // blocked main thread. Waiting is paced like the ambient void instead.
+      frameloop={entered || awaitingEntry ? "demand" : "always"}
       style={{
         position: "fixed",
         inset: 0,
@@ -249,7 +277,7 @@ export default function Background({ fx, entered, onError }) {
       // change is invisible. The door is a detailed lit object and deserves the
       // pixels; the ambient void is soft additive glows where DPR 1 is
       // indistinguishable, and costs 2.25x less fill on a 1.5x display.
-      dpr={entered ? 1 : [1, 1.5]}
+      dpr={entered || coarse ? 1 : [1, 1.5]}
       gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
       camera={{ position: [0, 0, 8], fov: 60, near: 0.1, far: 200 }}
       onCreated={({ gl }) => {
@@ -282,7 +310,7 @@ export default function Background({ fx, entered, onError }) {
       <ShootingStars />
       <ParticleField fx={fx} />
       <Rig fx={fx} />
-      {entered && visible && !covered && <AmbientFrameRate />}
+      {(entered || awaitingEntry) && visible && !covered && <AmbientFrameRate />}
     </Canvas>
   );
 }

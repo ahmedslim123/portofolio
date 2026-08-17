@@ -99,6 +99,20 @@ export default function Hero({ revealed, scrollTo }) {
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={asset(site.photo)}
+                    // Three widths, and a `sizes` that describes the box the
+                    // portrait is actually painted in — `.portal` is
+                    // min(360px, 80vw) and `.photo` insets it by 18px on each
+                    // side, so the drawn width is 36px less than the portal.
+                    // Without an accurate `sizes` the browser assumes the image
+                    // fills the viewport and always takes the largest file; with
+                    // it, a 1x laptop takes 360w (11 kB) and only a 3x phone or
+                    // a retina desktop pays for 720w (32 kB).
+                    srcSet={[
+                      `${asset("/ahmed-360.webp")} 360w`,
+                      `${asset("/ahmed-540.webp")} 540w`,
+                      `${asset(site.photo)} 720w`,
+                    ].join(", ")}
+                    sizes="(max-width: 450px) calc(80vw - 36px), 324px"
                     alt={site.name}
                     width="720"
                     height="720"

@@ -33,7 +33,13 @@ const DRY = process.argv.includes("--dry");
 // exactly what a lossy codec spends its bitrate on. At 1600px the difference is
 // invisible while the heaviest frame drops from 382 KB to well under a third.
 const RULES = [
-  { test: /(^|\/)ahmed\.\w+$/i, width: 720, quality: 82, thumb: false },
+  // The portrait is the one image on the first screen, and it is painted at
+  // wildly different sizes: 324 CSS px on a desktop, 294 on a phone — times a
+  // device pixel ratio of anywhere from 1 to 3. One 720px file served all of
+  // them, which meant a 1x laptop downloaded four times the pixels it drew.
+  // These extra widths let the browser choose (see `srcset` in Hero.jsx);
+  // 720 stays the top of the ladder for 3x phones and 2x desktops.
+  { test: /(^|\/)ahmed\.\w+$/i, width: 720, quality: 82, thumb: false, extra: [360, 540] },
   { test: /(^|\/)cover\.\w+$/i, width: 560, quality: 76, thumb: false },
   { test: /.*/, width: 1600, quality: 68, thumb: true },
 ];
@@ -97,6 +103,10 @@ const kb = (n) => (n / 1024).toFixed(0);
     const outputs = [
       { suffix: "", width: rule.width, quality: rule.quality },
       ...(rule.thumb ? [{ suffix: "-sm", ...SMALL }, { suffix: "-thumb", ...THUMB }] : []),
+      // Named by width, because that is what the `srcset` descriptor has to
+      // say — `ahmed-360.webp 360w`. A suffix like `-sm` would force whoever
+      // writes the srcset to remember which number it stood for.
+      ...(rule.extra || []).map((w) => ({ suffix: `-${w}`, width: w, quality: rule.quality })),
     ];
 
     for (const o of outputs) {

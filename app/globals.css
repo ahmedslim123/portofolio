@@ -299,8 +299,17 @@ button {
   letter-spacing: 0.45em;
   text-transform: uppercase;
   color: var(--gold);
-  opacity: 0;
   text-align: center;
+  /* Same treatment as .intro-title above, half a beat later so the two do not
+     arrive together. Resting state visible; the animation only supplies the
+     entrance and then gets out of the way of GSAP's fade-out. */
+  opacity: 0.85;
+  animation: intro-fade-in 0.9s var(--ease-out-quart) 0.9s backwards;
+}
+@keyframes intro-fade-in {
+  from {
+    opacity: 0;
+  }
 }
 .intro-hint .pulse {
   /* Block, not inline-block: its margin-top only ever made sense as a second
@@ -319,7 +328,31 @@ button {
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
-  opacity: 0;
+  /* The fade-in is CSS, not GSAP, and the resting state is VISIBLE.
+     ------------------------------------------------------------------------
+     This used to be `opacity: 0`, with GSAP fading it in once the timeline
+     started. That made the name — which is the Largest Contentful Paint
+     element, the biggest thing on the first screen — wait for React to
+     hydrate and for the Three.js, GSAP and React bundles to download, parse
+     and execute. Measured under Lighthouse's mid-range phone on 4G: LCP
+     12.3s, of which 11.9s was pure render delay. The text was in the HTML
+     within half a second and then sat there invisible for eleven more.
+
+     A CSS animation starts as soon as the stylesheet is parsed, so the name
+     now appears on schedule whatever the JavaScript is doing — and if the
+     JavaScript never arrives at all, the visitor still reads whose portfolio
+     this is instead of staring at a black screen.
+
+     `backwards` is the load-bearing keyword: it holds opacity 0 through the
+     delay, and then the animation STOPS APPLYING when it ends. That matters
+     because the same element is faded back out by GSAP through an inline
+     style later in the intro, and a running animation (or `forwards`) would
+     outrank that inline style and strand the title on screen.
+
+     Timings mirror the GSAP timeline they replaced (0.6s delay, 1.2s fade).
+     If one changes, change the other — see components/Chamber.jsx. */
+  opacity: 1;
+  animation: intro-fade-in 1.2s var(--ease-out-quart) 0.6s backwards;
   /* The role line is wider than the old tagline it replaced; bound the block
      so heavy letter-spacing wraps instead of running off a phone screen. */
   width: min(92vw, 720px);
@@ -327,8 +360,13 @@ button {
 .intro-eyebrow {
   display: block;
   font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.42em;
+  /* 12px, not 10. These two mono lines are the first words on the site and
+     they were below the size at which a phone renders text legibly — flagged
+     by Lighthouse, but true regardless: 10px of wide-tracked uppercase mono is
+     hard to read at arm's length. The tracking is reduced a touch so the line
+     still wraps the same way at 390px. */
+  font-size: 12px;
+  letter-spacing: 0.36em;
   text-transform: uppercase;
   color: var(--titanium);
   opacity: 0.88;
@@ -350,8 +388,9 @@ button {
 }
 .intro-title p {
   font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.5em;
+  /* Same reason as .intro-eyebrow above. */
+  font-size: 12px;
+  letter-spacing: 0.4em;
   color: var(--titanium);
   opacity: 0.88;
   margin-top: 14px;
@@ -359,6 +398,19 @@ button {
   text-wrap: balance;
   line-height: 1.9;
   text-shadow: 0 2px 14px rgba(2, 4, 14, 0.95), 0 0 4px rgba(2, 4, 14, 0.9);
+}
+/* Raising these two lines from 10px to 12px for legibility cost them width, and
+   on a phone the eyebrow started wrapping one orphan word onto a second line
+   ("…THE PORTFOLIO / OF"). The size is the part that matters for reading, so
+   the tracking gives way instead — the lines still read as spaced mono caps,
+   they just stop overflowing the 390px screen they were measured on. */
+@media (max-width: 600px) {
+  .intro-eyebrow {
+    letter-spacing: 0.2em;
+  }
+  .intro-title p {
+    letter-spacing: 0.24em;
+  }
 }
 .flash {
   position: fixed;
@@ -2020,7 +2072,7 @@ button {
   height: 2px;
   background: var(--accent, var(--cyan));
 }
-.monolith h4 {
+.monolith h3 {
   font-family: var(--mono);
   font-size: 11px;
   letter-spacing: 0.3em;
@@ -2133,7 +2185,7 @@ body.dragging * {
   letter-spacing: 0.25em;
   color: var(--gold);
 }
-.tnode h4 {
+.tnode h3 {
   font-family: var(--display);
   font-weight: 600;
   font-size: 26px;
@@ -2376,7 +2428,7 @@ body.dragging * {
 [dir="rtl"] .door .tag,
 [dir="rtl"] .door .interior .enter,
 [dir="rtl"] .room-hero .tag,
-[dir="rtl"] .monolith h4,
+[dir="rtl"] .monolith h3,
 [dir="rtl"] .pill,
 [dir="rtl"] .tnode .yr,
 [dir="rtl"] .field label,

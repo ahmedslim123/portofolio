@@ -16,7 +16,7 @@ export default function Timeline() {
           {site.timeline.map((n, i) => (
             <Reveal className="tnode" key={i} delay={i * 0.05}>
               <div className="yr">{n.yr}</div>
-              <h4>{n.role}</h4>
+              <h3>{n.role}</h3>
               <div className="org">{n.org}</div>
               <p>{n.desc}</p>
             </Reveal>

@@ -258,7 +258,7 @@ export default function ProjectRoom({
                   .filter(([, body]) => body)
                   .map(([h, body]) => (
                     <div className="monolith" key={h} style={{ "--accent": project.accent }}>
-                      <h4>{h}</h4>
+                      <h3>{h}</h3>
                       <p>{body}</p>
                     </div>
                   ))}

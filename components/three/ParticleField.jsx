@@ -10,18 +10,33 @@ const vertexShader = /* glsl */ `
   attribute vec3 aColor;
   uniform float uTime;
   uniform float uSize;
+  uniform float uMaxSize;
   varying vec3 vColor;
   varying float vTw;
+  varying float vNear;
   void main() {
     vColor = aColor;
     // each star breathes on its own phase
     float tw = 0.55 + 0.45 * sin(uTime * 1.4 + aPhase);
     vTw = tw;
     vec4 mv = modelViewMatrix * vec4(position, 1.0);
-    // perspective attenuation, but clamped so stars near the camera can never
-    // balloon into screen-filling quads.
-    float sz = uSize * aScale * tw * (26.0 / max(-mv.z, 1.5));
-    gl_PointSize = clamp(sz, 1.0, 46.0);
+    float viewZ = -mv.z;
+
+    // Perspective attenuation with a floor on the DIVISOR, not just a clamp on
+    // the answer: 26.0/viewZ runs away as a star approaches the camera, and
+    // the cloud is a box that CONTAINS the camera, so stars really do get
+    // to viewZ = 0.01. Clamping afterwards did not prevent the blow-up, it just
+    // parked the result at a fixed 46px disc; measured on the live site, 46 of
+    // 1800 stars sat pinned at that size, drifting across the hero as the field
+    // rotated. Flooring the divisor bounds the size before it is ever computed.
+    float sz = uSize * aScale * tw * (26.0 / max(viewZ, 7.0));
+    gl_PointSize = clamp(sz, 1.0, uMaxSize);
+
+    // ...and this bounds how VISIBLE a star is while it is that close, so one
+    // passing through the camera dissolves instead of flaring. Together the two
+    // mean there is no distance at which a star can become a blob.
+    vNear = smoothstep(1.5, 9.0, viewZ);
+
     gl_Position = projectionMatrix * mv;
   }
 `;
@@ -30,6 +45,7 @@ const fragmentShader = /* glsl */ `
   precision mediump float;
   varying vec3 vColor;
   varying float vTw;
+  varying float vNear;
   void main() {
     vec2 uv = gl_PointCoord - 0.5;
     float d = length(uv);
@@ -37,9 +53,16 @@ const fragmentShader = /* glsl */ `
     float glow = smoothstep(0.5, 0.0, d);
     float core = smoothstep(0.16, 0.0, d);
     float alpha = glow * glow * (0.32 + vTw * 0.34) + core * 0.25;
-    gl_FragColor = vec4(vColor * (0.45 + vTw * 0.4), alpha);
+    gl_FragColor = vec4(vColor * (0.45 + vTw * 0.4), alpha * vNear);
   }
 `;
+
+// The cloud's depth, as one definition instead of two magic numbers that have
+// to be kept in step. Positions are generated inside [Z_BACK, Z_FRONT] and the
+// warp recycles inside the same span.
+const Z_FRONT = 14;
+const Z_BACK = -22;
+const Z_SPAN = Z_FRONT - Z_BACK;
 
 /** The void dust: thousands of additive stars that twinkle and drift, then rush
  *  the camera in a warp tunnel when fx.warp ramps up. */
@@ -73,7 +96,7 @@ export default function ParticleField({ fx, count }) {
     for (let i = 0; i < N; i++) {
       positions[i * 3] = (Math.random() - 0.5) * 42;
       positions[i * 3 + 1] = (Math.random() - 0.5) * 26;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 36 - 4;
+      positions[i * 3 + 2] = Z_BACK + Math.random() * Z_SPAN;
       // weight palette toward blue/cyan, occasional gold/violet/white sparkle
       const r = Math.random();
       const c =
@@ -91,6 +114,9 @@ export default function ParticleField({ fx, count }) {
     () => ({
       uTime: { value: 0 },
       uSize: { value: 4.5 },
+      // The ceiling on a single point. Low enough at rest that no star can read
+      // as a blob, raised during the warp because the tunnel IS big stars.
+      uMaxSize: { value: 22 },
     }),
     []
   );
@@ -102,22 +128,32 @@ export default function ParticleField({ fx, count }) {
     if (!pts || !mat) return;
 
     mat.uniforms.uTime.value = state.clock.elapsedTime;
-
     pts.rotation.y += 0.0006 + f.warp * 0.01;
     if (f.mode !== "door") pts.rotation.x += 0.0002;
 
     if (f.warp > 0.001) {
       const arr = pts.geometry.attributes.position.array;
       const speed = f.warp * 95 * Math.min(delta, 0.05);
-      const camZ = state.camera.position.z;
+      // Recycle inside the cloud's own depth. This used to wrap relative to the
+      // camera and subtract a hard-coded 72 — nearly twice the cloud's depth —
+      // so every star that streamed past during the six-second intro was filed
+      // back somewhere much further away than it started. Measured: the field
+      // began at z [-22, 14] and ended the intro at [-61, -25], permanently.
+      // The visible consequence was that the portfolio's starfield was almost
+      // empty on any device that played the intro, while it looked correct on
+      // any device that skipped it (touch, reduced motion) — two different
+      // backgrounds for the same site. Wrapping by the span leaves the
+      // distribution exactly where it was, so the warp is now a thing that
+      // happens rather than a thing that is left behind.
       for (let i = 0; i < N; i++) {
-        arr[i * 3 + 2] += speed;
-        if (arr[i * 3 + 2] > camZ) arr[i * 3 + 2] -= 72;
+        if ((arr[i * 3 + 2] += speed) > Z_FRONT) arr[i * 3 + 2] -= Z_SPAN;
       }
       pts.geometry.attributes.position.needsUpdate = true;
       mat.uniforms.uSize.value = 4.5 + f.warp * 22;
+      mat.uniforms.uMaxSize.value = 22 + f.warp * 44;
     } else {
       mat.uniforms.uSize.value += (4.5 - mat.uniforms.uSize.value) * 0.1;
+      mat.uniforms.uMaxSize.value += (22 - mat.uniforms.uMaxSize.value) * 0.1;
     }
   });
 

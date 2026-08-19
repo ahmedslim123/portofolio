@@ -111,21 +111,21 @@ export const site = {
     },
     {
       slug: "nes-academy",
-      tag: "Web · Education · Agency",
+      tag: "Founder · Education · Web",
       name: "NES Academy",
       accent: "#E45BD8",
       bg: "linear-gradient(160deg,#2a0d2c,#0a0410)",
       glow: "rgba(228,91,216,.32)",
-      sub: "One site for two audiences that share nothing",
+      sub: "My education platform for students in Tunisia",
       cover: "/projects/nes-academy/cover.webp",
       overview:
-        "The site of NES Academy — a Tunisian academy and digital agency that walks engineering students through their graded projects and builds web, mobile and AI products for everyone else.",
+        "This one is mine end to end. NES Academy is the education platform I founded for students in Tunisia: coaching through their coursework and their final-year project, training programmes, and the resources they would otherwise pay a private tutor for — given away free.",
       problem:
-        "NES Academy sells to two audiences with nothing in common — a student three weeks from a defence, and a founder who needs an app — and one Facebook page was trying to speak to both at once.",
+        "A student two months from a defence has three problems at once — the code, the written report, and the presentation — and the only help within reach is a private tutor they cannot afford.",
       solution:
-        "I built a nine-page Next.js 16 site that forks the two paths from the navigation down: Services and Portfolio for clients, Encadrement and Formations for students, joined by a living aurora hero, a scroll-driven method timeline and a drag-to-explore project carousel — in French, English and Arabic, right-to-left included.",
+        "I built the platform around all three: one-to-one coaching on the project itself, training programmes on the tools the syllabus never covers, and real work on the PFE report and the defence deck. The free resources go out on the Facebook page, where the students already are; the site is where they land next, in French, English and Arabic with full right-to-left.",
       result:
-        "Each audience now lands on a page written for it alone, and the academy's own proof — the project count, the student count, the rating — sits on the same screen as the contact button.",
+        "Students arrive already knowing what the platform does, because they met the free work first. The site carries them from that first post to the first message: nine pages, an aurora hero, a scroll-driven method timeline and a drag-to-explore portfolio.",
       stack: ["Next.js 16", "React 19", "TypeScript", "Tailwind v4", "GSAP · Lenis", "i18n FR/EN/AR"],
       live: "https://nes-academy.vercel.app/",
       social: {
@@ -141,21 +141,21 @@ export const site = {
     },
     {
       slug: "nes-studio",
-      tag: "Web · Studio · i18n",
+      tag: "Founder · Software · AI",
       name: "NES Studio",
       accent: "#EBDCC0",
       bg: "linear-gradient(160deg,#241f18,#0a0806)",
       glow: "rgba(235,220,192,.28)",
-      sub: "Ivory Atelier — a studio's pitch in three languages",
+      sub: "My studio — web, apps, AI agents and software, built to order",
       cover: "/projects/nes-studio/cover.webp",
       overview:
-        "NES Studio is the client-facing studio of NES Academy. Its site makes a single argument, in three languages: own the booking, don't rent it from a platform that takes a cut of each one.",
+        "This one is mine too — the studio side of the same house. It is where I take on the actual building: websites, web and mobile apps, AI agents, and the internal software a business runs on, for companies and for individuals who arrive with a project and no team.",
       problem:
-        "Guesthouses, clinics and restaurants across Tunisia were handing every reservation — and a commission on it — to a booking platform, because a social page was the only thing they owned online.",
+        "A company or a founder with an idea has to choose between an agency that quotes like an agency and hiring a team they cannot keep busy. So the idea waits — or it ships as a social page and stays there.",
       solution:
-        "I built the studio's trilingual showcase on an \"Ivory Atelier\" system — warm porcelain, editorial Fraunces, an accent spectrum running magenta to lime — with a before/after argument, published prices, and a free first mockup that opens the conversation on WhatsApp.",
+        "The studio is one point of contact from the first sketch to the live domain: design, build, the AI and automation layer, and the brand around it. Its site publishes the process and the prices instead of hiding them behind a call, and offers a first mockup free — you see the thing before you pay for it.",
       result:
-        "French, Arabic right-to-left and English, every page prerendered, no server route anywhere: the fonts ship inside the repository and the contact form posts straight to Formspree from the browser, so the build makes no network call at all.",
+        "It runs in French, Arabic right-to-left and English on an \"Ivory Atelier\" system — warm porcelain, editorial Fraunces, an accent spectrum from magenta to lime. Every page is prerendered with no server route anywhere: the fonts ship inside the repository and the form posts straight to Formspree from the browser, so the build makes no network call at all.",
       stack: ["Next.js 14", "TypeScript", "Tailwind CSS", "Framer Motion", "i18n FR/AR/EN", "Formspree"],
       live: "https://www.nes-studios.com/",
       media: [
@@ -461,7 +461,7 @@ export const site = {
     {
       yr: "2023 — Present",
       role: "Marketing Manager",
-      org: "Nes Academy",
+      org: "NES Academy",
       desc: "Grew an educational community — publishing summaries, exam resources, and academic content for thousands of students.",
     },
     {
@@ -537,29 +537,29 @@ const projectsFR = {
     stack: ["Next.js 16", "Tailwind v4", "i18n · 6 Langues", "GSAP · Lenis", "SEO"],
   },
   "nes-academy": {
-    tag: "Web · Éducation · Agence",
-    sub: "Un seul site pour deux publics qui n'ont rien en commun",
+    tag: "Fondateur · Éducation",
+    sub: "Ma plateforme d'éducation pour les étudiants en Tunisie",
     overview:
-      "Le site de NES Academy — une académie et agence digitale tunisienne qui accompagne les étudiants ingénieurs jusqu'à la soutenance et développe sites, applications et IA pour tous les autres.",
+      "Celui-là est à moi de bout en bout. NES Academy est la plateforme d'éducation que j'ai fondée pour les étudiants en Tunisie : encadrement dans leurs matières et sur le projet de fin d'études, formations, et les ressources pour lesquelles ils paieraient sinon un professeur particulier — données gratuitement.",
     problem:
-      "NES Academy s'adresse à deux publics qui n'ont rien en commun — un étudiant à trois semaines de sa soutenance, et un porteur de projet qui a besoin d'une application — et une seule page Facebook essayait de parler aux deux à la fois.",
+      "Un étudiant à deux mois de sa soutenance a trois problèmes à la fois — le code, le rapport écrit et la présentation — et la seule aide à portée de main est un professeur particulier qu'il ne peut pas se payer.",
     solution:
-      "J'ai développé un site Next.js 16 de neuf pages qui sépare les deux parcours dès la navigation : Services et Portfolio pour les clients, Encadrement et Formations pour les étudiants, reliés par un hero aurore vivant, une frise de méthode animée au défilement et un carrousel de projets qui se fait glisser — en français, anglais et arabe, RTL compris.",
+      "J'ai construit la plateforme autour des trois : un encadrement individuel sur le projet lui-même, des formations sur les outils que le programme ne couvre jamais, et un vrai travail sur le rapport de PFE et sur la soutenance. Les ressources gratuites partent sur la page Facebook, là où les étudiants sont déjà ; le site est l'étape suivante, en français, anglais et arabe avec le RTL complet.",
     result:
-      "Chaque public arrive désormais sur une page écrite pour lui seul, et les preuves de l'académie — nombre de projets, nombre d'étudiants, note de satisfaction — sont sur le même écran que le bouton de contact.",
+      "Les étudiants arrivent en sachant déjà ce que fait la plateforme, parce qu'ils ont d'abord rencontré le travail gratuit. Le site les porte de ce premier post au premier message : neuf pages, un hero aurore, une frise de méthode animée au défilement et un portfolio qui se fait glisser.",
     stack: ["Next.js 16", "React 19", "TypeScript", "Tailwind v4", "GSAP · Lenis", "i18n FR/EN/AR"],
   },
   "nes-studio": {
-    tag: "Web · Studio · i18n",
-    sub: "Ivory Atelier — l'argumentaire d'un studio en trois langues",
+    tag: "Fondateur · Logiciel · IA",
+    sub: "Mon studio — web, applications, agents IA et logiciels sur mesure",
     overview:
-      "NES Studio est le studio client de NES Academy. Son site défend un seul argument, en trois langues : possédez la réservation, ne la louez pas à une plateforme qui prélève sa commission sur chacune.",
+      "Celui-là est à moi aussi — le versant studio de la même maison. C'est là que je construis pour de bon : sites web, applications web et mobiles, agents IA, et les logiciels internes qui font tourner une activité — pour des entreprises comme pour des particuliers qui arrivent avec un projet et sans équipe.",
     problem:
-      "Maisons d'hôtes, cliniques et restaurants de Tunisie confiaient chaque réservation — et la commission qui va avec — à une plateforme, faute de posséder autre chose qu'une page sociale.",
+      "Une entreprise ou un porteur d'idée doit choisir entre une agence qui facture comme une agence et une équipe qu'il ne pourra pas occuper. Alors l'idée attend — ou elle sort sous forme de page sociale, et y reste.",
     solution:
-      "J'ai construit la vitrine trilingue du studio sur un système « Ivory Atelier » — porcelaine chaude, Fraunces éditorial, un spectre d'accent du magenta au vert tilleul — avec une démonstration avant/après, des prix publiés, et une première maquette offerte qui ouvre la conversation sur WhatsApp.",
+      "Le studio est un interlocuteur unique, du premier croquis au domaine en ligne : design, développement, la couche IA et automatisation, et la marque autour. Son site publie le process et les prix au lieu de les cacher derrière un appel, et offre une première maquette : on voit la chose avant de la payer.",
     result:
-      "Français, arabe de droite à gauche et anglais, chaque page pré-rendue, aucune route serveur : les polices sont dans le dépôt et le formulaire poste directement vers Formspree depuis le navigateur — le build ne fait pas un seul appel réseau.",
+      "Il tourne en français, en arabe de droite à gauche et en anglais, sur un système « Ivory Atelier » — porcelaine chaude, Fraunces éditorial, un spectre d'accent du magenta au vert tilleul. Chaque page est pré-rendue, sans aucune route serveur : les polices sont dans le dépôt et le formulaire poste directement vers Formspree depuis le navigateur — le build ne fait pas un seul appel réseau.",
     stack: ["Next.js 14", "TypeScript", "Tailwind CSS", "Framer Motion", "i18n FR/AR/EN", "Formspree"],
   },
   "tera-energy": {
@@ -739,7 +739,7 @@ const timelineFR = [
   {
     yr: "2023 — Présent",
     role: "Responsable Marketing",
-    org: "Nes Academy",
+    org: "NES Academy",
     desc: "Développement d'une communauté éducative — publication de résumés, ressources d'examen et contenus académiques pour des milliers d'étudiants.",
   },
   {
@@ -812,29 +812,29 @@ const projectsAR = {
     stack: ["Next.js 16", "Tailwind v4", "ستّ لغات", "GSAP · Lenis", "SEO"],
   },
   "nes-academy": {
-    tag: "ويب · تعليم · وكالة",
-    sub: "موقع واحد لجمهورين لا يجمع بينهما شيء",
+    tag: "مؤسِّس · تعليم · ويب",
+    sub: "منصّتي التعليمية لطلبة تونس",
     overview:
-      "موقع NES Academy — أكاديمية ووكالة رقمية تونسية ترافق طلبة الهندسة حتى المناقشة، وتطوّر المواقع والتطبيقات والذكاء الاصطناعي لبقيّة العملاء.",
+      "هذا المشروع لي بالكامل. NES Academy منصّة تعليمية أسّستها لطلبة تونس: تأطير في موادّهم وفي مشروع التخرّج، ودورات تكوينية، والموارد التي كانوا سيدفعون مقابلها لأستاذ خصوصي — تُنشر مجانًا.",
     problem:
-      "تخاطب NES Academy جمهورين لا يجمع بينهما شيء — طالبٌ تفصله ثلاثة أسابيع عن مناقشته، وصاحب مشروع يحتاج تطبيقًا — وصفحة فيسبوك واحدة كانت تحاول مخاطبتهما معًا.",
+      "الطالب الذي يفصله شهران عن مناقشته يواجه ثلاث مشكلات دفعةً واحدة — الكود، والتقرير المكتوب، والعرض التقديمي — والمساعدة الوحيدة في متناوله أستاذ خصوصي لا يقدر على أجره.",
     solution:
-      "بنيتُ موقع Next.js 16 من تسع صفحات يفصل المسارين منذ شريط التنقّل: الخدمات والأعمال للعملاء، والتأطير والدورات للطلبة، تربطهما واجهة شفقيّة متحرّكة، وخطّ زمني للمنهجية يتحرّك مع التمرير، وشريط مشاريع يُسحب باليد — بالفرنسية والإنجليزية والعربية، مع دعم الاتجاه من اليمين إلى اليسار.",
+      "بنيتُ المنصّة حول الثلاثة معًا: تأطير فردي على المشروع نفسه، ودورات على الأدوات التي لا يغطّيها البرنامج الدراسي، وعمل حقيقي على تقرير مشروع التخرّج وعلى المناقشة. الموارد المجانية تُنشر على صفحة فيسبوك حيث يوجد الطلبة أصلًا؛ والموقع هو المحطّة التالية، بالفرنسية والإنجليزية والعربية مع دعم كامل للاتجاه من اليمين إلى اليسار.",
     result:
-      "كل جمهور يصل اليوم إلى صفحة مكتوبة له وحده، وأدلّة الأكاديمية — عدد المشاريع، وعدد الطلبة، ومعدّل الرضا — صارت على الشاشة نفسها التي يوجد فيها زرّ التواصل.",
+      "يصل الطلبة وهم يعرفون سلفًا ما تفعله المنصّة، لأنهم التقوا بالعمل المجاني أوّلًا. والموقع يحملهم من ذلك المنشور الأوّل إلى أوّل رسالة: تسع صفحات، وواجهة شفقيّة، وخطّ زمني للمنهجية يتحرّك مع التمرير، ومعرض أعمال يُسحب باليد.",
     stack: ["Next.js 16", "React 19", "TypeScript", "Tailwind v4", "GSAP · Lenis", "ثلاث لغات"],
   },
   "nes-studio": {
-    tag: "ويب · استوديو · تعدّد اللغات",
-    sub: "Ivory Atelier — عرض استوديو بثلاث لغات",
+    tag: "مؤسِّس · برمجيات · ذكاء اصطناعي",
+    sub: "استوديوي — مواقع وتطبيقات ووكلاء ذكاء اصطناعي وبرمجيات حسب الطلب",
     overview:
-      "NES Studio هو الذراع التجارية لـ NES Academy. يدافع موقعه عن فكرة واحدة، بثلاث لغات: امتلك الحجز، ولا تستأجره من منصّة تقتطع عمولتها من كلّ حجز.",
+      "وهذا لي أيضًا — الوجه الاستوديوي للبيت نفسه. هنا أبني فعليًّا: مواقع، وتطبيقات ويب وهواتف، ووكلاء ذكاء اصطناعي، والبرمجيات الداخلية التي يقوم عليها العمل — للشركات ولأصحاب المشاريع الأفراد الذين يأتون بفكرة بلا فريق.",
     problem:
-      "كانت دور الضيافة والعيادات والمطاعم في تونس تسلّم كلّ حجز — والعمولة معه — إلى منصّة، لأن صفحة على مواقع التواصل كانت كلّ ما تملكه على الإنترنت.",
+      "على الشركة أو صاحب الفكرة أن يختار بين وكالة تُسعّر كوكالة، وفريقٍ لن يجد ما يشغله. فتنتظر الفكرة — أو تخرج في هيئة صفحة على مواقع التواصل، وتبقى هناك.",
     solution:
-      "بنيتُ الواجهة الثلاثية اللغات على نظام «Ivory Atelier» — بورسلان دافئ، وخطّ Fraunces التحريري، وطيف لوني يمتدّ من الأرجواني إلى الأخضر الليموني — مع مقارنة قبل/بعد، وأسعار معلنة، ونموذج أوّل مجاني يفتح المحادثة على واتساب.",
+      "الاستوديو جهة واحدة من أوّل رسم إلى النطاق المنشور: التصميم، والتطوير، وطبقة الذكاء الاصطناعي والأتمتة، والهوية حولها. وموقعه ينشر المسار والأسعار بدل إخفائها خلف مكالمة، ويقدّم نموذجًا أوّل مجّانًا — ترى الشيء قبل أن تدفع ثمنه.",
     result:
-      "الفرنسية والعربية من اليمين إلى اليسار والإنجليزية، وكلّ صفحة مُولّدة مسبقًا، وبلا أيّ مسار خادم: الخطوط داخل المستودع، ونموذج التواصل يُرسل مباشرةً إلى Formspree من المتصفّح — فلا يُجري البناء أيّ اتصال بالشبكة.",
+      "يعمل بالفرنسية والعربية من اليمين إلى اليسار والإنجليزية، على نظام «Ivory Atelier» — بورسلان دافئ، وخطّ Fraunces التحريري، وطيف لوني من الأرجواني إلى الأخضر الليموني. كلّ صفحة مُولّدة مسبقًا وبلا أيّ مسار خادم: الخطوط داخل المستودع، ونموذج التواصل يُرسل مباشرةً إلى Formspree من المتصفّح — فلا يُجري البناء أيّ اتصال بالشبكة.",
     stack: ["Next.js 14", "TypeScript", "Tailwind CSS", "Framer Motion", "ثلاث لغات", "Formspree"],
   },
   "tera-energy": {
@@ -1018,7 +1018,7 @@ const timelineAR = [
   {
     yr: "2023 — الآن",
     role: "مسؤول التسويق",
-    org: "Nes Academy",
+    org: "NES Academy",
     desc: "تنمية مجتمع تعليمي — نشر الملخّصات وموارد الامتحانات والمحتوى الأكاديمي لآلاف الطلاب.",
   },
   {

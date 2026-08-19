@@ -252,7 +252,7 @@ export default function Chamber() {
       lenisRef.current?.stop();
       document.body.style.overflow = "hidden";
       // The room covers the viewport completely, but every decorative
-      // animation behind it kept running — twelve door arrows pulsing under an
+      // animation behind it kept running — fourteen door arrows pulsing under an
       // opaque panel nobody can see through. `data-room-open` parks them (see
       // globals.css); the IntersectionObserver above cannot, because the hall
       // is still, technically, intersecting.
@@ -273,7 +273,7 @@ export default function Chamber() {
 
   /* ----------------- Pause animations in off-screen sections ---------------- */
   // A CSS animation keeps running when its element is scrolled out of view, and
-  // these are all `infinite`: twelve door arrows pulsing, the skill orbs
+  // these are all `infinite`: fourteen door arrows pulsing, the skill orbs
   // drifting, the contact ring spinning — all of it ticking while the visitor
   // is still reading the hero. Measured at idle, the always-on animations were
   // the whole main-thread cost of the page: 40% busy with them, 10% without.

@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
  * Fades + lifts children into view on scroll, once.
  *
  * This used to be a Framer Motion `whileInView`. There are ~40 of these on the
- * page (every heading, paragraph, stat and all twelve doors), and Framer
+ * page (every heading, paragraph, stat and all fourteen doors), and Framer
  * animates on the main thread: each one wrote inline styles every frame for a
  * full second, and they fire in overlapping bursts as you scroll. That measured
  * as 1.5s of style recalculation over a single pass down the page — the biggest

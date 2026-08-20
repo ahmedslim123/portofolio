@@ -68,6 +68,8 @@ const KEEP_AS_IS = new Set([
   "icon-192.png",
   "icon-512.png",
   "icon-maskable.png",
+  // Same reason, plus: this one is named by <link rel="apple-touch-icon">.
+  "apple-icon.png",
 ]);
 
 const isRaster = (f) => /\.(jpe?g|png)$/i.test(f);

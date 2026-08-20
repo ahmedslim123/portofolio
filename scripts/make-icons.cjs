@@ -5,9 +5,9 @@
        node scripts/make-icons.cjs
 
    Writes:
-     app/icon.svg                the scalable icon modern browsers prefer
-     app/favicon.ico             16 / 32 / 48 px, for the browser tab
-     app/apple-icon.png          180x180, iOS home screen (opaque, no rounding —
+     public/icon.svg             the scalable icon modern browsers prefer
+     public/favicon.ico          16 / 32 / 48 px, for the browser tab
+     public/apple-icon.png       180x180, iOS home screen (opaque, no rounding —
                                  iOS rounds it itself and punishes pre-rounding)
      public/icon-192.png         PWA / Android
      public/icon-512.png         PWA / Android, splash screens
@@ -24,7 +24,9 @@ const path = require("path");
 const sharp = require("sharp");
 
 const ROOT = path.join(__dirname, "..");
-const APP = path.join(ROOT, "app");
+// Everything lands in public/. app/icon.* would work for browsers too, but
+// Next fingerprints those URLs on every build, and Google wants a favicon URL
+// that holds still between its (infrequent) crawls.
 const PUB = path.join(ROOT, "public");
 
 // Palette lifted verbatim from :root in app/globals.css.
@@ -142,13 +144,13 @@ async function build() {
 
   // 1 — the scalable icon. Browsers that support it stop here, at any size.
   const svg = markSvg({ radius: 12 });
-  put(path.join(APP, "icon.svg"), Buffer.from(svg));
+  put(path.join(PUB, "icon.svg"), Buffer.from(svg));
 
   // 2 — favicon.ico. The 16px face is drawn from a simplified source: at that
   //     size the hairline and the halo are sub-pixel and only muddy the mark.
   const tiny = markSvg({ radius: 6, detail: false });
   put(
-    path.join(APP, "favicon.ico"),
+    path.join(PUB, "favicon.ico"),
     ico([
       { size: 16, data: await png(tiny, 16) },
       { size: 32, data: await png(markSvg({ radius: 8 }), 32) },
@@ -157,7 +159,7 @@ async function build() {
   );
 
   // 3 — iOS home screen. Square and opaque; iOS applies its own mask.
-  put(path.join(APP, "apple-icon.png"), await png(markSvg({ radius: 0 }), 180, { opaque: true }));
+  put(path.join(PUB, "apple-icon.png"), await png(markSvg({ radius: 0 }), 180, { opaque: true }));
 
   // 4 — PWA / Android.
   put(path.join(PUB, "icon-192.png"), await png(markSvg({ radius: 14 }), 192));

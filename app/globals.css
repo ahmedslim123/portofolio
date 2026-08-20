@@ -484,7 +484,31 @@ button {
    it measured consistently worse (32 fps vs 40, twelve frames over 100ms vs
    two). Deferring the layout of a section until it scrolls in just moves the
    work to the exact moment the frame budget is already spent. Don't re-add it
-   without measuring a full wheel scroll, twice. */
+   without measuring a full wheel scroll, twice.
+
+   TRIED AGAIN, and the note above still stands. Worth writing down what the
+   second attempt looked like, because it looked like a win for a while:
+
+   On a SHORT scroll (three 2400px gestures from the top) it was convincing —
+   34.6 -> 39.1 fps, frames over 50ms halved, three runs each, ranges that did
+   not overlap. On the FULL page, top to bottom, which is what this note asks
+   for, it fell apart: 36.8 -> 44.6 fps by median, but the runs spread
+   33/36.8/40.7 against 29.9/44.6/51.2. The arms overlap, and the with-arm's
+   worst run is the worst number in the whole experiment. That is not a win,
+   it is a noisier page.
+
+   And the comparison was not even fair. contain-intrinsic-size makes every
+   section that has never been on screen report 900px instead of its real
+   height, so the two arms did not scroll the same distance: the document was
+   7950px without and 6301px with. A page that is 1650px shorter until you
+   scroll through it is a page whose scrollbar moves under the visitor's
+   hand — a visible bug traded for an unproven frame.
+
+   So: the top-of-page measurement was real but unrepresentative, and the
+   honest full-page one does not support the change. Third attempt, if there
+   is one, needs a fixed contain-intrinsic-size per section so the document
+   height is stable, and it needs to beat the baseline on the WORST run, not
+   the median. */
 
 /* Sections scrolled out of view stop animating (see Chamber.jsx). CSS keeps
    `infinite` animations ticking off-screen forever otherwise, and every one of

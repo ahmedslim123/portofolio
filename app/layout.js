@@ -62,6 +62,33 @@ export const metadata = {
     },
   },
 
+  /**
+   * The icons are declared here, by hand, because they live in public/ now
+   * rather than app/.
+   *
+   * Next's app/icon.* convention works fine for browsers but fingerprints the
+   * URL on every build:
+   *
+   *     <link rel="icon" href="/favicon.ico?favicon.3o2tfok3x6zl1.ico">
+   *
+   * Google's guidance for the favicon it shows beside a search result asks
+   * for a URL that does not change — it crawls favicons on its own slow
+   * schedule, separately from the page. This site redeploys often, so that
+   * hash meant the icon URL had effectively never held still. Served from
+   * public/, these three paths are fixed forever.
+   *
+   * The .ico is first and carries sizes="48x48" deliberately: it contains
+   * 16/32/48 and Google asks for a square that is a multiple of 48.
+   */
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "48x48", type: "image/x-icon" },
+      { url: "/icon.svg", type: "image/svg+xml", sizes: "any" },
+    ],
+    shortcut: [{ url: "/favicon.ico" }],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+  },
+
   openGraph: {
     type: "website",
     url: SITE_URL,

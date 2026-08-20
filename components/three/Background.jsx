@@ -6,6 +6,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import * as THREE from "three";
 
+import { approach } from "@/lib/frame";
 import GrandDoor from "@/components/three/GrandDoor";
 import ParticleField from "@/components/three/ParticleField";
 import Nebula from "@/components/three/Nebula";
@@ -48,14 +49,24 @@ function Rig({ fx }) {
   const px = useRef(0);
   const py = useRef(0);
 
-  useFrame(() => {
+  useFrame((_, delta) => {
     const f = fx.current;
     const t = clock.elapsedTime;
-    px.current += (pointer.x - px.current) * 0.05;
-    py.current += (pointer.y - py.current) * 0.05;
+
+    // Every easing below is a DURATION, not a number of frames. Before this,
+    // the camera reached the door in a fixed 15 frames — a quarter of a second
+    // at 60 Hz, a tenth at 144 Hz — so the whole approach through the doorway
+    // played at the speed of whatever display it landed on. See lib/frame.js.
+    const aPtr = approach(0.05, delta);
+    const aFov = approach(0.1, delta);
+    const aDoor = approach(0.2, delta);
+    const aAmb = approach(0.04, delta);
+
+    px.current += (pointer.x - px.current) * aPtr;
+    py.current += (pointer.y - py.current) * aPtr;
 
     const targetFov = f.mode === "door" ? f.camFov : 60;
-    const fovDelta = (targetFov - camera.fov) * 0.1;
+    const fovDelta = (targetFov - camera.fov) * aFov;
     camera.fov += fovDelta;
     // Reprojecting is only needed while the FOV is still settling.
     if (Math.abs(fovDelta) > 0.001) camera.updateProjectionMatrix();
@@ -63,11 +74,11 @@ function Rig({ fx }) {
     if (f.mode === "door") {
       camera.position.x = px.current * 0.6;
       camera.position.y = -py.current * 0.4;
-      camera.position.z += (f.camZ - camera.position.z) * 0.2;
+      camera.position.z += (f.camZ - camera.position.z) * aDoor;
     } else {
-      camera.position.x += (px.current * 1.2 - camera.position.x) * 0.04;
-      camera.position.y += (-py.current * 0.8 - camera.position.y) * 0.04;
-      camera.position.z += (8 - camera.position.z) * 0.04;
+      camera.position.x += (px.current * 1.2 - camera.position.x) * aAmb;
+      camera.position.y += (-py.current * 0.8 - camera.position.y) * aAmb;
+      camera.position.z += (8 - camera.position.z) * aAmb;
     }
     camera.lookAt(0, 0, 0);
 
@@ -137,7 +148,7 @@ function AmbientFrameRate({ fps = 30 }) {
     let raf = 0;
     let timer = 0;
     let stopped = false;
-    let last = performance.now();
+    let last = 0;
     const interval = 1000 / fps;
 
     // The previous version called requestAnimationFrame every frame and threw
@@ -152,18 +163,29 @@ function AmbientFrameRate({ fps = 30 }) {
     // on a timer, wake, ask for one frame, draw, sleep again. The wait is
     // measured from the last draw so the cadence does not drift slower as the
     // work in each frame grows.
-    const draw = () => {
-      last = performance.now();
+    // requestAnimationFrame does not run when it is called, it runs at the next
+    // screen refresh — so "sleep 33 ms, then ask for a frame" delivers 33 ms
+    // PLUS up to a whole refresh interval. Measured on the shipped build: this
+    // pacer advertised 30 fps and drew 19.95, a third slow, which is a large
+    // part of why the ambient backdrop did not feel smooth.
+    //
+    // Rather than guess the refresh interval (120 Hz and 144 Hz panels are
+    // common, so 16.7 ms is not a safe constant), the sleep corrects itself:
+    // each frame compares the period it actually achieved against the one it
+    // wanted and moves the correction halfway toward the error. It converges in
+    // a few frames, on any display, and re-converges by itself if the machine
+    // gets busy.
+    let bias = 0;
+
+    const draw = (now) => {
+      if (last) bias = Math.min(Math.max(bias + (now - last - interval) * 0.5, 0), interval);
+      last = now;
       invalidate();
-      sleep();
-    };
-    const sleep = () => {
-      const wait = Math.max(0, interval - (performance.now() - last));
       timer = setTimeout(() => {
         if (!stopped) raf = requestAnimationFrame(draw);
-      }, wait);
+      }, Math.max(0, interval - bias));
     };
-    draw();
+    raf = requestAnimationFrame(draw);
 
     return () => {
       stopped = true;
@@ -264,7 +286,12 @@ export default function Background({ fx, entered, awaitingEntry, onError }) {
       // hardware, for as long as the visitor took to decide. Measured under
       // Lighthouse's mid-range phone, which never taps: thirty seconds of
       // blocked main thread. Waiting is paced like the ambient void instead.
-      frameloop={entered || awaitingEntry ? "demand" : "always"}
+      //
+      // The intro is on `demand` too now. It used to be "always", which means
+      // the display's refresh rate — and on a 144 Hz panel that is 144 full
+      // Bloom stacks a second, 2.4x the work, for an animation that (now it is
+      // time-based) looks exactly the same at 60. The pacer below caps it.
+      frameloop="demand"
       style={{
         position: "fixed",
         inset: 0,
@@ -310,7 +337,10 @@ export default function Background({ fx, entered, awaitingEntry, onError }) {
       <ShootingStars />
       <ParticleField fx={fx} />
       <Rig fx={fx} />
-      {(entered || awaitingEntry) && visible && !covered && <AmbientFrameRate />}
+      {/* One pacer for every phase: 60 while the door plays (fast camera work,
+          nothing else on screen), 30 once it is a slow ambient drift or a still
+          door waiting for a tap. Unmounted when nobody can see it. */}
+      {visible && !covered && <AmbientFrameRate fps={entered || awaitingEntry ? 30 : 60} />}
     </Canvas>
   );
 }

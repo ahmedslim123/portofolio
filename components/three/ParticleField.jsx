@@ -4,6 +4,8 @@ import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
+import { approach } from "@/lib/frame";
+
 const vertexShader = /* glsl */ `
   attribute float aScale;
   attribute float aPhase;
@@ -128,8 +130,24 @@ export default function ParticleField({ fx, count }) {
     if (!pts || !mat) return;
 
     mat.uniforms.uTime.value = state.clock.elapsedTime;
-    pts.rotation.y += 0.0006 + f.warp * 0.01;
-    if (f.mode !== "door") pts.rotation.x += 0.0002;
+
+    // Radians per SECOND, not per frame. See lib/frame.js — this drift used to
+    // run 3x faster during the intro than behind the portfolio (measured:
+    // 2.064 deg/s against 0.686 deg/s in one visit) purely because the canvas
+    // draws at different rates in the two phases.
+    //
+    // The two rates are deliberately different, and the ambient one is NOT the
+    // arithmetic conversion of the old constant. The old constant assumed 60
+    // fps; behind the portfolio the pacer was really delivering 20, so the
+    // calm backdrop everyone has actually seen drifts at a third of the
+    // nominal speed. Converting by arithmetic would have made the portfolio
+    // three times busier than the one on screen today — the opposite of the
+    // complaint that started this. So the ambient rate is pinned to the
+    // measured shipped value and the intro keeps the sweep it always had.
+    const dt = Math.min(delta, 0.05);
+    const yaw = f.mode === "door" ? 0.036 : 0.012;
+    pts.rotation.y += (yaw + f.warp * 0.6) * dt;
+    if (f.mode !== "door") pts.rotation.x += 0.004 * dt;
 
     if (f.warp > 0.001) {
       const arr = pts.geometry.attributes.position.array;
@@ -152,8 +170,10 @@ export default function ParticleField({ fx, count }) {
       mat.uniforms.uSize.value = 4.5 + f.warp * 22;
       mat.uniforms.uMaxSize.value = 22 + f.warp * 44;
     } else {
-      mat.uniforms.uSize.value += (4.5 - mat.uniforms.uSize.value) * 0.1;
-      mat.uniforms.uMaxSize.value += (22 - mat.uniforms.uMaxSize.value) * 0.1;
+      // The settle after a warp is a DURATION, not a frame count.
+      const a = approach(0.1, delta);
+      mat.uniforms.uSize.value += (4.5 - mat.uniforms.uSize.value) * a;
+      mat.uniforms.uMaxSize.value += (22 - mat.uniforms.uMaxSize.value) * a;
     }
   });
 

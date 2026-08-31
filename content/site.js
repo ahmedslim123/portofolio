@@ -243,6 +243,8 @@ export const site = {
         { type: "image", src: "/projects/soafeno-vanilla/img1.webp" },
         { type: "image", src: "/projects/soafeno-vanilla/img2.webp" },
         { type: "image", src: "/projects/soafeno-vanilla/img3.webp" },
+        { type: "image", src: "/projects/soafeno-vanilla/img4.webp" },
+        { type: "image", src: "/projects/soafeno-vanilla/img5.webp" },
       ],
     },
     {
@@ -268,6 +270,8 @@ export const site = {
         { type: "image", src: "/projects/palmiche/img1.webp" },
         { type: "image", src: "/projects/palmiche/img2.webp" },
         { type: "image", src: "/projects/palmiche/img3.webp" },
+        { type: "image", src: "/projects/palmiche/img4.webp" },
+        { type: "image", src: "/projects/palmiche/img5.webp" },
       ],
     },
     {

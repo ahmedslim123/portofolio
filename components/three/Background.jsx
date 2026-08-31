@@ -143,6 +143,7 @@ function Effects() {
  */
 function AmbientFrameRate({ fps = 30 }) {
   const invalidate = useThree((s) => s.invalidate);
+  const clock = useThree((s) => s.clock);
 
   useEffect(() => {
     let raf = 0;
@@ -179,6 +180,31 @@ function AmbientFrameRate({ fps = 30 }) {
 
     const draw = (now) => {
       if (last) bias = Math.min(Math.max(bias + (now - last - interval) * 0.5, 0), interval);
+      else {
+        // FIRST FRAME OF THIS MOUNT — i.e. the first frame after a gap.
+        //
+        // This component is the only thing that asks for frames, so it is
+        // unmounted for the whole of every pause: a hidden tab, or a project
+        // room covering the canvas. Nothing renders in between, which means
+        // nothing calls clock.getDelta() in between — and three's Clock
+        // measures against the last call, not against the last frame:
+        //
+        //     diff = (performance.now() - this.oldTime) / 1000;
+        //     this.elapsedTime += diff;
+        //
+        // @react-three/fiber 9.6.1 hands that straight to useFrame with no
+        // clamp of its own (its update() is `let delta = state.clock
+        // .getDelta()`), so the first frame back from a two-minute absence
+        // arrives with delta = 120 and an elapsedTime that has jumped two
+        // minutes. Every animation keyed to either — the nebula rotation, the
+        // comet schedule, the door's emissive pulse — resolves that as one
+        // enormous instantaneous step.
+        //
+        // Re-basing the clock here spends the gap instead of animating it. The
+        // scene resumes exactly where the visitor left it, which is what
+        // someone coming back to a tab expects to see.
+        clock.oldTime = performance.now();
+      }
       last = now;
       invalidate();
       timer = setTimeout(() => {
@@ -192,7 +218,7 @@ function AmbientFrameRate({ fps = 30 }) {
       cancelAnimationFrame(raf);
       clearTimeout(timer);
     };
-  }, [invalidate, fps]);
+  }, [invalidate, clock, fps]);
 
   return null;
 }

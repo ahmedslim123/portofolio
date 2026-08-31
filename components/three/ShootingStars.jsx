@@ -73,7 +73,12 @@ export default function ShootingStars() {
         return;
       }
 
-      m.t += delta;
+      // Clamped for the same reason as the drift in ParticleField: a comet's
+      // flight is a DURATION, and one frame must never advance it by more than
+      // a frame's worth. AmbientFrameRate re-bases the clock after a pause, so
+      // delta should never be wild — this is the belt to that pair of braces,
+      // and it also covers an ordinary long task on a slow phone.
+      m.t += Math.min(delta, 0.05);
       const p = m.t / m.dur;
       if (p >= 1) {
         m.active = false;

@@ -63,6 +63,11 @@ export default function Chamber() {
   const lenisRef = useRef(null);
   const enteredRef = useRef(false);
   const introStartedRef = useRef(false);
+  // The door timeline, reachable from enter() so it can be stopped. It is not
+  // enough to let it play out: see the comment in enter() — a timeline that is
+  // still holding fx.warp when the portfolio is already on screen is the bug
+  // that made the backdrop explode after a tab switch.
+  const introTlRef = useRef(null);
 
   // Smooth-scroll helper handed to nav components.
   const scrollTo = (selector) => {
@@ -75,6 +80,41 @@ export default function Chamber() {
   const enter = () => {
     if (enteredRef.current) return;
     enteredRef.current = true;
+
+    // THE INTRO IS OVER, HOWEVER WE GOT HERE — so nothing is allowed to keep
+    // animating the door's scene values afterwards.
+    //
+    // This is the fix for the reported "leave the site, come back, the
+    // background goes white and swarms" bug, and the race is worth spelling
+    // out because nothing about it is visible from either half alone:
+    //
+    //   • GSAP is driven by requestAnimationFrame, and rAF stops in a hidden
+    //     tab. GSAP's lagSmoothing then treats the whole absence as one 33 ms
+    //     hiccup, so the door timeline does NOT fast-forward — it FREEZES and
+    //     later resumes exactly where it was.
+    //   • setTimeout does not freeze. The 9 s safety net below kept counting
+    //     and fired while the tab was away.
+    //
+    // So the visitor came back to a portfolio that the safety net had already
+    // revealed, with the door timeline still queued to run
+    // `.to(fx.current, { warp: 1 })`. It did — over the top of the hero. And
+    // because enteredRef was already set, the timeline's own `.add(enter)`
+    // was a no-op, so the tween that eases warp back to 0 never ran again:
+    // fx.warp stayed pinned at 1 for the rest of the visit.
+    //
+    // ParticleField reads that value every frame as
+    // `uSize = 4.5 + warp * 22` and `uMaxSize = 22 + warp * 44` — 26.5 and 66
+    // against the resting 4.5 and 22 — while streaming every star toward the
+    // camera at 95 units/s. That is precisely the recording: enormous, dense,
+    // over-bright stars tearing across the hero.
+    //
+    // Killing the timeline here makes enter() the single authority over
+    // fx.current. `overwrite: true` on the settle below is the same guarantee
+    // for any stray tween: one writer, always.
+    introTlRef.current?.kill();
+    introTlRef.current = null;
+    gsap.killTweensOf(fx.current);
+
     fx.current.mode = "ambient";
     // Retire the door instantly — it happens under the full whiteout, so the
     // 3D door can never bleed through behind the portfolio as it paints in.
@@ -89,7 +129,25 @@ export default function Chamber() {
       shake: 0,
       duration: 1.5,
       ease: "power2.out",
+      overwrite: true,
     });
+
+    // The whiteout is dissolved HERE rather than by the timeline, because the
+    // timeline no longer survives this function. Whoever called enter() — the
+    // timeline, the 9 s safety net, the manual button — the flash always ends
+    // up transparent, so the screen can never be left white.
+    if (flashRef.current) {
+      gsap.killTweensOf(flashRef.current);
+      gsap.to(flashRef.current, {
+        opacity: 0,
+        duration: 1.0,
+        ease: "power2.out",
+        // Hold the cover opaque a beat first so the portfolio is fully painted
+        // before the light dissolves — the beat the timeline used to own.
+        delay: 0.4,
+        overwrite: true,
+      });
+    }
   };
 
   /* ----------------------------- Intro sequence ----------------------------- */
@@ -191,22 +249,45 @@ export default function Chamber() {
         // it, then the white dissolves to reveal the finished, animating scene —
         // so there's never a blank white gap.
         .to(flashRef.current, { opacity: 1, duration: 0.3, ease: "power2.in" }, "open+=1.45")
-        .add(enter)
-        // hold the whiteout fully opaque a beat so the portfolio is completely
-        // painted (and the door fully gone) before the light dissolves — a clean
-        // cut to the finished scene, never a muddy overlap.
-        .to(
-          flashRef.current,
-          { opacity: 0, duration: 1.0, ease: "power2.out" },
-          ">0.4"
-        );
+        // enter() kills this timeline, so it must be the last beat. The hold
+        // and the dissolve of the whiteout moved inside enter() with it — that
+        // way they still happen when the safety net or the manual button is
+        // what ends the intro, instead of only on the happy path.
+        .add(enter);
+
+      introTlRef.current = tl;
     });
 
     // Safety net: never trap the visitor behind the door.
-    const safety = setTimeout(enter, 9000);
+    //
+    // It counts only while the tab is visible, because the thing it is
+    // guarding against — an intro that stalls — can only happen while the
+    // intro is actually running, and the intro is rAF-driven so it stops dead
+    // in a background tab. A plain setTimeout kept counting through an absence
+    // and fired against a frozen timeline; that mismatch between wall-clock
+    // and animation-clock is what let enter() and the door timeline both be
+    // half-finished at the same moment. enter() is now robust to being called
+    // at any point, but the two clocks may as well agree: leaving for a minute
+    // should cost the visitor no part of the intro they never saw.
+    let safety = 0;
+    let budget = 9000;
+    let startedAt = performance.now();
+    const arm = () => {
+      startedAt = performance.now();
+      safety = setTimeout(enter, budget);
+    };
+    const disarm = () => {
+      clearTimeout(safety);
+      safety = 0;
+      budget = Math.max(0, budget - (performance.now() - startedAt));
+    };
+    const onVis = () => (document.hidden ? disarm() : arm());
+    if (!document.hidden) arm();
+    document.addEventListener("visibilitychange", onVis);
 
     return () => {
       clearTimeout(safety);
+      document.removeEventListener("visibilitychange", onVis);
       ctx.revert();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

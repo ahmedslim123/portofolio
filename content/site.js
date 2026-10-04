@@ -292,7 +292,7 @@ export const site = {
       result:
         "A bilingual French–English site where a request is never shown as confirmed before the deposit is paid, and where every page is built to rank on the Riviera.",
       stack: ["Next.js 15", "TypeScript", "Tailwind v4", "React Hook Form · Zod", "FR / EN", "SEO"],
-      live: "https://elysia-vtc.com",
+      live: "https://elysia-vtc.vercel.app",
       media: [
         { type: "image", src: "/projects/elysia-vtc/img1.webp" },
         { type: "image", src: "/projects/elysia-vtc/img2.webp" },
@@ -319,7 +319,7 @@ export const site = {
       result:
         "Pages as rich as the best roofers' sites in the region, a look that belongs to this roofer alone, and a quote request that takes half a minute.",
       stack: ["Next.js 15", "TypeScript", "Tailwind v4", "Local SEO", "Schema.org"],
-      live: "https://couverture-vasseur.vercel.app",
+      live: "https://vasser-alpha.vercel.app",
       media: [
         { type: "image", src: "/projects/couverture-vasseur/img1.webp" },
         { type: "image", src: "/projects/couverture-vasseur/img2.webp" },
@@ -346,7 +346,7 @@ export const site = {
       result:
         "Every claim on the page is backed by a real photo or a real review, in French and English, and asking for a quote takes two lines.",
       stack: ["Next.js 16", "Tailwind v4", "GSAP · Lenis", "Three.js", "FR / EN"],
-      live: "https://pj-espaces-verts.com",
+      live: "https://pj-espaces-verts.vercel.app",
       media: [
         { type: "image", src: "/projects/pj-espaces-verts/img1.webp" },
         { type: "image", src: "/projects/pj-espaces-verts/img2.webp" },
@@ -400,6 +400,7 @@ export const site = {
       result:
         "A visitor feels trust, finds the donation numbers and copies them in under ten seconds — on a 100 € phone, in French or English.",
       stack: ["Next.js 15", "Tailwind v4", "Three.js", "GSAP · Lenis", "Playwright", "FR / EN"],
+      live: "https://ong-ifebyahmedslim.vercel.app",
       media: [
         { type: "image", src: "/projects/ong-ife/img1.webp" },
         { type: "image", src: "/projects/ong-ife/img2.webp" },

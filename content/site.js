@@ -33,7 +33,7 @@ export const site = {
 
   stats: [
     { num: 5, label: "Years Building" },
-    { num: 14, label: "Projects Shipped" },
+    { num: 19, label: "Projects Shipped" },
     { num: 20, label: "Tools & Tech" },
     { num: 3, label: "Languages" },
   ],
@@ -272,6 +272,140 @@ export const site = {
         { type: "image", src: "/projects/palmiche/img3.webp" },
         { type: "image", src: "/projects/palmiche/img4.webp" },
         { type: "image", src: "/projects/palmiche/img5.webp" },
+      ],
+    },
+    {
+      slug: "elysia-vtc",
+      tag: "Web · Luxury · Booking",
+      name: "ELYSIA",
+      accent: "#C9A86A",
+      bg: "linear-gradient(160deg,#16120b,#050506)",
+      glow: "rgba(201,168,106,.30)",
+      sub: "A private chauffeur house on the French Riviera, built like a palace concierge",
+      cover: "/projects/elysia-vtc/cover.webp",
+      overview:
+        "The site of ELYSIA, a private chauffeur house in Saint-Laurent-du-Var serving Nice, Monaco, Cannes and the whole Côte d'Azur in a Tesla Model 3 — built to sell the experience first and the ride second.",
+      problem:
+        "A new premium chauffeur had to stand apart from ride-hailing apps: no instant price, no car picker, no full-screen map — just the feeling of entering a private house that will take care of you.",
+      solution:
+        "I designed it like a palace concierge: Marcellus and Jost on cream and black, a booking request that draws the route as you type, the ELYSIA Circle that remembers each client's preferences, and service and destination pages written for search.",
+      result:
+        "A bilingual French–English site where a request is never shown as confirmed before the deposit is paid, and where every page is built to rank on the Riviera.",
+      stack: ["Next.js 15", "TypeScript", "Tailwind v4", "React Hook Form · Zod", "FR / EN", "SEO"],
+      live: "https://elysia-vtc.com",
+      media: [
+        { type: "image", src: "/projects/elysia-vtc/img1.webp" },
+        { type: "image", src: "/projects/elysia-vtc/img2.webp" },
+        { type: "image", src: "/projects/elysia-vtc/img3.webp" },
+        { type: "image", src: "/projects/elysia-vtc/img4.webp" },
+        { type: "image", src: "/projects/elysia-vtc/img5.webp" },
+      ],
+    },
+    {
+      slug: "couverture-vasseur",
+      tag: "Web · Roofing · Local SEO",
+      name: "Couverture Vasseur",
+      accent: "#5B8CFF",
+      bg: "linear-gradient(160deg,#0c1626,#04070d)",
+      glow: "rgba(91,140,255,.30)",
+      sub: "A roofer and zinc worker in Angers, the land of natural slate",
+      cover: "/projects/couverture-vasseur/cover.webp",
+      overview:
+        "The website of Couverture Vasseur, Julien Vasseur's roofing and zinc-work company in Angers — twelve years on Anjou roofs with three companions, RGE Qualibat certified, rated 4.9/5 from 47 Google reviews.",
+      problem:
+        "A local roofer had to outrank four established competitors on Google — and look like nobody else's template while doing it.",
+      solution:
+        "I built three dense pages around what Anjou is known for, natural slate: a quote form high on the page, trust signals up front, seven services, real projects, indicative pricing and a FAQ — all statically rendered, so every word is in the served HTML.",
+      result:
+        "Pages as rich as the best roofers' sites in the region, a look that belongs to this roofer alone, and a quote request that takes half a minute.",
+      stack: ["Next.js 15", "TypeScript", "Tailwind v4", "Local SEO", "Schema.org"],
+      live: "https://couverture-vasseur.vercel.app",
+      media: [
+        { type: "image", src: "/projects/couverture-vasseur/img1.webp" },
+        { type: "image", src: "/projects/couverture-vasseur/img2.webp" },
+        { type: "image", src: "/projects/couverture-vasseur/img3.webp" },
+        { type: "image", src: "/projects/couverture-vasseur/img4.webp" },
+        { type: "image", src: "/projects/couverture-vasseur/img5.webp" },
+      ],
+    },
+    {
+      slug: "pj-espaces-verts",
+      tag: "Web · Gardens · FR / EN",
+      name: "PJ Espaces Verts",
+      accent: "#E9893A",
+      bg: "linear-gradient(160deg,#0d2114,#040a06)",
+      glow: "rgba(233,137,58,.30)",
+      sub: "A tree surgeon and gardener in Provence — 21 reviews, all five stars",
+      cover: "/projects/pj-espaces-verts/cover.webp",
+      overview:
+        "The site of PJ Espaces Verts, Josué Poulain's tree-care and garden company in Lapalud, near Orange — more than seven years of pruning, felling, hedge trimming and garden upkeep within 30 km.",
+      problem:
+        "A craftsman with 21 five-star reviews and real photos of his work had no website to send people to — and nothing that answered the first question every client asks: roughly how much?",
+      solution:
+        "I built a fast bilingual site around his own job-site photos: rough prices up front, a before/after slider you can drag, a seasonal guide to what to do in the garden and when, and a two-line quote request.",
+      result:
+        "Every claim on the page is backed by a real photo or a real review, in French and English, and asking for a quote takes two lines.",
+      stack: ["Next.js 16", "Tailwind v4", "GSAP · Lenis", "Three.js", "FR / EN"],
+      live: "https://pj-espaces-verts.com",
+      media: [
+        { type: "image", src: "/projects/pj-espaces-verts/img1.webp" },
+        { type: "image", src: "/projects/pj-espaces-verts/img2.webp" },
+        { type: "image", src: "/projects/pj-espaces-verts/img3.webp" },
+        { type: "image", src: "/projects/pj-espaces-verts/img4.webp" },
+        { type: "image", src: "/projects/pj-espaces-verts/img5.webp" },
+      ],
+    },
+    {
+      slug: "thibaut-center",
+      tag: "Web · Retail · WhatsApp",
+      name: "THIBAUT CENTER",
+      accent: "#EFB322",
+      bg: "linear-gradient(160deg,#0a1a3d,#03081a)",
+      glow: "rgba(239,179,34,.30)",
+      sub: "A paint and plaster supplier in Benin, where every quote starts on WhatsApp",
+      cover: "/projects/thibaut-center/cover.webp",
+      overview:
+        "The site of Ets THIBAUT CENTER, a paint, plaster and hemp supplier in Abomey-Calavi, Benin — and a sourcing service that finds the products it does not keep in stock.",
+      problem:
+        "Builders in Abomey-Calavi browse on Android phones over 4G and buy over WhatsApp: a heavy catalogue site would never load, and a contact form would never be used.",
+      solution:
+        "I built a fast, simple site where every main button opens WhatsApp with a pre-filled message: a product catalogue, a colour chart you click to see each shade large, a paint calculator, and the sourcing service.",
+      result:
+        "A customer picks a colour, works out how much paint the job needs — 120 m² comes to 32.4 litres — and sends the quote request to WhatsApp, in French or English, in under a minute.",
+      stack: ["Next.js 15", "Tailwind v4", "Lenis", "WhatsApp", "FR / EN"],
+      live: "https://thibautcenter.vercel.app",
+      media: [
+        { type: "image", src: "/projects/thibaut-center/img1.webp" },
+        { type: "image", src: "/projects/thibaut-center/img2.webp" },
+        { type: "image", src: "/projects/thibaut-center/img3.webp" },
+        { type: "image", src: "/projects/thibaut-center/img4.webp" },
+        { type: "image", src: "/projects/thibaut-center/img5.webp" },
+      ],
+    },
+    {
+      slug: "ong-ife",
+      tag: "Web · NGO · Donations",
+      name: "ONG IFÊ",
+      accent: "#43C26F",
+      bg: "linear-gradient(160deg,#0c2416,#040b07)",
+      glow: "rgba(67,194,111,.30)",
+      sub: "A solidarity NGO in Benin — giving made obvious in under ten seconds",
+      cover: "/projects/ong-ife/cover.webp",
+      overview:
+        "The site of ONG IFÊ — Initiative pour la fraternité et l'entraide — an NGO supporting vulnerable people through food aid, health, education, housing and family support, under one promise: together for a better future.",
+      problem:
+        "Most donors arrive from a WhatsApp share or a printed poster, on an entry-level Android phone with paid data, and give by sending mobile money to a number — one wrong digit sends the money to a stranger.",
+      solution:
+        "I designed a warm, dignified site that puts the MTN MoMo and Celtiis numbers one tap from copying, explains the five fields of action, and checks with an automated test that the donation numbers are exactly right.",
+      result:
+        "A visitor feels trust, finds the donation numbers and copies them in under ten seconds — on a 100 € phone, in French or English.",
+      stack: ["Next.js 15", "Tailwind v4", "Three.js", "GSAP · Lenis", "Playwright", "FR / EN"],
+      media: [
+        { type: "image", src: "/projects/ong-ife/img1.webp" },
+        { type: "image", src: "/projects/ong-ife/img2.webp" },
+        { type: "image", src: "/projects/ong-ife/img3.webp" },
+        { type: "image", src: "/projects/ong-ife/img4.webp" },
+        { type: "image", src: "/projects/ong-ife/img5.webp" },
       ],
     },
     {
@@ -619,6 +753,71 @@ const projectsFR = {
       "Le menu fait la pédagogie avant même qu'on pousse la porte, et chaque plat est à un geste d'une commande.",
     stack: ["Next.js", "Framer Motion", "Design Web", "Identité de Marque"],
   },
+  "elysia-vtc": {
+    tag: "Web · Luxe · Réservation",
+    sub: "Une maison de chauffeur privé sur la Côte d'Azur, pensée comme une conciergerie de palace",
+    overview:
+      "Le site d'ELYSIA, une maison de chauffeur privé installée à Saint-Laurent-du-Var, au service de Nice, Monaco, Cannes et de toute la Côte d'Azur en Tesla Model 3 — conçu pour vendre d'abord l'expérience, ensuite le trajet.",
+    problem:
+      "Un nouveau chauffeur premium devait se distinguer des applications de VTC : pas de prix instantané, pas de choix de véhicule, pas de carte plein écran — seulement le sentiment d'entrer dans une maison privée qui va s'occuper de vous.",
+    solution:
+      "Je l'ai conçu comme une conciergerie de palace : Marcellus et Jost sur crème et noir, une demande de réservation qui trace l'itinéraire pendant la saisie, le Cercle ELYSIA qui retient les préférences de chaque client, et des pages services et destinations écrites pour le référencement.",
+    result:
+      "Un site bilingue français–anglais où une demande n'est jamais présentée comme confirmée avant le paiement des arrhes, et où chaque page est construite pour se positionner sur la Riviera.",
+    stack: ["Next.js 15", "TypeScript", "Tailwind v4", "React Hook Form · Zod", "FR / EN", "SEO"],
+  },
+  "couverture-vasseur": {
+    tag: "Web · Artisan · SEO local",
+    sub: "Un couvreur-zingueur à Angers, au pays de l'ardoise naturelle",
+    overview:
+      "Le site de Couverture Vasseur, l'entreprise de couverture et de zinguerie de Julien Vasseur à Angers — douze ans sur les toits de l'Anjou avec trois compagnons, certifiée RGE Qualibat, notée 4,9/5 sur 47 avis Google.",
+    problem:
+      "Un couvreur local devait passer devant quatre concurrents installés sur Google — sans ressembler au gabarit de personne.",
+    solution:
+      "J'ai construit trois pages denses autour de ce qui fait la réputation de l'Anjou, l'ardoise naturelle : un formulaire de devis en haut de page, les gages de confiance d'entrée, sept prestations, de vraies réalisations, des tarifs indicatifs et une FAQ — le tout rendu en statique, pour que chaque mot soit dans le HTML servi.",
+    result:
+      "Des pages aussi riches que celles des meilleurs couvreurs de la région, une identité qui n'appartient qu'à ce couvreur, et une demande de devis qui prend trente secondes.",
+    stack: ["Next.js 15", "TypeScript", "Tailwind v4", "SEO local", "Schema.org"],
+  },
+  "pj-espaces-verts": {
+    tag: "Web · Jardins · FR / EN",
+    sub: "Un élagueur-paysagiste en Provence — 21 avis, tous à cinq étoiles",
+    overview:
+      "Le site de PJ Espaces Verts, l'entreprise d'élagage et d'entretien de jardins de Josué Poulain à Lapalud, près d'Orange — plus de sept ans de taille, d'abattage, de taille de haies et d'entretien dans un rayon de 30 km.",
+    problem:
+      "Un artisan avec 21 avis à cinq étoiles et de vraies photos de chantier n'avait aucun site vers lequel envoyer ses clients — ni rien pour répondre à la première question de chacun : combien, à peu près ?",
+    solution:
+      "J'ai construit un site bilingue rapide autour de ses propres photos de chantier : des prix indicatifs d'entrée, un curseur avant/après à faire glisser, un guide des saisons pour savoir quoi faire au jardin et quand, et une demande de devis en deux lignes.",
+    result:
+      "Chaque promesse de la page s'appuie sur une vraie photo ou un vrai avis, en français et en anglais, et demander un devis tient en deux lignes.",
+    stack: ["Next.js 16", "Tailwind v4", "GSAP · Lenis", "Three.js", "FR / EN"],
+  },
+  "thibaut-center": {
+    tag: "Web · Commerce · WhatsApp",
+    sub: "Un fournisseur de peinture et de plâtre au Bénin, où chaque devis commence sur WhatsApp",
+    overview:
+      "Le site des Ets THIBAUT CENTER, fournisseur de peinture, de plâtre et de filasse à Abomey-Calavi, au Bénin — et un service de sourcing qui trouve les produits qu'il n'a pas en stock.",
+    problem:
+      "Les artisans d'Abomey-Calavi naviguent sur Android en 4G et achètent par WhatsApp : un site catalogue lourd ne chargerait jamais, et un formulaire de contact ne servirait jamais.",
+    solution:
+      "J'ai construit un site simple et rapide où chaque bouton principal ouvre WhatsApp avec un message pré-rempli : un catalogue de produits, un nuancier où un clic affiche la teinte en grand, un calculateur de peinture et le service de sourcing.",
+    result:
+      "Un client choisit sa teinte, calcule la quantité de peinture nécessaire — 120 m² donnent 32,4 litres — et envoie sa demande de devis sur WhatsApp, en français ou en anglais, en moins d'une minute.",
+    stack: ["Next.js 15", "Tailwind v4", "Lenis", "WhatsApp", "FR / EN"],
+  },
+  "ong-ife": {
+    tag: "Web · ONG · Dons",
+    sub: "Une ONG de solidarité au Bénin — donner devient évident en moins de dix secondes",
+    overview:
+      "Le site de l'ONG IFÊ — Initiative pour la fraternité et l'entraide — qui soutient les personnes vulnérables par l'aide alimentaire, la santé, l'éducation, le logement et le soutien aux familles, avec une promesse : ensemble pour un avenir meilleur.",
+    problem:
+      "La plupart des donateurs arrivent par un partage WhatsApp ou une affiche, sur un Android d'entrée de gamme avec des données payantes, et donnent en envoyant du mobile money vers un numéro — un seul chiffre faux et l'argent part chez un inconnu.",
+    solution:
+      "J'ai conçu un site chaleureux et digne qui met les numéros MTN MoMo et Celtiis à un geste de la copie, présente les cinq domaines d'action, et vérifie par un test automatisé que les numéros de don sont exacts.",
+    result:
+      "Un visiteur ressent la confiance, trouve les numéros de don et les copie en moins de dix secondes — sur un téléphone à 100 €, en français ou en anglais.",
+    stack: ["Next.js 15", "Tailwind v4", "Three.js", "GSAP · Lenis", "Playwright", "FR / EN"],
+  },
   "talentmatch-ai": {
     tag: "IA · SaaS",
     sub: "Une plateforme SaaS nouvelle génération pour le recrutement par IA",
@@ -893,6 +1092,71 @@ const projectsAR = {
     result:
       "القائمة تتكفّل بالشرح قبل أن يدخل أحد من الباب، وكل طبق على بُعد لمسة واحدة من الطلب.",
     stack: ["Next.js", "Framer Motion", "تصميم ويب", "هوية بصرية"],
+  },
+  "elysia-vtc": {
+    tag: "ويب · فخامة · حجز",
+    sub: "دار سائق خاص على الريفييرا الفرنسية، صُمّمت كخدمة كونسيرج في قصر",
+    overview:
+      "موقع ELYSIA، دار سائق خاص مقرّها سان لوران دو فار، تخدم نيس وموناكو وكان وكامل الكوت دازور بسيارة Tesla Model 3 — صُمّم ليبيع التجربة أولًا ثم الرحلة.",
+    problem:
+      "كان على سائق فاخر جديد أن يتميّز عن تطبيقات النقل: لا سعر فوري، ولا اختيار للسيارة، ولا خريطة تملأ الشاشة — بل شعور الدخول إلى دار خاصة ستعتني بك.",
+    solution:
+      "صمّمتُه كخدمة كونسيرج في قصر: خطّا Marcellus وJost على الكريمي والأسود، وطلب حجز يرسم المسار أثناء الكتابة، و«دائرة ELYSIA» التي تتذكّر تفضيلات كل عميل، وصفحات للخدمات والوجهات مكتوبة لمحرّكات البحث.",
+    result:
+      "موقع بلغتين، الفرنسية والإنجليزية، لا يُعرض فيه أي طلب على أنه مؤكَّد قبل دفع العربون، وكل صفحة فيه مبنيّة لتتصدّر نتائج البحث على الريفييرا.",
+    stack: ["Next.js 15", "TypeScript", "Tailwind v4", "React Hook Form · Zod", "لغتان", "SEO"],
+  },
+  "couverture-vasseur": {
+    tag: "ويب · حِرَفي · سيو محلّي",
+    sub: "حِرَفي تسقيف وزنك في أنجيه، أرض الأردواز الطبيعي",
+    overview:
+      "موقع Couverture Vasseur، شركة التسقيف وأعمال الزنك لجوليان فاسور في أنجيه — اثنا عشر عامًا على أسطح أنجو مع ثلاثة حِرَفيين، بشهادة RGE Qualibat، وتقييم 4.9/5 من 47 مراجعة على Google.",
+    problem:
+      "كان على حِرَفي محلّي أن يتقدّم على أربعة منافسين راسخين في Google — دون أن يشبه قالب أيّ أحد.",
+    solution:
+      "بنيتُ ثلاث صفحات غنيّة حول ما تشتهر به أنجو، الأردواز الطبيعي: نموذج طلب عرض سعر في أعلى الصفحة، وعلامات الثقة منذ البداية، وسبع خدمات، وأعمال حقيقية، وأسعار تقريبية، وأسئلة شائعة — كلّها مُولّدة مسبقًا لتكون كل كلمة في الـHTML المرسَل.",
+    result:
+      "صفحات بغنى مواقع أفضل حِرَفيي التسقيف في المنطقة، وهوية لا تخصّ إلا هذا الحِرَفي، وطلب عرض سعر يستغرق نصف دقيقة.",
+    stack: ["Next.js 15", "TypeScript", "Tailwind v4", "سيو محلّي", "Schema.org"],
+  },
+  "pj-espaces-verts": {
+    tag: "ويب · تنسيق حدائق · لغتان",
+    sub: "مختصّ تقليم أشجار وبستاني في بروفانس — 21 مراجعة، كلّها بخمس نجوم",
+    overview:
+      "موقع PJ Espaces Verts، شركة جوزيه بولان للعناية بالأشجار والحدائق في لابالو قرب أورانج — أكثر من سبع سنوات من التقليم وقطع الأشجار وتشذيب السياجات وصيانة الحدائق في دائرة 30 كم.",
+    problem:
+      "حِرَفي لديه 21 مراجعة بخمس نجوم وصور حقيقية لأعماله، بلا موقع يوجّه إليه عملاءه — ولا شيء يجيب عن السؤال الأول لكل عميل: كم سيكلّف تقريبًا؟",
+    solution:
+      "بنيتُ موقعًا سريعًا بلغتين حول صوره الحقيقية من الورشات: أسعار تقريبية منذ البداية، ومنزلق قبل/بعد يمكن سحبه، ودليل للمواسم يبيّن ما يُعمل في الحديقة ومتى، وطلب عرض سعر في سطرين.",
+    result:
+      "كل وعد في الصفحة تسنده صورة حقيقية أو مراجعة حقيقية، بالفرنسية والإنجليزية، وطلب عرض السعر لا يتجاوز سطرين.",
+    stack: ["Next.js 16", "Tailwind v4", "GSAP · Lenis", "Three.js", "لغتان"],
+  },
+  "thibaut-center": {
+    tag: "ويب · تجارة · واتساب",
+    sub: "مورّد دهانات وجبس في بنين، حيث يبدأ كل طلب عرض سعر على واتساب",
+    overview:
+      "موقع Ets THIBAUT CENTER، مورّد الدهانات والجبس وألياف القنّب في أبومي-كالافي ببنين — مع خدمة توريد تبحث عن المنتجات غير المتوفّرة في المخزون.",
+    problem:
+      "حِرَفيّو أبومي-كالافي يتصفّحون على هواتف أندرويد عبر شبكة 4G ويشترون عبر واتساب: موقع كتالوج ثقيل لن يُحمَّل أبدًا، ونموذج تواصل لن يُستعمل أبدًا.",
+    solution:
+      "بنيتُ موقعًا بسيطًا وسريعًا يفتح فيه كل زر رئيسي واتساب برسالة جاهزة: كتالوج للمنتجات، ولوحة ألوان تعرض كل درجة بحجم كبير بنقرة، وحاسبة للدهان، وخدمة التوريد.",
+    result:
+      "يختار العميل لونه، ويحسب كمية الدهان اللازمة — 120 م² تعطي 32.4 لترًا — ويرسل طلب عرض السعر على واتساب، بالفرنسية أو الإنجليزية، في أقل من دقيقة.",
+    stack: ["Next.js 15", "Tailwind v4", "Lenis", "واتساب", "لغتان"],
+  },
+  "ong-ife": {
+    tag: "ويب · جمعية · تبرّعات",
+    sub: "منظمة تضامن في بنين — التبرّع يصبح بديهيًا في أقل من عشر ثوانٍ",
+    overview:
+      "موقع منظمة IFÊ — «مبادرة من أجل الأخوّة والتعاون» — التي تدعم الأشخاص في وضعيات هشّة عبر المساعدة الغذائية والصحة والتعليم والسكن ودعم الأسر، تحت وعد واحد: معًا من أجل مستقبل أفضل.",
+    problem:
+      "يصل معظم المتبرّعين عبر مشاركة على واتساب أو ملصق مطبوع، على هاتف أندرويد بسيط وبيانات مدفوعة، ويتبرّعون بتحويل مالي عبر الهاتف إلى رقم — ورقم واحد خاطئ يرسل المال إلى غريب.",
+    solution:
+      "صمّمتُ موقعًا دافئًا يحفظ كرامة الناس، يضع رقمي MTN MoMo وCeltiis على بُعد لمسة من النسخ، ويعرض مجالات العمل الخمسة، ويتحقّق باختبار آلي من أن أرقام التبرّع صحيحة تمامًا.",
+    result:
+      "يشعر الزائر بالثقة، ويجد أرقام التبرّع وينسخها في أقل من عشر ثوانٍ — على هاتف بـ100 يورو، بالفرنسية أو الإنجليزية.",
+    stack: ["Next.js 15", "Tailwind v4", "Three.js", "GSAP · Lenis", "Playwright", "لغتان"],
   },
   "talentmatch-ai": {
     tag: "ذكاء اصطناعي · SaaS",

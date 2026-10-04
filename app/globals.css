@@ -2536,7 +2536,7 @@ body.dragging * {
 
      .logo        "AHMED·SLIM" is a Latin wordmark; RTL rendered it "SLIM·AHMED".
      .hero-contact
-                  "+216 94 687 669" rendered as "669 687 94 216+" — the leading
+                  "+216 53 625 330" rendered as "330 625 53 216+" — the leading
                   "+" is bidi-neutral and got pushed to the far end. The email
                   address is isolated for the same reason: "@" and "." are
                   neutral characters sitting between Latin runs.

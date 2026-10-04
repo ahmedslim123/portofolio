@@ -486,16 +486,16 @@ export const site = {
   // Shown as a pill in the hero beside the phone, and used by the contact
   // section and footer. FR/AR inherit it — it is language-neutral.
   email: "ahmedslim007@gmail.com",
-  phone: "+21694687669",
-  phoneDisplay: "+216 94 687 669",
+  phone: "+21653625330",
+  phoneDisplay: "+216 53 625 330",
   // WhatsApp deep-link — wa.me wants the number in international form with NO
-  // "+", spaces or dashes (country code + number). +216 94 687 669 → 21694687669.
-  whatsapp: "https://wa.me/21694687669",
+  // "+", spaces or dashes (country code + number). +216 53 625 330 → 21653625330.
+  whatsapp: "https://wa.me/21653625330",
   socials: [
     { label: "LinkedIn", href: "https://www.linkedin.com/in/ahmed-s-307897226" },
     { label: "Upwork", href: "https://www.upwork.com/freelancers/~012340f5cbd8f352dc" },
     { label: "Facebook", href: "https://www.facebook.com/ahmed.slim.135496/" },
-    { label: "WhatsApp", href: "https://wa.me/21694687669" },
+    { label: "WhatsApp", href: "https://wa.me/21653625330" },
   ],
 
   /* ---- Contact form delivery (Formspree) --------------------------------

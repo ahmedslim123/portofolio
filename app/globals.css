@@ -1409,18 +1409,21 @@ button {
     radial-gradient(420px 320px at 30% 30%, rgba(30, 159, 255, 0.08), transparent 70%),
     radial-gradient(420px 320px at 72% 70%, rgba(154, 107, 255, 0.07), transparent 70%);
 }
+/* Each orb floats on its own slow diagonal glide — its own tempo, direction and
+   starting point (set per orb in Skills.jsx) — so the twelve never move in step.
+   The float rides on `translate`, which composes with the centring `transform`.
+   Kept small (≤ ~10px from rest) so the closest pair still clears a hover. */
 .orb-slot {
   position: absolute;
   transform: translate(-50%, -50%);
-  animation: drift 9s ease-in-out infinite;
+  animation: float var(--float-dur, 16s) cubic-bezier(0.45, 0.05, 0.55, 0.95) var(--float-delay, 0s) infinite alternate;
 }
-@keyframes drift {
-  0%,
-  100% {
-    transform: translate(-50%, calc(-50% - 9px));
+@keyframes float {
+  from {
+    translate: calc(var(--float-x, 4px) * -1) calc(var(--float-y, 8px) * -1);
   }
-  50% {
-    transform: translate(-50%, calc(-50% + 9px));
+  to {
+    translate: var(--float-x, 4px) var(--float-y, 8px);
   }
 }
 .orb {
@@ -1459,7 +1462,8 @@ button {
   -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1.5px));
   mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1.5px));
   opacity: 0.55;
-  animation: spin 11s linear infinite;
+  /* a slow, lazy turn — neighbours alternate direction (Skills.jsx) */
+  animation: spin var(--halo-dur, 38s) linear infinite var(--halo-dir, normal);
   transition: opacity 0.4s;
 }
 /* proficiency arc — fills to the skill's percentage */

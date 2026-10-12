@@ -29,6 +29,24 @@ const SPOTS = [
   [72, 87],
 ];
 
+// Float for each orb: [seconds per glide, x px, y px]. Different tempos and
+// directions so the field drifts like weightless bodies, never as one wave.
+// Amplitudes stay ≤ ~10px from rest — see the spacing note above.
+const FLOAT = [
+  [8.5, 4, 8],
+  [10, -5, 7],
+  [7.5, 3, 9],
+  [9.5, -4, 8],
+  [8, 5, -7],
+  [10.5, -3, 9],
+  [9, 4, -8],
+  [7.8, -5, 7],
+  [9.8, 3, -9],
+  [8.3, -4, 8],
+  [10.2, 5, 7],
+  [8.8, -3, -8],
+];
+
 export default function Skills() {
   const { site, ui } = useI18n();
   return (
@@ -42,6 +60,7 @@ export default function Skills() {
         <div className="galaxy">
           {site.skills.map((s, i) => {
             const sp = SPOTS[i % SPOTS.length];
+            const [dur, fx, fy] = FLOAT[i % FLOAT.length];
             return (
               <div
                 key={s.name}
@@ -51,7 +70,13 @@ export default function Skills() {
                   top: `${sp[1]}%`,
                   width: s.size,
                   height: s.size,
-                  animationDelay: `${i * 0.5}s`,
+                  "--float-dur": `${dur}s`,
+                  "--float-x": `${fx}px`,
+                  "--float-y": `${fy}px`,
+                  // negative delay: every orb is already mid-glide on arrival
+                  "--float-delay": `-${((i * 2.3) % dur).toFixed(1)}s`,
+                  "--halo-dur": `${32 + ((i * 5) % 13)}s`,
+                  "--halo-dir": i % 2 ? "reverse" : "normal",
                 }}
               >
                 <div className="orb" style={{ "--pct": s.pct }}>

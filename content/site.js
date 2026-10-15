@@ -110,36 +110,6 @@ export const site = {
       ],
     },
     {
-      slug: "nes-academy",
-      tag: "Founder · Education · Web",
-      name: "NES Academy",
-      accent: "#E45BD8",
-      bg: "linear-gradient(160deg,#2a0d2c,#0a0410)",
-      glow: "rgba(228,91,216,.32)",
-      sub: "My education platform for students in Tunisia",
-      cover: "/projects/nes-academy/cover.webp",
-      overview:
-        "This one is mine end to end. NES Academy is the education platform I founded for students in Tunisia: coaching through their coursework and their final-year project, training programmes, and the resources they would otherwise pay a private tutor for — given away free.",
-      problem:
-        "A student two months from a defence has three problems at once — the code, the written report, and the presentation — and the only help within reach is a private tutor they cannot afford.",
-      solution:
-        "I built the platform around all three: one-to-one coaching on the project itself, training programmes on the tools the syllabus never covers, and real work on the PFE report and the defence deck. The free resources go out on the Facebook page, where the students already are; the site is where they land next, in French, English and Arabic with full right-to-left.",
-      result:
-        "Students arrive already knowing what the platform does, because they met the free work first. The site carries them from that first post to the first message: nine pages, an aurora hero, a scroll-driven method timeline and a drag-to-explore portfolio.",
-      stack: ["Next.js 16", "React 19", "TypeScript", "Tailwind v4", "GSAP · Lenis", "i18n FR/EN/AR"],
-      live: "https://nes-academy.vercel.app/",
-      social: {
-        facebook: "https://www.facebook.com/profile.php?id=61554040184314",
-      },
-      media: [
-        { type: "image", src: "/projects/nes-academy/img1.webp" },
-        { type: "image", src: "/projects/nes-academy/img2.webp" },
-        { type: "image", src: "/projects/nes-academy/img3.webp" },
-        { type: "image", src: "/projects/nes-academy/img4.webp" },
-        { type: "image", src: "/projects/nes-academy/img5.webp" },
-      ],
-    },
-    {
       slug: "nes-studio",
       tag: "Founder · Software · AI",
       name: "NES Studio",
@@ -158,6 +128,10 @@ export const site = {
         "It runs in French, Arabic right-to-left and English on an \"Ivory Atelier\" system — warm porcelain, editorial Fraunces, an accent spectrum from magenta to lime. Every page is prerendered with no server route anywhere: the fonts ship inside the repository and the form posts straight to Formspree from the browser, so the build makes no network call at all.",
       stack: ["Next.js 14", "TypeScript", "Tailwind CSS", "Framer Motion", "i18n FR/AR/EN", "Formspree"],
       live: "https://www.nes-studios.com/",
+      social: {
+        facebook: "https://www.facebook.com/NesStudioOfficiel",
+        instagram: "https://www.instagram.com/nesstudio.official/",
+      },
       media: [
         { type: "image", src: "/projects/nes-studio/img1.webp" },
         { type: "image", src: "/projects/nes-studio/img2.webp" },
@@ -676,19 +650,6 @@ const projectsFR = {
       "Quatre-vingt-dix pages pré-rendues sur un seul domaine. Six marchés lisent désormais la même institution, chacun dans sa langue et son écriture — sans pièce jointe ni site séparé par marque.",
     stack: ["Next.js 16", "Tailwind v4", "i18n · 6 Langues", "GSAP · Lenis", "SEO"],
   },
-  "nes-academy": {
-    tag: "Fondateur · Éducation",
-    sub: "Ma plateforme d'éducation pour les étudiants en Tunisie",
-    overview:
-      "Celui-là est à moi de bout en bout. NES Academy est la plateforme d'éducation que j'ai fondée pour les étudiants en Tunisie : encadrement dans leurs matières et sur le projet de fin d'études, formations, et les ressources pour lesquelles ils paieraient sinon un professeur particulier — données gratuitement.",
-    problem:
-      "Un étudiant à deux mois de sa soutenance a trois problèmes à la fois — le code, le rapport écrit et la présentation — et la seule aide à portée de main est un professeur particulier qu'il ne peut pas se payer.",
-    solution:
-      "J'ai construit la plateforme autour des trois : un encadrement individuel sur le projet lui-même, des formations sur les outils que le programme ne couvre jamais, et un vrai travail sur le rapport de PFE et sur la soutenance. Les ressources gratuites partent sur la page Facebook, là où les étudiants sont déjà ; le site est l'étape suivante, en français, anglais et arabe avec le RTL complet.",
-    result:
-      "Les étudiants arrivent en sachant déjà ce que fait la plateforme, parce qu'ils ont d'abord rencontré le travail gratuit. Le site les porte de ce premier post au premier message : neuf pages, un hero aurore, une frise de méthode animée au défilement et un portfolio qui se fait glisser.",
-    stack: ["Next.js 16", "React 19", "TypeScript", "Tailwind v4", "GSAP · Lenis", "i18n FR/EN/AR"],
-  },
   "nes-studio": {
     tag: "Fondateur · Logiciel · IA",
     sub: "Mon studio — web, applications, agents IA et logiciels sur mesure",
@@ -1015,19 +976,6 @@ const projectsAR = {
     result:
       "تسعون صفحة مُولّدة مسبقًا على نطاق واحد. ستّة أسواق تقرأ اليوم المؤسّسة ذاتها، كلٌّ بلغته وحرفه — بلا مرفقات ولا موقع منفصل لكل علامة.",
     stack: ["Next.js 16", "Tailwind v4", "ستّ لغات", "GSAP · Lenis", "SEO"],
-  },
-  "nes-academy": {
-    tag: "مؤسِّس · تعليم · ويب",
-    sub: "منصّتي التعليمية لطلبة تونس",
-    overview:
-      "هذا المشروع لي بالكامل. NES Academy منصّة تعليمية أسّستها لطلبة تونس: تأطير في موادّهم وفي مشروع التخرّج، ودورات تكوينية، والموارد التي كانوا سيدفعون مقابلها لأستاذ خصوصي — تُنشر مجانًا.",
-    problem:
-      "الطالب الذي يفصله شهران عن مناقشته يواجه ثلاث مشكلات دفعةً واحدة — الكود، والتقرير المكتوب، والعرض التقديمي — والمساعدة الوحيدة في متناوله أستاذ خصوصي لا يقدر على أجره.",
-    solution:
-      "بنيتُ المنصّة حول الثلاثة معًا: تأطير فردي على المشروع نفسه، ودورات على الأدوات التي لا يغطّيها البرنامج الدراسي، وعمل حقيقي على تقرير مشروع التخرّج وعلى المناقشة. الموارد المجانية تُنشر على صفحة فيسبوك حيث يوجد الطلبة أصلًا؛ والموقع هو المحطّة التالية، بالفرنسية والإنجليزية والعربية مع دعم كامل للاتجاه من اليمين إلى اليسار.",
-    result:
-      "يصل الطلبة وهم يعرفون سلفًا ما تفعله المنصّة، لأنهم التقوا بالعمل المجاني أوّلًا. والموقع يحملهم من ذلك المنشور الأوّل إلى أوّل رسالة: تسع صفحات، وواجهة شفقيّة، وخطّ زمني للمنهجية يتحرّك مع التمرير، ومعرض أعمال يُسحب باليد.",
-    stack: ["Next.js 16", "React 19", "TypeScript", "Tailwind v4", "GSAP · Lenis", "ثلاث لغات"],
   },
   "nes-studio": {
     tag: "مؤسِّس · برمجيات · ذكاء اصطناعي",
